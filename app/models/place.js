@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // sub document for Category title
@@ -13,7 +13,7 @@ const Coordinates = new Schema({
 });
 
 // sub document for location (address)
-const location = new Schema({
+const Location = new Schema({
   address1: { type: String, required: true },
   address2: { type: String },
   address3: { type: String },
@@ -35,7 +35,7 @@ const PlaceSchema = new Schema({
   categories: [ Category ],
   coordinates: { Coordinates },
   location: { Location },
-  rating: [{ type: Schema.Types.ObjectId, ref: Rating }]
+  rating: [{ type: Schema.Types.ObjectId, ref: "Rating" }]
 });
 
 const Place = mongoose.model("Place", PlaceSchema);

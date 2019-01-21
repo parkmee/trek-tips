@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import db from "../models";
+const mongoose = require("mongoose");
+const db = require("../models");
 
 // connect to mongoose database
 mongoose.connect(
@@ -73,6 +73,8 @@ const preferenceSeed = [
 ]
 
 // empties, then seeds Cuisine collection
+
+
 db.Cuisine
   .remove({})
   .then(() => db.Cuisine.collection.insertMany(cuisineSeed))

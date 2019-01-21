@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // TODO: include variables needed for Auth0
@@ -8,9 +8,9 @@ const UserSchema = new Schema({
   lastname: { type: String, required: true },
   username: { type: String, required: true },
   email: { type: String },
-  cuisines: [{ type: Schema.Types.ObjectId, ref: Cuisine }],
-  preferences: [{ type: Schema.Types.ObjectId, ref: Preference }],
-  history: [{ type: Schema.Types.ObjectId, ref: History }]
+  cuisines: [{ type: Schema.Types.ObjectId, ref: "Cuisine" }],
+  preferences: [{ type: Schema.Types.ObjectId, ref: "Preference" }],
+  history: [{ type: Schema.Types.ObjectId, ref: "History" }]
 });
 
 const User = mongoose.model("User", UserSchema);
