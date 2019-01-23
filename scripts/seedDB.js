@@ -18,6 +18,25 @@ const categorySeed = [
   // TODO get categories from yelp API: https://www.yelpblog.com/2018/01/yelp_category_list
 ]
 
+const placeSeed = [
+  { 
+    yelpId: "id-1",
+    name: "Place 1",
+    image_url: "image1.jpg",
+    url: "http:url1.com",
+    price: "$$",
+    yelpRating: 4.5,
+    phone: "+15555555555",
+    categories: [
+      { title: "category 1 title"}
+    ],
+    coordinates: {
+      latitude: 12.34654,
+      longitude: 
+    }
+  }
+]
+
 // empties, then seeds Category collection
 db.Category
 .remove({})

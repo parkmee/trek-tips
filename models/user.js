@@ -8,8 +8,7 @@ const UserSchema = new Schema({
   lastname: { type: String, required: true },
   username: { type: String, required: true },
   email: { type: String },
-  cuisines: [{ type: Schema.Types.ObjectId, ref: "Cuisine" }],
-  preferences: [{ type: Schema.Types.ObjectId, ref: "Preference" }],
+  preferences: [{ type: Schema.Types.ObjectId, ref: "Category" }],
   history: [{ type: Schema.Types.ObjectId, ref: "History" }]
 });
 
