@@ -1,5 +1,4 @@
 module.exports = {
-  Cuisine: require("./cuisine"),
   History: require("./history"),
   Location: require("./location"),
   Place: require("./place"),
