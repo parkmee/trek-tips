@@ -5,14 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-ios": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev-ios",
-    "start-android": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev-android",
-    "start:prod": "node server.js",
-    "start:dev-ios": "concurrently \"nodemon --ignore 'app/*'\" \"npm run app-ios\"",
-    "start:dev-android": "concurrently \"nodemon --ignore 'app/*'\" \"npm run app-android\"",
-    "app-ios": "cd app && react-native run-ios",
-    "app-android": "cd app && react-native run-android",
-    "postinstall": "cd app && npm install",
+    "start": "nodemon server.js",
     "populate": "babel-cli/bin/babel-node.js populate.js"
   },
   "repository": {
@@ -28,6 +21,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "if-env": "^1.0.4",
     "mongoose": "^5.4.6",
@@ -35,6 +29,7 @@
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
+    "morgan": "^1.9.1",
     "nodemon": "^1.18.9"
   }
 }

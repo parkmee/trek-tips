@@ -1,27 +1,28 @@
-// dependencies
+// Dependencies ---------------------------------------------------------------
 const express = require("express");
+const routes = require('./routes');
 const bodyParser = require("body-parser");
+const logger = require('morgan');
 const mongoose = require("mongoose");
-//import routes from "./routes";
+mongoose.set('useCreateIndex', true);
 
-// initialize http server
+// Initialize http server -----------------------------------------------------
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// middleware
+// Middleware -----------------------------------------------------------------
+app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// routes
-// TODO: add routes in routes directory
-//app.use(routes);
+// Routes ---------------------------------------------------------------------
+app.use(routes);
 
-// temporary route
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// Connect to MongoDB Database ------------------------------------------------
+/*const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/trek-tips';
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true});*/
 
-// launch server
-app.listen(PORT, function() {
+// launch server --------------------------------------------------------------
+app.listen(PORT, () => {
   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
 });
