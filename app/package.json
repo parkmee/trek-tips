@@ -7,11 +7,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.4",
-    "mongoose": "^5.4.5",
-    "morgan": "^1.9.1",
-    "path": "^0.12.7",
     "react": "16.6.3",
     "react-native": "0.57.8"
   },
