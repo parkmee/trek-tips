@@ -21,7 +21,7 @@ const Location = new Schema({
   state: { type: String },
   country: { type: String, required: true },
   display_address: { type: String }
-})
+});
 
 // main schema for places (via Yelp)
 // refer to https://www.yelp.com/developers/documentation/v3/business for response body

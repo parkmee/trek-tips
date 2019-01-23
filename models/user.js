@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 // TODO: include variables needed for Auth0
 // TODO: add pre-validation for capitalization
 const UserSchema = new Schema({
-  firstname: { type: String, required: true },
-  lastname: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
   username: { type: String, required: true },
   email: { type: String },
   cuisines: [{ type: Schema.Types.ObjectId, ref: "Cuisine" }],
