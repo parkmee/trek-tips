@@ -8,8 +8,12 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import TtScrollView from "./app/components/TtScrollView/TtScrollView";
-import RecommendationTile from "./app/components/RecommendationTile/RecommendationTile";
+import TtScrollView from "./components/TtScrollView/TtScrollView";
+import RecommendationTile from "./components/RecommendationTile/RecommendationTile";
+
+import Auth0 from 'react-native-auth0';
+import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
+import API from './utils/API';
 
 
 const instructions = Platform.select({
@@ -19,35 +23,45 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-type Props = {};
-export default class App extends Component<Props> {
-  constructor() {
-    super();
-    this.state = 
-    {
-      imgUrl: "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg",
-      description: "Gary's House",
-      rating: "4",
-      price: "2",
-      isSaved: false,
-      wasVisited: false
-    };
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state =
+      {
+        imgUrl: "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg",
+        description: "Gary's House",
+        rating: "4",
+        price: "2",
+        isSaved: false,
+        wasVisited: false
+      };
+
+    /*this.handleLogin = this.handleLogin.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);*/
   }
-  
+
+  handleLogin = () => {
+
+  };
+
+  handleLogout = () => {
+
+  };
+
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-        <RecommendationTile 
-          imgUrl={this.state.imgUrl} 
+        <Text style={styles.welcome}>Welcome to Trek Tips!</Text>
+        <Text style={styles.instructions}>To get started, please login...</Text>
+        <RecommendationTile
+          imgUrl={this.state.imgUrl}
           description={this.state.description}
           rating={this.state.rating}
           isSaved={this.state.isSaved}
           wasVisited={this.state.wasVisited}
         />
+        <Text style={styles.instructions}>{instructions}</Text>
       </View>
     );
   }
