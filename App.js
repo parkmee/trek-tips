@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import TtScrollView from "./components/TtScrollView/TtScrollView";
@@ -15,10 +7,10 @@ import Auth0 from 'react-native-auth0';
 import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
 import API from './utils/API';
 
-const auth0 = new Auth0({
+/*const auth0 = new Auth0({
   domain: DOMAIN,
   clientId: CLIENT_ID
-});
+});*/
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -65,9 +57,9 @@ export default class App extends Component {
         <Text style={styles.instructions}>To get started, please login...</Text>
         <TouchableOpacity
           style={styles.login}
-          onClick={loggedIn ? this.handleLogout : this.handleLogin}
+          onPress={loggedIn ? this.handleLogout : this.handleLogin}
         >
-          {loggedIn ? 'Logout' : 'Login'}
+          <Text style={styles.loginText}>{loggedIn ? 'Logout' : 'Login'}</Text>
         </TouchableOpacity>
         <RecommendationTile
           imgUrl={this.state.imgUrl}
@@ -90,7 +82,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   welcome: {
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: '600',
     textAlign: 'center',
     margin: 10,
   },
@@ -100,7 +93,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   login: {
-    color: '#FF7900',
     backgroundColor: '#0DF242',
+    borderRadius: 5
+  },
+  loginText: {
+    color: '#FF7900',
+    fontWeight: '600',
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingRight: 10,
+    paddingBottom: 5
   }
 });
