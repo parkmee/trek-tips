@@ -8,8 +8,8 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import TtScrollView from "./components/TtScrollView/TtScrollView";
-import RecommendationTile from "./components/RecommendationTile/RecommendationTile";
+import TtScrollView from "./app/components/TtScrollView/TtScrollView";
+import RecommendationTile from "./app/components/RecommendationTile/RecommendationTile";
 
 
 const instructions = Platform.select({
