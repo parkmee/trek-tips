@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Text, Image, View, StyleSheet, ScrollView } from 'react-native';
 
-class TtScrollView extends Component {
+type Props = {};
+class TtScrollView extends Component<Props>  {
     render() {
        return (
           <View>
