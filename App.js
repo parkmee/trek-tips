@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import TtScrollView from "./components/TtScrollView/TtScrollView";
 import RecommendationTile from "./components/RecommendationTile/RecommendationTile";
 
@@ -15,6 +15,10 @@ import Auth0 from 'react-native-auth0';
 import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
 import API from './utils/API';
 
+const auth0 = new Auth0({
+  domain: DOMAIN,
+  clientId: CLIENT_ID
+});
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -33,7 +37,8 @@ export default class App extends Component {
         rating: "4",
         price: "2",
         isSaved: false,
-        wasVisited: false
+        wasVisited: false,
+        userName: null
       };
 
     /*this.handleLogin = this.handleLogin.bind(this);
@@ -41,19 +46,29 @@ export default class App extends Component {
   }
 
   handleLogin = () => {
-
+    console.log('Logging In');
+    this.setState({userName: 'Test'}, () => console.log('username: ', this.state.userName))
   };
 
   handleLogout = () => {
-
+    console.log('Logging Out');
+    this.setState({userName: null}, () => console.log('username: ', this.state.userName))
   };
 
 
   render() {
+    let loggedIn = this.state.userName !== null;
+
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to Trek Tips!</Text>
         <Text style={styles.instructions}>To get started, please login...</Text>
+        <TouchableOpacity
+          style={styles.login}
+          onClick={loggedIn ? this.handleLogout : this.handleLogin}
+        >
+          {loggedIn ? 'Logout' : 'Login'}
+        </TouchableOpacity>
         <RecommendationTile
           imgUrl={this.state.imgUrl}
           description={this.state.description}
@@ -84,4 +99,8 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  login: {
+    color: '#FF7900',
+    backgroundColor: '#0DF242',
+  }
 });

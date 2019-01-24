@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, Image, View, StyleSheet} from 'react-native';
 import FontAwesome, {Icons} from 'react-native-fontawesome';
 
 class RecommendationTile extends Component {
