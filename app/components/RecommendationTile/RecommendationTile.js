@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, Image, View, StyleSheet} from 'react-native';
-import FontAwesome, { Icons } from 'react-native-fontawesome';
+import FontAwesome, { Icons, parseIconFromClassName} from 'react-native-fontawesome';
+import { relative } from 'path';
 
 class RecommendationTile extends Component {
     constructor(props) {
@@ -12,23 +13,47 @@ class RecommendationTile extends Component {
             wasVisited: props.wasVisited,
             imgUrl: props.imgUrl,
             rating: props.rating,
-            price: props.price,
+            price: this.priceString(props.price),
             rating: props.rating,
             description: props.description
         };
     }
+
+    priceString(price) {
+        let priceString;
+        switch (price) {
+            case "1":
+                priceString = "$";
+                break;
+            case "2":
+                priceString = "$$";
+                break;
+            case "3":
+                priceString = "$$$";
+                break;
+            case "":
+                priceString = "$$$$";
+                break;
+            default:
+                priceString = "";
+                break;
+        }
+        return priceString;
+    }
+
     render() {
+        const heartIcon = parseIconFromClassName('fa fa-heart');
+        const checkIcon = parseIconFromClassName('fa fa-check');
         return (
             <View>
-                <FontAwesome style={{fontSize: 32}}>{Icons.chevronLeft}</FontAwesome>
-                <Text style={styles.isSaved}>{this.state.isSaved}</Text>
-                <Text style={styles.wasVisited}>{this.state.wasVisited}</Text>
                 <Image
                     style={styles.imgStyle}
                     source={{uri: this.state.imgUrl}}
                 />
                 <Text style={styles.rating}>{this.state.rating}</Text>
-                <Text style={styles.price}>{this.state.price}</Text>
+                <FontAwesome style={styles.savedIcon}>{heartIcon}</FontAwesome>
+                <FontAwesome style={styles.wasVisitedIcon}>{checkIcon}</FontAwesome>
+                <Text style={styles.price}>- {this.state.price}</Text>
                 <Text style={styles.description}>{this.state.description}</Text>
           </View>
         )
@@ -37,33 +62,45 @@ class RecommendationTile extends Component {
 
 const styles = StyleSheet.create({
     imgStyle: {
-      width: 125,
-      height: 125
+      width: 150,
+      height: 150
     },
     description: {
-      fontSize: 20,
-      textAlign: 'center',
-      margin: 10,
+        top: -164,
+        left: 10,
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        color: "red",
     },
-    isSaved: {
-      textAlign: 'right',
-      color: 'red',
-      marginBottom: 5,
+    savedIcon: {
+        top: -170,
+        left: 105,
+        fontSize: 32,
+        textAlign: 'left',
+        color: 'red',
     },
-    wasVisited: {
-        textAlign: 'center',
+    wasVisitedIcon: {
+        top: -200,
+        left: 65,
+        fontSize: 32,
+        textAlign: 'left',
         color: '#333333',
-        marginBottom: 5,
-    },
-    rating: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
     },
     price: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
+        top: -118,
+        left: 30,
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        color: 'red',
+    },
+    rating: {
+        top: -30,
+        left: 10,
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'red',
     },
   });
 
