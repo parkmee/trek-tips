@@ -1,28 +1,11 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, ScrollView} from 'react-native';
-import NavBar from "./components/NavBar/NavBar";
-import RecommendationTile from "./components/RecommendationTile/RecommendationTile";
+// import NavBar from "./components/NavBar/NavBar"; <--no such file or folder or component
+import RecommendationTile from './components/RecommendationTile/RecommendationTile';
 
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-type Props = {};
-export default class App extends Component<Props> {
-  constructor() {
-    super();
+export default class App extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
       recommendations: [
         {
@@ -62,36 +45,34 @@ export default class App extends Component<Props> {
           wasVisited: false
         }
     ]}
-    
+
   }
 
   recommendationList() {
     return this.state.recommendations.map((recommendation) => {
       return (
-        <RecommendationTile 
-          key={recommendation.recommendationId} 
-          imgUrl={recommendation.imgUrl} 
+        <RecommendationTile
+          key={recommendation.recommendationId}
+          imgUrl={recommendation.imgUrl}
           description={recommendation.description}
           rating={recommendation.rating}
           isSaved={recommendation.isSaved}
           price={recommendation.price}
           wasVisited={recommendation.wasVisited}
-
         />
       )
     })
   }
-  
+
 
   render() {
     return (
       <View>
-        <NavBar />
         <ScrollView contentContainer={styles.contentContainer}>
           {this.recommendationList()}
         </ScrollView>
       </View>
-      
+
     );
   }
 }
