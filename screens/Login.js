@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
-// import {createStackNavigator, createAppContainer} from 'react-navigation';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
 
 // import NavBar from "./components/NavBar/NavBar"; <--no such file or folder or component
 
@@ -13,8 +13,8 @@ class LoginScreen extends Component {
       userName: null
     };
 
-    // this.handleLogin = this.handleLogin.bind(this);
-    // this.handleLogout = this.handleLogout.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   handleLogin = () => {
@@ -29,14 +29,18 @@ class LoginScreen extends Component {
 
   render() {
     let loggedIn = this.state.userName !== null;
-    // console.log(loggedIn);
-    // console.log(this.props);
+    console.log(loggedIn);
+    console.log(this.props);
 
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Trek Tips</Text>
         <Text style={styles.instructions}>Our goal is for you to have the best possible travel experience.</Text>
         <Text style={styles.instructions}>To get started, please login...</Text>
+        <Button
+          title="Go to Details"
+          onPress={() => this.props.navigation.navigate('Details')}
+        />
         <TouchableOpacity
           style={styles.login}
           onPress={loggedIn ? this.handleLogout : this.handleLogin}
@@ -49,17 +53,17 @@ class LoginScreen extends Component {
   }
 }
 
-/*const AppNavigator = createStackNavigator({
+const AppNavigator = createStackNavigator({
   Login: {
     screen: LoginScreen,
     navigationOptions: {
       title: 'Login'
     }
   }
-});*/
+});
 
-// export default createAppContainer(AppNavigator);
-export default LoginScreen;
+export default createAppContainer(AppNavigator);
+// export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
