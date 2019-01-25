@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, Image, View, StyleSheet} from 'react-native';
 import FontAwesome, { Icons, parseIconFromClassName} from 'react-native-fontawesome';
-import { relative } from 'path';
+// import { relative } from 'path'; <--- is this necessary?
 
 class RecommendationTile extends Component {
     constructor(props) {
@@ -14,7 +14,6 @@ class RecommendationTile extends Component {
             imgUrl: props.imgUrl,
             rating: props.rating,
             price: this.priceString(props.price),
-            rating: props.rating,
             description: props.description
         };
     }
