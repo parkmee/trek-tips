@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, ScrollView} from 'react-native';
 // import NavBar from "./components/NavBar/NavBar"; <--no such file or folder or component
-import RecommendationTile from './components/RecommendationTile/RecommendationTile';
+import RecommendationTile from '../components/RecommendationTile';
+import NavBar from '../components/NavBar/NavBar';
 
 export default class App extends Component {
   constructor(props) {
@@ -68,6 +69,7 @@ export default class App extends Component {
   render() {
     return (
       <View>
+        <NavBar />
         <ScrollView contentContainer={styles.contentContainer}>
           {this.recommendationList()}
         </ScrollView>
