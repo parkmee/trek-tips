@@ -26,7 +26,7 @@ class LoginScreen extends Component {
 
   render() {
     let loggedIn = this.state.userName !== null;
-    // console.log(loggedIn);
+    console.log(loggedIn);
     // console.log(this.props);
 
     return (
@@ -40,6 +40,14 @@ class LoginScreen extends Component {
         >
           <Text style={styles.loginText}>{loggedIn ? 'Logout' : 'Login'}</Text>
         </TouchableOpacity>
+        {loggedIn
+          ? <TouchableOpacity
+            style={styles.continue}
+            onPress={() => console.log('Continue to App')}
+          >
+            <Text style={styles.continueText}>Continue</Text>
+          </TouchableOpacity>
+          : null}
       </View>
 
     );
@@ -53,9 +61,9 @@ class LoginScreen extends Component {
       title: 'Login'
     }
   }
-});
+});*/
 
-export default createAppContainer(AppNavigator);*/
+// export default createAppContainer(AppNavigator);
 export default LoginScreen;
 
 const styles = StyleSheet.create({
@@ -82,6 +90,19 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: '#FF7900',
+    fontWeight: '600',
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingRight: 10,
+    paddingBottom: 5
+  },
+  continue: {
+    marginTop: 5,
+    backgroundColor: '#FF7900',
+    borderRadius: 5
+  },
+  continueText: {
+    color: '#0DF242',
     fontWeight: '600',
     paddingLeft: 10,
     paddingTop: 5,
