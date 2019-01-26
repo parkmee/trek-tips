@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import RecCard from "../components/RecCard"
 
 export default class SavedScreen extends Component {
   // Header Options
@@ -43,7 +45,40 @@ export default class SavedScreen extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.content}>
-          <Text>Saved Things go here...</Text>
+          <ScrollView>
+            <RecCard
+              imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
+              description="Gary's House"
+              rating="4"
+              price="4"
+              isSaved="false"
+              wasVisited="true"
+            />
+            <RecCard
+              imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
+              description="Steve's House"
+              rating="4"
+              price="2"
+              isSaved="true"
+              wasVisited="true"
+            />
+            <RecCard
+              imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
+              description="Mike's House"
+              rating="1"
+              price="1"
+              isSaved="false"
+              wasVisited="true"
+            />
+            <RecCard
+              imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
+              description="Mary's House"
+              rating="2"
+              price="3"
+              isSaved="false"
+              wasVisited="true"
+            />
+          </ScrollView>
         </View>
       </View>
     )
