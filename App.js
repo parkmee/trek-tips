@@ -17,7 +17,7 @@ class LoginScreen extends Component {
           onPress={() => {
             this.props.navigation.navigate('Home', {
               user_id: 23,
-              otherParam: 'User Name'
+              userName: 'User Name'
             })
           }}/>
       </View>
@@ -26,11 +26,15 @@ class LoginScreen extends Component {
 }
 
 class HomeScreen extends Component {
+  static navigationOptions = {
+    title: 'Trek Tips'
+  };
+
   render() {
 
     const {navigation} = this.props;
     const user_id = navigation.getParam('user_id', 'NO ID');
-    const otherParam = navigation.getParam('otherParam', 'Default Param Value');
+    const userName = navigation.getParam('userName', 'Default Param Value');
 
     return (
       <View style={styles.container}>
@@ -38,14 +42,15 @@ class HomeScreen extends Component {
           title="Logout"
           color="#C3272B"
           onPress={() => this.props.navigation.navigate('Login')}/>
-        <Text>Home Screen</Text>
-        <Text>User ID: {JSON.stringify(user_id)}</Text>
-        <Text>Welcome to Trek Tips {JSON.stringify(otherParam)}!</Text>
+        <Text style={styles.welcome}>Home Screen</Text>
+        <Text style={styles.instructions}>User ID: {JSON.stringify(user_id)}</Text>
+        <Text style={styles.instructions}>Welcome to Trek Tips {userName}!</Text>
         <TouchableOpacity
           style={styles.continue}
           onPress={() => {
             this.props.navigation.navigate('Recommendations', {
-              locationSearch: 'Atlanta, Georgia'
+              locationSearch: 'Atlanta, Georgia',
+              pageNumber: 1
             })
           }}
         >
@@ -57,22 +62,40 @@ class HomeScreen extends Component {
 }
 
 class RecommendationsScreen extends Component {
+  static navigationOptions = ({navigation, navigationOptions}) => {
+    const {params} = navigation.state;
+    console.log(params);
+
+    return {
+      title: params.locationSearch ? params.locationSearch : 'A Nested Screen',
+      headerStyle: {
+        backgroundColor: navigationOptions.headerTintColor
+      },
+      headerTintColor: navigationOptions.headerStyle.backgroundColor
+    }
+  };
+
   render() {
 
     const {navigation} = this.props;
     const locationSearch = navigation.getParam('locationSearch', 'No Search Requested');
-    console.log(locationSearch);
+    let pageNumber = navigation.getParam('pageNumber', 1);
 
     return (
       <View style={styles.container}>
         <Button
           title="Logout"
+          color="#C3272B"
           onPress={() => this.props.navigation.navigate('Login')}/>
-        <Text>Recommendations Screen</Text>
-        <Text>Showing Results for: {locationSearch}</Text>
+        <Text style={styles.welcome}>Recommendations Screen</Text>
+        <Text style={styles.instructions}>Showing Results for: {locationSearch}</Text>
         <Button
           title="See More Recommendations"
-          onPress={() => this.props.navigation.push('Recommendations')}/>
+          onPress={() => {
+            this.props.navigation.push('Recommendations', {
+              pageNumber: ++pageNumber
+            })
+          }}/>
         <TouchableOpacity
           style={styles.continue}
           onPress={() => this.props.navigation.goBack()}
@@ -82,6 +105,7 @@ class RecommendationsScreen extends Component {
         <Button
           title="Return to Home"
           onPress={() => this.props.navigation.navigate('Home')}/>
+          <Text>Page {pageNumber}</Text>
       </View>
     )
   }
@@ -99,7 +123,16 @@ const AppNavigator = createStackNavigator({
     }
   },
   {
-    initialRouteName: 'Login'
+    initialRouteName: 'Login',
+    defaultNavigationOptions: {
+      headerStyle: { // Style object that wraps the header
+        backgroundColor: '#FF1589',
+      },
+      headerTintColor: '#FFFFFF', // Used to color the back button and the title.
+      headerTitleStyle: { // Customize the 'fontFamily', 'fontWeight' and other 'Text' properties
+        fontWeight: 'bold',
+      },
+    },
   });
 
 const AppContainer = createAppContainer(AppNavigator);
@@ -144,6 +177,7 @@ const styles = StyleSheet.create({
   },
   continue: {
     marginTop: 5,
+    marginBottom: 5,
     backgroundColor: '#FF7900',
     borderRadius: 5
   },
