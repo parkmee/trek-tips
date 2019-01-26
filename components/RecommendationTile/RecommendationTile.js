@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import { Text, Image, View, StyleSheet} from 'react-native';
 import FontAwesome, { Icons, parseIconFromClassName} from 'react-native-fontawesome';
-// import { relative } from 'path'; <--- is this necessary?
 
 class RecommendationTile extends Component {
     constructor(props) {
         super(props);
-        console.log("imgUrl: ", this.imgUrl);
+    }
 
-        this.state = {
-            isSaved: props.isSaved,
-            wasVisited: props.wasVisited,
-            imgUrl: props.imgUrl,
-            rating: props.rating,
-            price: this.priceString(props.price),
-            description: props.description
-        };
+    toggleSaved() {
+        alert("saved icon pressed" + this.props.description);
+
+        // TODO: put code here to do axios put to update isSaved
+
+    }
+
+    toggleVisited () {
+        alert("visited icon pressed" + this.props.description);
+
+        // TODO: put code here to do axios put to update wasVisited
+
     }
 
     priceString(price) {
@@ -47,13 +50,25 @@ class RecommendationTile extends Component {
             <View>
                 <Image
                     style={styles.imgStyle}
-                    source={{uri: this.state.imgUrl}}
+                    source={{uri: this.props.imgUrl}}
                 />
-                <Text style={styles.rating}>{this.state.rating}</Text>
-                <FontAwesome style={styles.savedIcon}>{heartIcon}</FontAwesome>
-                <FontAwesome style={styles.wasVisitedIcon}>{checkIcon}</FontAwesome>
-                <Text style={styles.price}>- {this.state.price}</Text>
-                <Text style={styles.description}>{this.state.description}</Text>
+                <Text style={styles.rating}>
+                    {this.props.rating}
+                </Text>
+                <FontAwesome style={this.props.isSaved ? styles.savedIconTrue : styles.savedIconFalse}
+                    onPress={this.toggleSaved}>
+                    {heartIcon}
+                </FontAwesome>
+                <FontAwesome style={this.props.wasVisited ? styles.wasVisitedIconTrue : styles.wasVisitedIconFalse}
+                    onPress={this.toggleVisited}>
+                    {checkIcon}
+                </FontAwesome>
+                <Text style={styles.price}> 
+                    - {this.props.price}
+                </Text>
+                <Text style={styles.description}>
+                    {this.props.description}
+                </Text>
           </View>
         )
      }
@@ -70,7 +85,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'left',
-        color: "red",
+        color: "white",
     },
     savedIcon: {
         top: -170,
@@ -79,6 +94,20 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: 'red',
     },
+    savedIconTrue: {
+        top: -170,
+        left: 105,
+        fontSize: 32,
+        textAlign: 'left',
+        color: 'red',
+    },
+    savedIconFalse: {
+        top: -170,
+        left: 105,
+        fontSize: 32,
+        textAlign: 'left',
+        color: 'grey',
+    },
     wasVisitedIcon: {
         top: -200,
         left: 65,
@@ -86,20 +115,34 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: '#333333',
     },
+    wasVisitedIconTrue: {
+        top: -200,
+        left: 65,
+        fontSize: 32,
+        textAlign: 'left',
+        color: 'green',
+    },
+    wasVisitedIconFalse: {
+        top: -200,
+        left: 65,
+        fontSize: 32,
+        textAlign: 'left',
+        color: 'grey',
+    },
     price: {
         top: -118,
         left: 30,
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'left',
-        color: 'red',
+        color: 'white',
     },
     rating: {
         top: -30,
         left: 10,
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'red',
+        color: 'white',
     },
   });
 

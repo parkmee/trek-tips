@@ -7,6 +7,9 @@ import NavBar from './components/NavBar/NavBar';
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this.toggleSaved = this.toggleSaved.bind(this);
+    this.toggleVisited = this.toggleVisited.bind(this);
+
     this.state = {
       recommendations: [
         {
@@ -65,6 +68,23 @@ export default class App extends Component {
     })
   }
 
+  toggleSaved(recommendation) {
+    alert("saved icon pressed" + recommendation.description);
+    if (recommendation.isSaved) {
+      recommendation.isSaved = false;
+    } else {
+      recommendation.isSaved = true;
+    }
+  }
+
+  toggleVisited (recommendation) {
+      alert("visited icon pressed" + recommendation.description);
+      if (recommendation.wasVisited) {
+        recommendation.wasVisited = false;
+      } else {
+        recommendation.wasVisited = true;
+      }
+  }
 
   render() {
     return (
