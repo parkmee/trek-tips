@@ -8,17 +8,48 @@ export default class HomeScreen extends Component {
       title: 'Trek Tips',
       headerLeft: null,
       headerRight: (
-        <TouchableOpacity
-          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-          onPress={() => navigation.navigate('Login')}
-        >
-          <Text style={{
-            color: navigationOptions.headerTintColor,
-            marginRight: 10
-          }}>
-            Logout
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.nav}>
+          <TouchableOpacity
+            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+            onPress={() => navigation.navigate('Saved', {
+                userName: navigation.getParam('userName', 'Default Param Value')
+              }
+            )}
+          >
+            <Text style={{
+              color: navigationOptions.headerTintColor,
+              marginRight: 10
+            }}>
+              Saved
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+            onPress={() => navigation.navigate('Preferences', {
+                user_id: navigation.getParam('user_id', 'NO ID'),
+                userName: navigation.getParam('userName', 'Default Param Value')
+              }
+            )}
+          >
+            <Text style={{
+              color: navigationOptions.headerTintColor,
+              marginRight: 10
+            }}>
+              Preferences
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+            onPress={() => navigation.navigate('Login')}
+          >
+            <Text style={{
+              color: navigationOptions.headerTintColor,
+              marginRight: 10
+            }}>
+              Logout
+            </Text>
+          </TouchableOpacity>
+        </View>
       )
     }
   };
@@ -35,28 +66,6 @@ export default class HomeScreen extends Component {
         <Text style={styles.welcome}>Home Screen</Text>
         <Text style={styles.instructions}>User ID: {JSON.stringify(user_id)}</Text>
         <Text style={styles.instructions}>Welcome to Trek Tips {userName}!</Text>
-        <Text style={styles.instructions}>Button Styling:</Text>
-        <Button
-          title="View Recommendations"
-          color="#FF1589"
-          onPress={() => {
-            this.props.navigation.navigate('Recommendations', {
-              locationSearch: 'Atlanta, Georgia',
-              pageNumber: 1
-            })
-          }}/>
-        <Text style={styles.instructions}>vs. TouchableOpacity:</Text>
-        <TouchableOpacity
-          style={styles.continue}
-          onPress={() => {
-            this.props.navigation.navigate('Recommendations', {
-              locationSearch: 'Atlanta, Georgia',
-              pageNumber: 1
-            })
-          }}
-        >
-          <Text style={styles.continueText}>View Recommendations</Text>
-        </TouchableOpacity>
       </View>
     )
   }
@@ -64,6 +73,9 @@ export default class HomeScreen extends Component {
 
 // StyleSheet
 const styles = StyleSheet.create({
+  nav: {
+    flexDirection: 'row'
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
