@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import RecCard from "../components/RecCard";
+import { ScrollView } from 'react-native-gesture-handler';
+
 
 export default class RecommendationsScreen extends Component {
   // Header Options
@@ -40,9 +43,50 @@ export default class RecommendationsScreen extends Component {
       <View style={styles.container}>
         <Text style={styles.welcome}>Recommendations Screen</Text>
         <Text style={styles.instructions}>Showing Results for: {locationSearch}</Text>
-        <View
+        <ScrollView
           style={styles.content}
+        >
+        <RecCard
+          imgUrl = "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
+          description = "Brintz's House"
+          rating = "5"
+          price = "4"
+          isSaved = "false"
+          wasVisited = "false"
         />
+        <RecCard
+          imgUrl = "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
+          description = "Mike's House"
+          rating = "3"
+          price = "2"
+          isSaved = "false"
+          wasVisited = "false"
+        />
+        <RecCard
+          imgUrl = "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
+          description = "Mike's House"
+          rating = "5"
+          price = "4"
+          isSaved = "false"
+          wasVisited = "true"
+        />
+        <RecCard
+          imgUrl = "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
+          description = "Steve's House"
+          rating = "1"
+          price = "1"
+          isSaved = "true"
+          wasVisited = "false"
+        />
+        <RecCard
+          imgUrl = "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
+          description = "Donna's House"
+          rating = "4.5"
+          price = "3"
+          isSaved = "true"
+          wasVisited = "true"
+        />
+        </ScrollView>
         <View style={styles.footer}>
           <TouchableOpacity
             style={styles.continue}
@@ -89,7 +133,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   content: {
-    flex: 1
+    flexDirection: "column"
   },
   continue: {
     marginTop: 5,
