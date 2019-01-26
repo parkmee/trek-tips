@@ -7,7 +7,7 @@ export default class SavedScreen extends Component {
     const {params} = navigation.state;
 
     return {
-      title: params.locationSearch ? params.locationSearch : 'A Nested Screen',
+      title: `${params.userName}'s Saved Tips`,
       headerStyle: {
         backgroundColor: navigationOptions.headerTintColor
       },
@@ -37,31 +37,29 @@ export default class SavedScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>{userName}'s Saved Recommendations</Text>
-        <Text style={styles.instructions}>Insert sorting option here...</Text>
+        <View style={styles.filterBar}>
+          <TouchableOpacity
+            style={styles.filter}
+            onPress={() => console.log('View All')}
+          >
+            <Text style={styles.filterText}>All</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.filter}
+            onPress={() => console.log('View Saved')}
+          >
+            <Text style={styles.filterText}>Saved</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.filter}
+            onPress={() => console.log('View Visited')}
+          >
+            <Text style={styles.filterText}>Visited</Text>
+          </TouchableOpacity>
+        </View>
         <View
           style={styles.content}
         />
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.continue}
-            onPress={() => this.props.navigation.goBack()}
-          >
-            <Text style={styles.continueText}>Go Back</Text>
-          </TouchableOpacity>
-          <Text style={styles.pageNum}>Page {pageNumber}</Text>
-          <TouchableOpacity
-            style={styles.continue}
-            onPress={() => {
-              this.props.navigation.push('Recommendations', {
-                pageNumber: ++pageNumber,
-                locationSearch: locationSearch
-              })
-            }}
-          >
-            <Text style={styles.continueText}>More</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     )
   }
@@ -71,7 +69,7 @@ export default class SavedScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },
@@ -90,28 +88,25 @@ const styles = StyleSheet.create({
   content: {
     flex: 1
   },
-  continue: {
+  filterBar: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: '#F5FCFF'
+  },
+  filter: {
     marginTop: 5,
     marginBottom: 5,
-    backgroundColor: '#FF1589',
+    backgroundColor: '#F5FCFF',
     borderRadius: 5
   },
-  pageNum: {
-    color: '#F5FCFF'
-  },
-  continueText: {
-    color: '#F5FCFF',
+  filterText: {
+    color: '#FF1589',
     fontWeight: '600',
     paddingLeft: 10,
     paddingTop: 5,
     paddingRight: 10,
     paddingBottom: 5
-  },
-  footer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#FF1589'
   }
 });

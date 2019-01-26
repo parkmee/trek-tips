@@ -12,7 +12,7 @@ export default class PreferencesScreen extends Component {
         >
           <Text style={{
             color: navigationOptions.headerTintColor,
-            marginRight: 10
+            marginLeft: 10
           }}>
             Home
           </Text>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justfiyContent: 'center',
+    justifyContent: 'center',
     alignItems: "center"
   }
 });
