@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 
-export default class RecommendationsScreen extends Component {
+export default class SavedScreen extends Component {
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
@@ -12,7 +12,7 @@ export default class RecommendationsScreen extends Component {
         backgroundColor: navigationOptions.headerTintColor
       },
       headerTintColor: navigationOptions.headerStyle.backgroundColor,
-      headerRight: (
+      /*headerRight: (
         <TouchableOpacity
           style={{backgroundColor: navigationOptions.headerTintColor}}
           onPress={() => navigation.navigate('Home')}
@@ -25,21 +25,20 @@ export default class RecommendationsScreen extends Component {
             Home
           </Text>
         </TouchableOpacity>
-      )
+      )*/
     }
   };
 
   render() {
 
     const {navigation} = this.props;
-    const locationSearch = navigation.getParam('locationSearch', 'No Search Requested');
-    let pageNumber = navigation.getParam('pageNumber', 1);
+    const userName = navigation.getParam('userName', 'Default Value');
 
     // Body Content
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Recommendations Screen</Text>
-        <Text style={styles.instructions}>Showing Results for: {locationSearch}</Text>
+        <Text style={styles.welcome}>{userName}'s Saved Recommendations</Text>
+        <Text style={styles.instructions}>Insert sorting option here...</Text>
         <View
           style={styles.content}
         />

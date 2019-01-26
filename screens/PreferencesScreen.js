@@ -1,22 +1,33 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 
-export default class HomeScreen extends Component {
+export default class PreferencesScreen extends Component {
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
-      title: 'Trek Tips',
-      headerLeft: null,
-      headerRight: (
-        <TouchableOpacity
+      title: 'Preferences',
+      headerLeft: (<TouchableOpacity
           style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => navigation.navigate('Home')}
         >
           <Text style={{
             color: navigationOptions.headerTintColor,
             marginRight: 10
           }}>
-            Logout
+            Home
+          </Text>
+        </TouchableOpacity>
+      ),
+      headerRight: (
+        <TouchableOpacity
+          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+          onPress={() => console.log('Saved!')}
+        >
+          <Text style={{
+            color: navigationOptions.headerTintColor,
+            marginRight: 10
+          }}>
+            Save Preferences
           </Text>
         </TouchableOpacity>
       )
@@ -32,30 +43,12 @@ export default class HomeScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Home Screen</Text>
+        <Text style={styles.welcome}>{userName}</Text>
+        <Text style={styles.instructions}>^ Probably unnecessary, but left it as a stand in...</Text>
         <Text style={styles.instructions}>User ID: {JSON.stringify(user_id)}</Text>
-        <Text style={styles.instructions}>Welcome to Trek Tips {userName}!</Text>
-        <Text style={styles.instructions}>Button Styling:</Text>
-        <Button
-          title="View Saved"
-          color="#FF1589"
-          onPress={() => {
-            this.props.navigation.navigate('Saved', {
-              userName: userName
-            })
-          }}/>
-        <Text style={styles.instructions}>vs. TouchableOpacity:</Text>
-        <TouchableOpacity
-          style={styles.continue}
-          onPress={() => {
-            this.props.navigation.navigate('Preferences', {
-              user_id: user_id,
-              userName: userName
-            })
-          }}
-        >
-          <Text style={styles.continueText}>Edit Preferences</Text>
-        </TouchableOpacity>
+        <View style={styles.content}>
+          <Text style={styles.instructions}>Stuff goes here....</Text>
+        </View>
       </View>
     )
   }
@@ -81,18 +74,9 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
-  continue: {
-    marginTop: 5,
-    marginBottom: 5,
-    backgroundColor: '#FF1589',
-    borderRadius: 5
-  },
-  continueText: {
-    color: '#0DF242',
-    fontWeight: '600',
-    paddingLeft: 10,
-    paddingTop: 5,
-    paddingRight: 10,
-    paddingBottom: 5
+  content: {
+    flex: 1,
+    justfiyContent: 'center',
+    alignItems: "center"
   }
 });
