@@ -1,70 +1,115 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
 
 // import API from './utils/API';
 
 class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userName: null
-    };
-
-    // this.handleLogin = this.handleLogin.bind(this);
-    // this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  handleLogin = () => {
-    console.log('Logging In');
-    this.setState({userName: 'Test'}, () => console.log('userName: ', this.state.userName))
-  };
-
-  handleLogout = () => {
-    console.log('Logging Out');
-    this.setState({userName: null}, () => console.log('userName: ', this.state.userName))
-  };
-
   render() {
-    let loggedIn = this.state.userName !== null;
-    console.log(loggedIn);
-    // console.log(this.props);
-
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Trek Tips</Text>
         <Text style={styles.instructions}>Our goal is for you to have the best possible travel experience.</Text>
         <Text style={styles.instructions}>To get started, please login...</Text>
-        <TouchableOpacity
-          style={styles.login}
-          onPress={loggedIn ? this.handleLogout : this.handleLogin}
-        >
-          <Text style={styles.loginText}>{loggedIn ? 'Logout' : 'Login'}</Text>
-        </TouchableOpacity>
-        {loggedIn
-          ? <TouchableOpacity
-            style={styles.continue}
-            onPress={() => console.log('Continue to App')}
-          >
-            <Text style={styles.continueText}>Continue</Text>
-          </TouchableOpacity>
-          : null}
+        <Button
+          title="Login"
+          color="#FF1589"
+          onPress={() => {
+            this.props.navigation.navigate('Home', {
+              user_id: 23,
+              otherParam: 'User Name'
+            })
+          }}/>
       </View>
-
-    );
+    )
   }
 }
 
-/*const AppNavigator = createStackNavigator({
-  Login: {
-    screen: LoginScreen,
-    navigationOptions: {
-      title: 'Login'
-    }
-  }
-});*/
+class HomeScreen extends Component {
+  render() {
 
-// export default createAppContainer(AppNavigator);
-export default LoginScreen;
+    const {navigation} = this.props;
+    const user_id = navigation.getParam('user_id', 'NO ID');
+    const otherParam = navigation.getParam('otherParam', 'Default Param Value');
+
+    return (
+      <View style={styles.container}>
+        <Button
+          title="Logout"
+          color="#C3272B"
+          onPress={() => this.props.navigation.navigate('Login')}/>
+        <Text>Home Screen</Text>
+        <Text>User ID: {JSON.stringify(user_id)}</Text>
+        <Text>Welcome to Trek Tips {JSON.stringify(otherParam)}!</Text>
+        <TouchableOpacity
+          style={styles.continue}
+          onPress={() => {
+            this.props.navigation.navigate('Recommendations', {
+              locationSearch: 'Atlanta, Georgia'
+            })
+          }}
+        >
+          <Text style={styles.continueText}>Go to Recommendations Screen</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+}
+
+class RecommendationsScreen extends Component {
+  render() {
+
+    const {navigation} = this.props;
+    const locationSearch = navigation.getParam('locationSearch', 'No Search Requested');
+    console.log(locationSearch);
+
+    return (
+      <View style={styles.container}>
+        <Button
+          title="Logout"
+          onPress={() => this.props.navigation.navigate('Login')}/>
+        <Text>Recommendations Screen</Text>
+        <Text>Showing Results for: {locationSearch}</Text>
+        <Button
+          title="See More Recommendations"
+          onPress={() => this.props.navigation.push('Recommendations')}/>
+        <TouchableOpacity
+          style={styles.continue}
+          onPress={() => this.props.navigation.goBack()}
+        >
+          <Text style={styles.continueText}>Go Back</Text>
+        </TouchableOpacity>
+        <Button
+          title="Return to Home"
+          onPress={() => this.props.navigation.navigate('Home')}/>
+      </View>
+    )
+  }
+}
+
+const AppNavigator = createStackNavigator({
+    Login: {
+      screen: LoginScreen
+    },
+    Home: {
+      screen: HomeScreen
+    },
+    Recommendations: {
+      screen: RecommendationsScreen
+    }
+  },
+  {
+    initialRouteName: 'Login'
+  });
+
+const AppContainer = createAppContainer(AppNavigator);
+
+export default class App extends Component {
+  render() {
+    return <AppContainer/>
+  }
+}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -78,6 +123,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     textAlign: 'center',
     margin: 10,
+    color: '#FF1589'
   },
   instructions: {
     textAlign: 'center',
