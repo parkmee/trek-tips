@@ -12,27 +12,12 @@ export default class SavedScreen extends Component {
         backgroundColor: navigationOptions.headerTintColor
       },
       headerTintColor: navigationOptions.headerStyle.backgroundColor,
-      /*headerRight: (
-        <TouchableOpacity
-          style={{backgroundColor: navigationOptions.headerTintColor}}
-          onPress={() => navigation.navigate('Home')}
-        >
-          <Text
-            style={{
-              color: navigationOptions.headerStyle.backgroundColor,
-              marginRight: 10
-            }}>
-            Home
-          </Text>
-        </TouchableOpacity>
-      )*/
     }
   };
 
   render() {
-
-    const {navigation} = this.props;
-    const userName = navigation.getParam('userName', 'Default Value');
+    // const {navigation} = this.props;
+    // const userName = navigation.getParam('userName', 'Default Value');
 
     // Body Content
     return (
@@ -57,9 +42,9 @@ export default class SavedScreen extends Component {
             <Text style={styles.filterText}>Visited</Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={styles.content}
-        />
+        <View style={styles.content}>
+          <Text>Saved Things go here...</Text>
+        </View>
       </View>
     )
   }
@@ -85,9 +70,6 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
-  content: {
-    flex: 1
-  },
   filterBar: {
     width: '100%',
     flexDirection: 'row',
@@ -108,5 +90,10 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingRight: 10,
     paddingBottom: 5
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: "center"
   }
 });
