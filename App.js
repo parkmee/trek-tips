@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
-// import {createStackNavigator, createAppContainer} from 'react-navigation';
-
-// import NavBar from "./components/NavBar/NavBar"; <--no such file or folder or component
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
 // import API from './utils/API';
 
