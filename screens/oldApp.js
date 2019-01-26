@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
-import {createStackNavigator, createAppContainer} from 'react-navigation';
-import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
-import RecommendationsScreen from './screens/RecommendationsScreen';
+import {Platform, StyleSheet, Text, View, ScrollView} from 'react-native';
+// import NavBar from "./components/NavBar/NavBar"; <--no such file or folder or component
+import RecommendationTile from '../components/RecommendationTile';
+import NavBar from '../components/NavBar/NavBar';
 
-<<<<<<< HEAD
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.toggleSaved = this.toggleSaved.bind(this);
-    this.toggleVisited = this.toggleVisited.bind(this);
-
     this.state = {
       recommendations: [
         {
@@ -49,7 +45,7 @@ export default class App extends Component {
           isSaved: false,
           wasVisited: false
         }
-    ]}
+      ]}
 
   }
 
@@ -69,53 +65,43 @@ export default class App extends Component {
     })
   }
 
-  toggleSaved(recommendation) {
-    alert("saved icon pressed" + recommendation.description);
-    if (recommendation.isSaved) {
-      recommendation.isSaved = false;
-    } else {
-      recommendation.isSaved = true;
-    }
-  }
 
-  toggleVisited (recommendation) {
-      alert("visited icon pressed" + recommendation.description);
-      if (recommendation.wasVisited) {
-        recommendation.wasVisited = false;
-      } else {
-        recommendation.wasVisited = true;
-      }
-  }
-=======
-const AppNavigator = createStackNavigator({
-    Login: {
-      screen: LoginScreen
-    },
-    Home: {
-      screen: HomeScreen
-    },
-    Recommendations: {
-      screen: RecommendationsScreen
-    }
-  },
-  {
-    initialRouteName: 'Login',
-    defaultNavigationOptions: {
-      headerStyle: { // Style object that wraps the header
-        backgroundColor: '#FF1589',
-      },
-      headerTintColor: '#FFFFFF', // Used to color the back button and the title.
-      headerTitleStyle: { // Customize the 'fontFamily', 'fontWeight' and other 'Text' properties
-        fontWeight: 'bold',
-      },
-    },
-  });
-
-const AppContainer = createAppContainer(AppNavigator);
->>>>>>> d0cd37bcb1953d7b957148d461328af06dad21e4
-
-export default class App extends Component {
   render() {
-    return <AppContainer/>
+    return (
+      <View>
+        <NavBar />
+        <ScrollView contentContainer={styles.contentContainer}>
+          {this.recommendationList()}
+        </ScrollView>
+      </View>
+
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
+  },
+  item: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 30,
+    margin: 2,
+    borderColor: '#2a4944',
+    borderWidth: 1,
+    backgroundColor: '#d2f7f1'
+  }
+});
