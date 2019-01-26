@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 
 export default class RecommendationsScreen extends Component {
+  // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
 
@@ -34,30 +35,40 @@ export default class RecommendationsScreen extends Component {
     const locationSearch = navigation.getParam('locationSearch', 'No Search Requested');
     let pageNumber = navigation.getParam('pageNumber', 1);
 
+    // Body Content
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Recommendations Screen</Text>
         <Text style={styles.instructions}>Showing Results for: {locationSearch}</Text>
-        <Button
-          title="See More Recommendations"
-          color="#0DF242"
-          onPress={() => {
-            this.props.navigation.push('Recommendations', {
-              pageNumber: ++pageNumber
-            })
-          }}/>
-        <TouchableOpacity
-          style={styles.continue}
-          onPress={() => this.props.navigation.goBack()}
-        >
-          <Text style={styles.continueText}>Go Back</Text>
-        </TouchableOpacity>
-        <Text>Page {pageNumber}</Text>
+        <View
+          style={styles.content}
+        />
+        <View style={styles.footer}>
+          <TouchableOpacity
+            style={styles.continue}
+            onPress={() => this.props.navigation.goBack()}
+          >
+            <Text style={styles.continueText}>Go Back</Text>
+          </TouchableOpacity>
+          <Text style={styles.pageNum}>Page {pageNumber}</Text>
+          <TouchableOpacity
+            style={styles.continue}
+            onPress={() => {
+              this.props.navigation.push('Recommendations', {
+                pageNumber: ++pageNumber,
+                locationSearch: locationSearch
+              })
+            }}
+          >
+            <Text style={styles.continueText}>More</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
 }
 
+// StyleSheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -77,18 +88,31 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  content: {
+    flex: 1
+  },
   continue: {
     marginTop: 5,
     marginBottom: 5,
     backgroundColor: '#FF1589',
     borderRadius: 5
   },
+  pageNum: {
+    color: '#F5FCFF'
+  },
   continueText: {
-    color: '#0DF242',
+    color: '#F5FCFF',
     fontWeight: '600',
     paddingLeft: 10,
     paddingTop: 5,
     paddingRight: 10,
     paddingBottom: 5
+  },
+  footer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FF1589'
   }
 });

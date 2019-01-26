@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 
 export default class HomeScreen extends Component {
+  // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: 'Trek Tips',
+      headerLeft: null,
       headerRight: (
         <TouchableOpacity
           style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
@@ -27,11 +29,23 @@ export default class HomeScreen extends Component {
     const user_id = navigation.getParam('user_id', 'NO ID');
     const userName = navigation.getParam('userName', 'Default Param Value');
 
+    // Body Content
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Home Screen</Text>
         <Text style={styles.instructions}>User ID: {JSON.stringify(user_id)}</Text>
         <Text style={styles.instructions}>Welcome to Trek Tips {userName}!</Text>
+        <Text style={styles.instructions}>Button Styling:</Text>
+        <Button
+          title="View Recommendations"
+          color="#FF1589"
+          onPress={() => {
+            this.props.navigation.navigate('Recommendations', {
+              locationSearch: 'Atlanta, Georgia',
+              pageNumber: 1
+            })
+          }}/>
+        <Text style={styles.instructions}>vs. TouchableOpacity:</Text>
         <TouchableOpacity
           style={styles.continue}
           onPress={() => {
@@ -41,17 +55,18 @@ export default class HomeScreen extends Component {
             })
           }}
         >
-          <Text style={styles.continueText}>Go to Recommendations Screen</Text>
+          <Text style={styles.continueText}>View Recommendations</Text>
         </TouchableOpacity>
       </View>
     )
   }
 }
 
+// StyleSheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },

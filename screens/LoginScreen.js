@@ -3,6 +3,8 @@ import {StyleSheet, Button, Text, View} from 'react-native';
 
 export default class LoginScreen extends Component {
   render() {
+
+    // Body Content
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Trek Tips</Text>
@@ -22,6 +24,7 @@ export default class LoginScreen extends Component {
   }
 }
 
+// StyleSheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
