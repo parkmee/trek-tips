@@ -26,8 +26,18 @@ class LoginScreen extends Component {
 }
 
 class HomeScreen extends Component {
-  static navigationOptions = {
-    title: 'Trek Tips'
+  static navigationOptions = ({navigation, navigationOptions}) => {
+    return {
+      title: 'Trek Tips',
+      headerRight: (
+        <TouchableOpacity
+          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+          onPress={() => navigation.navigate('Login')}
+        >
+          <Text style={{color: navigationOptions.headerTintColor, marginRight: 10}}>Logout</Text>
+        </TouchableOpacity>
+      )
+    }
   };
 
   render() {
@@ -38,10 +48,6 @@ class HomeScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Button
-          title="Logout"
-          color="#C3272B"
-          onPress={() => this.props.navigation.navigate('Login')}/>
         <Text style={styles.welcome}>Home Screen</Text>
         <Text style={styles.instructions}>User ID: {JSON.stringify(user_id)}</Text>
         <Text style={styles.instructions}>Welcome to Trek Tips {userName}!</Text>
@@ -71,7 +77,19 @@ class RecommendationsScreen extends Component {
       headerStyle: {
         backgroundColor: navigationOptions.headerTintColor
       },
-      headerTintColor: navigationOptions.headerStyle.backgroundColor
+      headerTintColor: navigationOptions.headerStyle.backgroundColor,
+      headerRight: (
+        <TouchableOpacity
+          style={{backgroundColor: navigationOptions.headerTintColor}}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <Text
+            style={{color: navigationOptions.headerStyle.backgroundColor, marginRight: 10}}
+          >
+            Home
+          </Text>
+        </TouchableOpacity>
+      )
     }
   };
 
@@ -83,14 +101,11 @@ class RecommendationsScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Button
-          title="Logout"
-          color="#C3272B"
-          onPress={() => this.props.navigation.navigate('Login')}/>
         <Text style={styles.welcome}>Recommendations Screen</Text>
         <Text style={styles.instructions}>Showing Results for: {locationSearch}</Text>
         <Button
           title="See More Recommendations"
+          color="#0DF242"
           onPress={() => {
             this.props.navigation.push('Recommendations', {
               pageNumber: ++pageNumber
@@ -102,10 +117,7 @@ class RecommendationsScreen extends Component {
         >
           <Text style={styles.continueText}>Go Back</Text>
         </TouchableOpacity>
-        <Button
-          title="Return to Home"
-          onPress={() => this.props.navigation.navigate('Home')}/>
-          <Text>Page {pageNumber}</Text>
+        <Text>Page {pageNumber}</Text>
       </View>
     )
   }
@@ -168,7 +180,7 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   loginText: {
-    color: '#FF7900',
+    color: '#FF1589',
     fontWeight: '600',
     paddingLeft: 10,
     paddingTop: 5,
@@ -178,7 +190,7 @@ const styles = StyleSheet.create({
   continue: {
     marginTop: 5,
     marginBottom: 5,
-    backgroundColor: '#FF7900',
+    backgroundColor: '#FF1589',
     borderRadius: 5
   },
   continueText: {
