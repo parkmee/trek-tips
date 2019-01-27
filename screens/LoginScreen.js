@@ -1,6 +1,17 @@
 import React, {Component} from 'react';
 import {Button, View, SafeAreaView, Modal, Text, StyleSheet} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
+import Auth0 from 'react-native-auth0';
+import API from '../utils/API';
+import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
+
+// console.log(DOMAIN, CLIENT_ID);
+
+const auth0 = new Auth0({
+  domain: DOMAIN,
+  clientId: CLIENT_ID
+});
+
 
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -16,11 +27,34 @@ export default class LoginScreen extends Component {
   }
 
   handleLogin = () => {
-    console.log('Logging In');
+
     this.setState({
       userName: 'DB_NAME',
       user_id: 'DB_ID'
     }, () => console.log('userName', this.state.userName))
+
+    /*auth0.webAuth
+      .authorize({
+        scope: 'openid profile email',
+        audience: `https://${DOMAIN}/userinfo`
+      })
+      .then(credentials => {
+        console.log(credentials);
+
+        API.getUser(credentials.accessToken)
+          .then(res => {
+            console.log(res.data);
+            this.setState({
+              userName: res.data.name,
+              user_id: res.data.sub
+            }, () => {
+              console.log(this.state.userName);
+              console.log(this.state.user_id)
+            })
+          })
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))*/
   };
 
   changeModalVisibility = (modalVisible = false) => {
