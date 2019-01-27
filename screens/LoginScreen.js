@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, View, SafeAreaView, Modal, Text, StyleSheet} from 'react-native';
+import {NavigationEvents} from 'react-navigation';
 
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -33,6 +34,14 @@ export default class LoginScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onWillFocus={() => {
+            this.setState({
+              userName: null,
+              user_id: null
+            })
+          }}
+        />
         <Text style={styles.welcome}>Trek Tips</Text>
         <Text style={styles.instructions}>Our goal is for you to have the best possible travel experience.</Text>
         <Text style={styles.instructions}>To get started, please login...</Text>
