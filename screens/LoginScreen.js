@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {StyleSheet, Button, Text, View} from 'react-native';
+import {Button, View, SafeAreaView, Modal, Text, StyleSheet} from 'react-native';
 
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      modalVisible: false,
+      newUser: true,
       userName: null,
       user_id: null,
     };
@@ -18,6 +20,10 @@ export default class LoginScreen extends Component {
       userName: 'DB_NAME',
       user_id: 'DB_ID'
     }, () => console.log('userName', this.state.userName))
+  };
+
+  changeModalVisibility = (modalVisible = false) => {
+    this.setState({modalVisible})
   };
 
   render() {
@@ -35,16 +41,60 @@ export default class LoginScreen extends Component {
             title="Continue"
             color="#FF1589"
             onPress={() => {
-              this.props.navigation.navigate('Home', {
-                user_id: this.state.user_id,
-                userName: this.state.userName
-              })
+              this.state.newUser
+                ? this.changeModalVisibility(true)
+                : this.props.navigation.navigate('Home', {
+                  user_id: this.state.user_id,
+                  userName: this.state.userName
+                })
             }}/>
           : <Button
             title="Login"
             color="#FF1589"
             onPress={this.handleLogin}/>
         }
+        <Modal
+          visible={this.state.modalVisible}
+          animationType="fade"
+          onRequestClose={() => {
+          }}
+        >
+          <SafeAreaView style={styles.modalContainer}>
+            <View style={styles.modalBody}>
+              <Text style={styles.instructions}>
+                Would you like to set your preferences?
+              </Text>
+              <View style={styles.modalButton}>
+                <Button
+                  style={styles.modalButton}
+                  title="Set Preferences"
+                  color="#FF1589"
+                  onPress={() => {
+                    this.changeModalVisibility(false);
+                    this.props.navigation.navigate('Preferences', {
+                      user_id: this.state.user_id,
+                      userName: this.state.userName
+                    })
+                  }}
+                />
+              </View>
+              <View style={styles.modalButton}>
+                <Button
+                  title="Not Right Now"
+                  color="#FF1589"
+                  onPress={() => {
+                    this.changeModalVisibility(false);
+                    this.props.navigation.navigate('Home', {
+                      user_id: this.state.user_id,
+                      userName: this.state.userName
+                    })
+                  }}
+                />
+              </View>
+            </View>
+          </SafeAreaView>
+
+        </Modal>
       </View>
     )
   }
@@ -69,5 +119,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  modalBody: {
+    backgroundColor: '#FFFFFF',
+    width: '80%',
+    padding: 20,
+    borderRadius: 5,
+  },
+  modalButton: {
+    margin: 10
   }
 });
