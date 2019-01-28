@@ -4,11 +4,15 @@ import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 export default class PreferencesScreen extends Component {
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
+    const {params} = navigation.state;
     return {
       title: 'Preferences',
       headerLeft: (<TouchableOpacity
           style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('Home', {
+            user_id: params.user_id,
+            userName: params.userName
+          })}
         >
           <Text style={{
             color: navigationOptions.headerTintColor,

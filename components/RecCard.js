@@ -11,7 +11,7 @@ class RecCard extends Component {
         }
     }
 
-    priceString(price) {
+    static priceString(price) {
         let priceString;
         switch (price) {
             case "1":
@@ -35,18 +35,18 @@ class RecCard extends Component {
 
     toggleVisited() {
         alert("visited button clicked");
-        if (this.state.wasVisited == "true") {
+        if (this.state.wasVisited === "true") {
             this.setState({wasVisited: "false"});
         } else {
             this.setState({wasVisited: "true"});
         }
 
         // TODO: axios call to update the property in mongoose
-    } 
+    }
 
     toggleSaved () {
         alert("saved button clicked");
-        if (this.state.isSaved == "true") {
+        if (this.state.isSaved === "true") {
             this.setState({isSaved: "false"});
         } else {
             this.setState({isSaved: "true"});
@@ -56,28 +56,28 @@ class RecCard extends Component {
     }
 
     render() {
-        const savedButtonColor = this.state.isSaved == "true" ? "green" : "grey";
-        const visitedButtonColor = this.state.wasVisited == "true" ? "green" : "grey";
+        const savedButtonColor = this.state.isSaved === "true" ? "green" : "grey";
+        const visitedButtonColor = this.state.wasVisited === "true" ? "green" : "grey";
 
         return (
             <Card>
                 <Card.Content>
                     <Title>{this.props.description}</Title>
-                    <Card.Cover 
-                        source={{ uri: this.props.imgUrl}} 
+                    <Card.Cover
+                        source={{ uri: this.props.imgUrl}}
                         style={styles.imgStyle}/>
                 </Card.Content>
                 <Card.Actions>
                     <Text>
-                        {this.props.rating} - {this.priceString(this.props.price)}
-                    </Text>                    
-                    <Button 
-                        color={savedButtonColor} 
+                        {this.props.rating} - {RecCard.priceString(this.props.price)}
+                    </Text>
+                    <Button
+                        color={savedButtonColor}
                         onPress={this.toggleSaved.bind(this)}>
                         Saved
                     </Button>
-                    <Button 
-                        color={visitedButtonColor} 
+                    <Button
+                        color={visitedButtonColor}
                         onPress={this.toggleVisited.bind(this)}>
                         Visited
                     </Button>
@@ -109,5 +109,5 @@ const styles = StyleSheet.create({
     },
 });
 
-  
+
   export default RecCard;
