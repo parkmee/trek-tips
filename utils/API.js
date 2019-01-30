@@ -9,5 +9,8 @@ const DEV_SERVER_URL = Platform.OS === 'android'
 export default {
   getUser: function (accessToken) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
+  },
+  getAllUsers: function() {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user`)
   }
 }
