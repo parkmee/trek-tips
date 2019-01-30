@@ -12,5 +12,18 @@ export default {
   },
   getAllUsers: function() {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user`)
+  },
+  createUser: function() {
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/new`)
+  },
+  findUserById: function() {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/:id`)
+  },
+  addUserPreference: function() {
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/:id/category/:categoryid`)
+  },
+  removeUserPreference: function() {
+    return axios.delete(`http://${DEV_SERVER_URL}:8000/api/user/:id/category/:categoryid`)
   }
+
 }
