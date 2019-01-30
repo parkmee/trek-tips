@@ -7,10 +7,10 @@ import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
 
 // console.log(DOMAIN, CLIENT_ID);
 
-const auth0 = new Auth0({
+/* const auth0 = new Auth0({
   domain: DOMAIN,
   clientId: CLIENT_ID
-});
+}); */
 
 
 export default class LoginScreen extends Component {
