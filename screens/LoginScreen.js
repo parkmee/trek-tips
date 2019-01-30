@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Button, View, SafeAreaView, Modal, Text, StyleSheet} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
-import Auth0 from 'react-native-auth0';
+// import Auth0 from 'react-native-auth0';
 import API from '../utils/API';
-import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
+// import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
 
 // console.log(DOMAIN, CLIENT_ID);
 
