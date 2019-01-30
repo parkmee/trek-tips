@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import {Button, View, SafeAreaView, Modal, Text, StyleSheet} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
-import Auth0 from 'react-native-auth0';
+// import Auth0 from 'react-native-auth0';
 import API from '../utils/API';
-import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
+// import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
 
 // console.log(DOMAIN, CLIENT_ID);
 
-const auth0 = new Auth0({
+/*const auth0 = new Auth0({
   domain: DOMAIN,
   clientId: CLIENT_ID
-});
+});*/
 
 
 export default class LoginScreen extends Component {
