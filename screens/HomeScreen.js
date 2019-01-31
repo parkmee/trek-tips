@@ -15,7 +15,21 @@ export default class HomeScreen extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: 'Trek Tips',
-      headerLeft: null,
+      headerLeft: (
+        <View style={styles.nav}>
+          <TouchableOpacity
+            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+            onPress={() => navigation.navigate('Login')}
+          >
+            <Text style={{
+              color: navigationOptions.headerTintColor,
+              marginLeft: 10
+            }}>
+              Logout
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ),
       headerRight: (
         <View style={styles.nav}>
           <TouchableOpacity
@@ -45,17 +59,6 @@ export default class HomeScreen extends Component {
               marginRight: 10
             }}>
               Preferences
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-            onPress={() => navigation.navigate('Login')}
-          >
-            <Text style={{
-              color: navigationOptions.headerTintColor,
-              marginRight: 10
-            }}>
-              Logout
             </Text>
           </TouchableOpacity>
         </View>
