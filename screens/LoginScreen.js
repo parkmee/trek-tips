@@ -12,19 +12,13 @@ import API from '../utils/API';
   clientId: CLIENT_ID
 }); */
 
-
 export default class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalVisible: false,
-      newUser: true,
-      userName: null,
-      user_id: null,
-    };
-
-    this.handleLogin = this.handleLogin.bind(this)
-  }
+  state = {
+    modalVisible: false,
+    newUser: true,
+    userName: null,
+    user_id: null,
+  };
 
   handleLogin = () => {
 
@@ -63,7 +57,7 @@ export default class LoginScreen extends Component {
 
   render() {
     let loggedIn = this.state.userName !== null;
-    console.log(loggedIn);
+    // console.log(loggedIn);
 
     // Body Content
     return (
