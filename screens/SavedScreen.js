@@ -10,10 +10,6 @@ export default class SavedScreen extends Component {
 
     return {
       title: `${params.userName}'s Saved Tips`,
-      headerStyle: {
-        backgroundColor: navigationOptions.headerTintColor
-      },
-      headerTintColor: navigationOptions.headerStyle.backgroundColor,
     }
   };
 
@@ -91,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#B1A296'
   },
   welcome: {
     fontSize: 36,
@@ -113,14 +109,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF'
   },
   filter: {
+    color: "black",
     marginTop: 5,
     marginBottom: 5,
     backgroundColor: '#F5FCFF',
     borderRadius: 5
   },
   filterText: {
-    color: '#FF1589',
-    fontWeight: '600',
+    color: 'black',
     paddingLeft: 10,
     paddingTop: 5,
     paddingRight: 10,

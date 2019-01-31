@@ -10,8 +10,8 @@ export default {
   /* getUser: function (accessToken) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
   }, */
-  searchYelp: function(location, categories) {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/recommendations/`)
+  searchYelp: function(location) {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/location/${location}/recomendations`)
   },
   getAllUsers: function() {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user`)
@@ -19,14 +19,13 @@ export default {
   createUser: function() {
     return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/new`)
   },
-  findUserById: function() {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/:id`)
+  findUserById: function(id) {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}`)
   },
-  addUserPreference: function() {
-    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/:id/category/:categoryid`)
+  addUserPreference: function(id, categoryid) {
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/${id}/category/${categoryid}`)
   },
-  removeUserPreference: function() {
-    return axios.delete(`http://${DEV_SERVER_URL}:8000/api/user/:id/category/:categoryid`)
+  removeUserPreference: function(id, categoryid) {
+    return axios.delete(`http://${DEV_SERVER_URL}:8000/api/user/${id}/category/${categoryid}`)
   }
-
 }

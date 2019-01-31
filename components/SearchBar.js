@@ -8,14 +8,16 @@ class SearchBar extends Component {
   }
 
   render() {
+    //var updatesearchLocation = this.props.updatesearchLocation;
     return (
       <View style={styles.inputWrapper}>
         <TextInput
-          label='Search City, State or Zip'
-          value={this.props.city}
-          onChangeText={text => this.props.searchTerm = text}
+          label='Search City, State or Zip'   
+          value={this.props.searchLocation}       // this is from the parent prop searchLocation
+          onChangeText = {this.props.updateSearchLocation}  // update parent state for location                 
+          onSubmitEditing = {this.props.searchAction}       // call yelp API to query  
           style={styles.searchInput}
-        />
+        />      
       </View>
     )
   }
@@ -25,12 +27,11 @@ const styles = StyleSheet.create({
   inputWrapper: {
     height: 50,
     alignItems: 'stretch',
-    backgroundColor: '#FF1589',
   },
   searchInput: {
     flex: 1,
     height: 45,
-    width: 300,
+    width: 330,
     fontSize: 22
   },
 });
