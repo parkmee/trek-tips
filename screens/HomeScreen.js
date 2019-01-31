@@ -1,70 +1,57 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import RecCard from "../components/RecCard"
 import { ScrollView } from 'react-native-gesture-handler';
 import SearchBar from '../components/SearchBar';
+import API from "../utils/API";
 
 export default class HomeScreen extends Component {
   constructor() {
     super();
     this.state = {
-      searchTerm: "Atlanta, GA"
+      searchLocation: "Atlanta, GA",
+      searchCategories: "dessert",
+      results: [],
+      error: ""
     }
   }
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: 'Trek Tips',
-      headerLeft: (
-        <View style={styles.nav}>
-          <TouchableOpacity
-            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-            onPress={() => navigation.navigate('Login')}
-          >
-            <Text style={{
-              color: navigationOptions.headerTintColor,
-              marginLeft: 10
-            }}>
-              Logout
-            </Text>
-          </TouchableOpacity>
-        </View>
-      ),
-      headerRight: (
-        <View style={styles.nav}>
-          <TouchableOpacity
-            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-            onPress={() => navigation.navigate('Saved', {
-                userName: navigation.getParam('userName', 'Default Param Value')
-              }
-            )}
-          >
-            <Text style={{
-              color: navigationOptions.headerTintColor,
-              marginRight: 10
-            }}>
-              Saved
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-            onPress={() => navigation.navigate('Preferences', {
-                user_id: navigation.getParam('user_id', 'NO ID'),
-                userName: navigation.getParam('userName', 'Default Param Value')
-              }
-            )}
-          >
-            <Text style={{
-              color: navigationOptions.headerTintColor,
-              marginRight: 10
-            }}>
-              Preferences
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )
     }
   };
+
+  componentWillMount() {
+    API.searchYelp(this.state.searchLocation)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({ results: res.data.message, error: "" });
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({ error: err.message });
+        console.log(this.state.error);
+      });
+  }
+
+  updateSearchLocation(searchLocation) {
+    // update the state value searchLocation given the input from the search bar
+    this.setState({searchLocation: searchLocation});
+  }
+
+  getRecommendations(event){
+    API.searchYelp(this.state.searchLocation, this.state.searchCategories)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({ results: res.data.message, error: "" });
+      })
+      .catch(err => this.setState({ error: err.message }));
+  }
 
   render() {
 
@@ -75,11 +62,53 @@ export default class HomeScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Home Screen</Text>
-        <Text style={styles.instructions}>User ID: {JSON.stringify(user_id)}</Text>
-        <Text style={styles.instructions}>Welcome to Trek Tips {userName}!</Text>
-
-        <SearchBar searchTerm={this.state.searchTerm} />
+      <View style={styles.filterBar}>
+      <TouchableOpacity
+        style={styles.filter}
+        onPress={() => navigation.navigate('Preferences', {
+            user_id: navigation.getParam('user_id', 'NO ID'),
+            userName: navigation.getParam('userName', 'Default Param Value')
+          }
+        )}
+      >
+        <Text style={{
+          color: "black",
+          marginLeft: 10
+        }}>
+          Preferences
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+          style={styles.filter}
+          onPress={() => navigation.navigate('Saved', {
+              userName: navigation.getParam('userName', 'Default Param Value')
+            }
+          )}
+        >
+          <Text style={{
+            color: "black",
+            marginRight: 10
+          }}>
+            Saved
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+            style={styles.filter}
+            onPress={() => navigation.navigate('Login')}
+          >
+            <Text style={{
+              color: "black",
+              marginRight: 10
+            }}>
+              Logout
+            </Text>
+          </TouchableOpacity>
+      </View>
+        <SearchBar 
+          searchLocation={this.state.searchLocation} 
+          updateSearchLocation={this.updateSearchLocation.bind(this)} 
+          searchAction={this.getRecommendations.bind(this)}
+        />
         <ScrollView>
           <RecCard
             imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
@@ -131,7 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#B1A296'
   },
   scrollView: {
     flexDirection: "column"
@@ -161,5 +190,18 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingRight: 10,
     paddingBottom: 5
-  }
+  },
+  filterBar: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: '#F5FCFF'
+  },
+  filter: {
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: '#F5FCFF',
+    borderRadius: 5
+  },
 });
