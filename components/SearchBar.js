@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
+    width: 390,
     height: 45,
-    width: 330,
     fontSize: 22
   },
 });

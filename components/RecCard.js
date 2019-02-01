@@ -14,20 +14,20 @@ class RecCard extends Component {
   static priceString(price) {
     let priceString;
     switch (price) {
-      case "1":
+      case "$":
         priceString = "   $";
         break;
-      case "2":
+      case "$$":
         priceString = "  $$";
         break;
-      case "3":
+      case "$$$$":
         priceString = " $$$";
         break;
-      case "4":
+      case "$$$$":
         priceString = "$$$$";
         break;
       default:
-        priceString = "    ";
+        priceString = " N/A";
         break;
     }
     return priceString;

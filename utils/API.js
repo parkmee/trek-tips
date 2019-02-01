@@ -10,8 +10,8 @@ export default {
    handleLogin: function (accessToken) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
   },
-  searchYelp: function(location) {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/location/${location}/recomendations`)
+  searchYelp: function(location, categories) {
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {location, categories})
   },
   getAllUsers: function() {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user`)
