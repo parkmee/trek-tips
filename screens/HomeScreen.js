@@ -58,8 +58,8 @@ export default class HomeScreen extends Component {
           <TouchableOpacity
             style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
             onPress={() => navigation.navigate('Saved', {
-              user_id: params.user_id,
-              userName: params.userName
+                user_id: params.user_id,
+                userName: params.userName
               }
             )}
           >
@@ -110,10 +110,10 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    console.log(this.props);
     const {navigation} = this.props;
-    const user_id = navigation.getParam('user_id', 'NO ID');
-    const userName = navigation.getParam('userName', 'Default Param Value');
+    const {params} = navigation.state;
+    const user_id = params.user_id;
+    const userName = params.userName;
 
     // Body Content
     return (

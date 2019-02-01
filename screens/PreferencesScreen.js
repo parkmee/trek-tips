@@ -5,9 +5,6 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import API from "../utils/API";
 
 export default class PreferencesScreen extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
