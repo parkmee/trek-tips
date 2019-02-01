@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import RecCard from "../components/RecCard";
 import API from "../utils/API";
 
@@ -12,8 +12,13 @@ export default class SavedScreen extends Component {
       searchLocation: "Atlanta, GA",
       searchCategories: "dessert",
       results: [],
-      error: ""
-    }
+      error: "",
+      filter: 'ALL'
+    };
+
+    this.showAll = this.showAll.bind(this);
+    this.showSaved = this.showSaved.bind(this);
+    this.showVisited = this.showVisited.bind(this);
   }
 
   // Header Options
@@ -23,50 +28,53 @@ export default class SavedScreen extends Component {
     return {
       title: `${params.userName}'s Saved Tips`,
       headerLeft: (<TouchableOpacity
-        style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-        onPress={() => navigation.navigate('Home', {
-          user_id: params.user_id,
-          userName: params.userName
-        })}
-      >
-        <Text style={{
-          color: navigationOptions.headerTintColor,
-          marginLeft: 10
-        }}>
-          Home
-        </Text>
-      </TouchableOpacity>
-    )
+          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+          onPress={() => navigation.navigate('Home', {
+            user_id: params.user_id,
+            userName: params.userName
+          })}
+        >
+          <Text style={{
+            color: navigationOptions.headerTintColor,
+            marginLeft: 10
+          }}>
+            Home
+          </Text>
+        </TouchableOpacity>
+      )
     }
   };
 
   showAll() {
     console.log('View All');
+    this.setState({filter: 'ALL'}, () => console.log(this.state.filter))
   }
 
   showSaved() {
     console.log('View Saved');
+    this.setState({filter: 'SAVED'}, () => console.log(this.state.filter))
   }
 
   showVisited() {
-    console.log('View Visited')
+    console.log('View Visited');
+    this.setState({filter: 'VISITED'}, () => console.log(this.state.filter))
   }
 
-/*  componentWillMount() {
-    // trigger the YELP api search (via the server) when the screen loads
-    API.searchYelp(this.state.searchLocation, "")
-      .then(res => {
-        if (res.data.status === "error") {
-          throw new Error(res.data.message);
-        }
-        this.setState({ results: res.data.businesses, error: "" });
-        console.log(this.state.results);
-      })
-      .catch(err => {
-        this.setState({ error: err.message });
-        console.log(this.state.error);
-      });
-  }*/
+  /*  componentWillMount() {
+      // trigger the YELP api search (via the server) when the screen loads
+      API.searchYelp(this.state.searchLocation, "")
+        .then(res => {
+          if (res.data.status === "error") {
+            throw new Error(res.data.message);
+          }
+          this.setState({ results: res.data.businesses, error: "" });
+          console.log(this.state.results);
+        })
+        .catch(err => {
+          this.setState({ error: err.message });
+          console.log(this.state.error);
+        });
+    }*/
 
   render() {
     const {navigation} = this.props;
@@ -77,39 +85,54 @@ export default class SavedScreen extends Component {
       <View style={styles.container}>
         <View style={styles.content}>
           <ScrollView>
-          {this.state.results.map(reccomendation => {
-            return (
-              <RecCard
-                key={reccomendation.id}
-                imgUrl={reccomendation.image_url}
-                description={reccomendation.name}
-                rating={reccomendation.rating}
-                price={reccomendation.price}
-                isSaved="false"
-                wasVisited="false"
-              />
-            )
-          })}
+            {this.state.results.map(recommendation => {
+              return (
+                <RecCard
+                  key={recommendation.id}
+                  imgUrl={recommendation.image_url}
+                  description={recommendation.name}
+                  rating={recommendation.rating}
+                  price={recommendation.price}
+                  isSaved="false"
+                  wasVisited="false"
+                />
+              )
+            })}
           </ScrollView>
         </View>
         <View style={styles.filterBar}>
           <TouchableOpacity
-            style={styles.filter}
+            style={style.filter}
             onPress={this.showAll}
           >
-            <Text style={styles.filterText}>All</Text>
+            <Text style={this.state.filter === 'ALL'
+              ? styles.filterActiveText
+              : styles.filterText}
+            >
+              All
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.filter}
             onPress={this.showSaved}
           >
-            <Text style={styles.filterText}>Saved</Text>
+            <Text style={this.state.filter === 'SAVED'
+              ? styles.filterActiveText
+              : styles.filterText}
+            >
+              Saved
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.filter}
             onPress={this.showVisited}
           >
-            <Text style={styles.filterText}>Visited</Text>
+            <Text style={this.state.filter === 'VISITED'
+              ? styles.filterActiveText
+              : styles.filterText}
+            >
+              Visited
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -153,6 +176,13 @@ const styles = StyleSheet.create({
   },
   filterText: {
     color: 'black',
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingRight: 10,
+    paddingBottom: 5
+  },
+  filterActiveText: {
+    color: '#FF1589',
     paddingLeft: 10,
     paddingTop: 5,
     paddingRight: 10,

@@ -18,6 +18,8 @@ export default class HomeScreen extends Component {
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
+    const {params} = navigation.state;
+
     return {
       title: 'Trek Tips',
       headerLeft: (
@@ -38,10 +40,10 @@ export default class HomeScreen extends Component {
       headerRight: (
         <View style={styles.nav}>
           <TouchableOpacity
-            style={styles.filter}
+            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
             onPress={() => navigation.navigate('Preferences', {
-                user_id: navigation.getParam('user_id', 'NO ID'),
-                userName: navigation.getParam('userName', 'Default Param Value')
+                user_id: params.user_id,
+                userName: params.userName
               }
             )}
           >
@@ -53,9 +55,10 @@ export default class HomeScreen extends Component {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.filter}
+            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
             onPress={() => navigation.navigate('Saved', {
-                userName: navigation.getParam('userName', 'Default Param Value')
+              user_id: params.user_id,
+              userName: params.userName
               }
             )}
           >
