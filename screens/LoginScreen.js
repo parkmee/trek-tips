@@ -76,7 +76,7 @@ export default class LoginScreen extends Component {
         {loggedIn
           ? <Button
             title="Continue"
-            color="#FF1589"
+            color="#B500A9"
             onPress={() => {
               this.state.newUser
                 ? this.changeModalVisibility(true)
@@ -87,7 +87,7 @@ export default class LoginScreen extends Component {
             }}/>
           : <Button
             title="Login"
-            color="#FF1589"
+            color="#B500A9"
             onPress={this.handleLogin}/>
         }
         <Modal
@@ -105,7 +105,7 @@ export default class LoginScreen extends Component {
                 <Button
                   style={styles.modalButton}
                   title="Set Preferences"
-                  color="#FF1589"
+                  color="#B500A9"
                   onPress={() => {
                     this.changeModalVisibility(false);
                     this.props.navigation.navigate('Preferences', {
@@ -118,7 +118,7 @@ export default class LoginScreen extends Component {
               <View style={styles.modalButton}>
                 <Button
                   title="Not Right Now"
-                  color="#FF1589"
+                  color="#B500A9"
                   onPress={() => {
                     this.changeModalVisibility(false);
                     this.props.navigation.navigate('Home', {
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     textAlign: 'center',
     margin: 10,
-    color: '#FF1589'
+    color: '#B500A9'
   },
   instructions: {
     textAlign: 'center',
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    backgroundColor: '#333333',
     alignItems: 'center',
     justifyContent: 'center'
   },

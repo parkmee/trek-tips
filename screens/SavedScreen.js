@@ -1,20 +1,19 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {ScrollView} from 'react-native-gesture-handler';
 import RecCard from "../components/RecCard";
 import API from "../utils/API";
 
 export default class SavedScreen extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      searchLocation: "Atlanta, GA",
-      searchCategories: "dessert",
-      results: [],
-      error: ""
-    }
-  }
+  state = {
+    searchLocation: "Atlanta, GA",
+    searchCategories: "dessert",
+    results: [],
+    error: "",
+    filter: 'ALL'
+  };
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -23,34 +22,37 @@ export default class SavedScreen extends Component {
     return {
       title: `${params.userName}'s Saved Tips`,
       headerLeft: (<TouchableOpacity
-        style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-        onPress={() => navigation.navigate('Home', {
-          user_id: params.user_id,
-          userName: params.userName
-        })}
-      >
-        <Text style={{
-          color: navigationOptions.headerTintColor,
-          marginLeft: 10
-        }}>
-          Home
-        </Text>
-      </TouchableOpacity>
-    )
+          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+          onPress={() => navigation.navigate('Home', {
+            user_id: params.user_id,
+            userName: params.userName
+          })}
+        >
+          <Text style={{
+            color: navigationOptions.headerTintColor,
+            marginLeft: 10
+          }}>
+            <FontAwesome5 name={'home'} style={{fontSize: 20}}/>
+          </Text>
+        </TouchableOpacity>
+      )
     }
   };
 
-  showAll() {
+  showAll = () => {
     console.log('View All');
-  }
+    this.setState({filter: 'ALL'})
+  };
 
-  showSaved() {
+  showSaved = () => {
     console.log('View Saved');
-  }
+    this.setState({filter: 'SAVED'})
+  };
 
-  showVisited() {
-    console.log('View Visited')
-  }
+  showVisited = () => {
+    console.log('View Visited');
+    this.setState({filter: 'VISITED'})
+  };
 
   componentWillMount() {
     // trigger the YELP api search (via the server) when the screen loads
@@ -59,11 +61,11 @@ export default class SavedScreen extends Component {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({ results: res.data.businesses, error: "" });
+        this.setState({results: res.data.businesses, error: ""});
         console.log(this.state.results);
       })
       .catch(err => {
-        this.setState({ error: err.message });
+        this.setState({error: err.message});
         console.log(this.state.error);
       });
   }
@@ -75,42 +77,57 @@ export default class SavedScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
+        <View style={styles.content}>
+          <ScrollView>
+            {this.state.results.map(recommendation => {
+              return (
+                <RecCard
+                  key={recommendation.id}
+                  imgUrl={recommendation.image_url}
+                  description={recommendation.name}
+                  rating={recommendation.rating}
+                  price={recommendation.price}
+                  isSaved="false"
+                  wasVisited="false"
+                />
+              )
+            })}
+          </ScrollView>
+        </View>
         <View style={styles.filterBar}>
           <TouchableOpacity
             style={styles.filter}
             onPress={this.showAll}
           >
-            <Text style={styles.filterText}>All</Text>
+            <Text style={this.state.filter === 'ALL'
+              ? styles.filterActiveText
+              : styles.filterText}
+            >
+              All
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.filter}
             onPress={this.showSaved}
           >
-            <Text style={styles.filterText}>Saved</Text>
+            <Text style={this.state.filter === 'SAVED'
+              ? styles.filterActiveText
+              : styles.filterText}
+            >
+              Saved
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.filter}
             onPress={this.showVisited}
           >
-            <Text style={styles.filterText}>Visited</Text>
+            <Text style={this.state.filter === 'VISITED'
+              ? styles.filterActiveText
+              : styles.filterText}
+            >
+              Visited
+            </Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.content}>
-          <ScrollView>
-          {this.state.results.map(reccomendation => {
-            return (
-              <RecCard
-                key={reccomendation.id}
-                imgUrl={reccomendation.image_url}
-                description={reccomendation.name}
-                rating={reccomendation.rating}
-                price={reccomendation.price}
-                isSaved="false"
-                wasVisited="false"
-              />
-            )
-          })}
-          </ScrollView>
         </View>
       </View>
     )
@@ -125,17 +142,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#B1A296'
   },
-  welcome: {
-    fontSize: 36,
-    fontWeight: '800',
-    textAlign: 'center',
-    margin: 10,
-    color: '#FF1589'
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: "center"
   },
   filterBar: {
     width: '100%',
@@ -158,9 +168,11 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingBottom: 5
   },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: "center"
+  filterActiveText: {
+    color: '#B500A9',
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingRight: 10,
+    paddingBottom: 5
   }
 });

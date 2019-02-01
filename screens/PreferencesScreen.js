@@ -1,33 +1,45 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import API from "../utils/API";
 
 export default class PreferencesScreen extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
     return {
       title: 'Preferences',
-      headerLeft: (<TouchableOpacity
-        style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-        onPress={() => navigation.navigate('Home', {
-          user_id: params.user_id,
-          userName: params.userName
-        })}
-      >
-        <Text style={{
-          color: navigationOptions.headerTintColor,
-          marginLeft: 10
-        }}>
-          Home
-        </Text>
-      </TouchableOpacity>
-    )
+      headerLeft: (
+        <TouchableOpacity
+          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+          onPress={() => navigation.navigate('Home', {
+            user_id: params.user_id,
+            userName: params.userName
+          })}
+        >
+          <Text style={{
+            color: navigationOptions.headerTintColor,
+            marginLeft: 15
+          }}>
+            <FontAwesome5 name={'home'} style={{fontSize: 20}}/>
+          </Text>
+        </TouchableOpacity>
+      ),
+      headerRight: (
+        <TouchableOpacity
+          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+          onPress={() => console.log('Saved!')}
+        >
+          <Text style={{
+            color: navigationOptions.headerTintColor,
+            marginRight: 15
+          }}>
+            <FontAwesome5 name={'save'} style={{fontSize: 20}}/>
+          </Text>
+        </TouchableOpacity>
+      )
     }
   };
 
@@ -41,11 +53,11 @@ export default class PreferencesScreen extends Component {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({ results: res.data.message, error: "" });
+        this.setState({results: res.data.message, error: ""});
         console.log(this.state.results);
       })
       .catch(err => {
-        this.setState({ error: err.message });
+        this.setState({error: err.message});
         console.log(this.state.error);
       });
   }
@@ -59,20 +71,8 @@ export default class PreferencesScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
-      <View style={styles.filterBar}>
-      <TouchableOpacity
-          style={styles.filter}
-          onPress={() => console.log('Saved!')}
-        >
-          <Text style={{
-            color: "black"
-          }}>
-            Save Preferences
-          </Text>
-        </TouchableOpacity>
-      </View>
         <Text style={styles.welcome}>{userName}</Text>
-        <Text style={styles.instructions}>^ Probably unnecessary, but left it as a stand in...</Text>
+        <Text style={styles.instructions}>Username: {JSON.stringify(userName)}</Text>
         <Text style={styles.instructions}>User ID: {JSON.stringify(user_id)}</Text>
         <View style={styles.content}>
           <Text style={styles.instructions}>Stuff goes here....</Text>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     textAlign: 'center',
     margin: 10,
-    color: '#FF1589'
+    color: '#B500A9'
   },
   instructions: {
     textAlign: 'center',
@@ -106,18 +106,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: "center"
-  },
-  filterBar: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: '#F5FCFF'
-  },
-  filter: {
-    marginTop: 5,
-    marginBottom: 5,
-    backgroundColor: '#F5FCFF',
-    borderRadius: 5
-  },
+  }
 });
