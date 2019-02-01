@@ -43,24 +43,24 @@ export default class PreferencesScreen extends Component {
     }
   };
 
-  /*  componentWillMount() {
-      // trigger the YELP api search (via the server) when the screen loads
-      const {navigation} = this.props;
-      const user_id = navigation.getParam('user_id', 'NO ID');
+  componentWillMount() {
+    // trigger the YELP api search (via the server) when the screen loads
+    const {navigation} = this.props;
+    const user_id = navigation.getParam('user_id', 'NO ID');
 
-      API.findUserById(user_id)
-        .then(res => {
-          if (res.data.status === "error") {
-            throw new Error(res.data.message);
-          }
-          this.setState({ results: res.data.message, error: "" });
-          console.log(this.state.results);
-        })
-        .catch(err => {
-          this.setState({ error: err.message });
-          console.log(this.state.error);
-        });
-    }*/
+    API.findUserById(user_id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({results: res.data.message, error: ""});
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
+  }
 
   render() {
 
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     textAlign: 'center',
     margin: 10,
-    color: '#FF1589'
+    color: '#B500A9'
   },
   instructions: {
     textAlign: 'center',
@@ -106,18 +106,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: "center"
-  },
-  filterBar: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: '#F5FCFF'
-  },
-  filter: {
-    marginTop: 5,
-    marginBottom: 5,
-    backgroundColor: '#F5FCFF',
-    borderRadius: 5
-  },
+  }
 });

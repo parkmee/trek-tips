@@ -23,7 +23,7 @@ const AppNavigator = createStackNavigator({
     initialRouteName: 'Login',
     defaultNavigationOptions: {
       headerStyle: { // Style object that wraps the header
-        backgroundColor: '#FF1589',
+        backgroundColor: '#B500A9',
       },
       headerTintColor: '#FFFFFF', // Used to color the back button and the title.
       headerTitleStyle: { // Customize the 'fontFamily', 'fontWeight' and other 'Text' properties

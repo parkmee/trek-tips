@@ -54,21 +54,21 @@ export default class SavedScreen extends Component {
     this.setState({filter: 'VISITED'})
   };
 
-  /*  componentWillMount() {
-      // trigger the YELP api search (via the server) when the screen loads
-      API.searchYelp(this.state.searchLocation, "")
-        .then(res => {
-          if (res.data.status === "error") {
-            throw new Error(res.data.message);
-          }
-          this.setState({ results: res.data.businesses, error: "" });
-          console.log(this.state.results);
-        })
-        .catch(err => {
-          this.setState({ error: err.message });
-          console.log(this.state.error);
-        });
-    }*/
+  componentWillMount() {
+    // trigger the YELP api search (via the server) when the screen loads
+    API.searchYelp(this.state.searchLocation, "")
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({results: res.data.businesses, error: ""});
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
+  }
 
   render() {
     const {navigation} = this.props;
@@ -142,17 +142,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#B1A296'
   },
-  welcome: {
-    fontSize: 36,
-    fontWeight: '800',
-    textAlign: 'center',
-    margin: 10,
-    color: '#FF1589'
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: "center"
   },
   filterBar: {
     width: '100%',
@@ -176,15 +169,10 @@ const styles = StyleSheet.create({
     paddingBottom: 5
   },
   filterActiveText: {
-    color: '#FF1589',
+    color: '#B500A9',
     paddingLeft: 10,
     paddingTop: 5,
     paddingRight: 10,
     paddingBottom: 5
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: "center"
   }
 });

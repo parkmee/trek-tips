@@ -75,21 +75,21 @@ export default class HomeScreen extends Component {
     }
   };
 
-  /*  componentWillMount() {
-      // trigger the YELP api search (via the server) when the screen loads
-      API.searchYelp(this.state.searchLocation, "")
-        .then(res => {
-          if (res.data.status === "error") {
-            throw new Error(res.data.message);
-          }
-          this.setState({ results: res.data.businesses, error: "" });
-          console.log(this.state.results);
-        })
-        .catch(err => {
-          this.setState({ error: err.message });
-          console.log(this.state.error);
-        });
-    }*/
+  componentWillMount() {
+    // trigger the YELP api search (via the server) when the screen loads
+    API.searchYelp(this.state.searchLocation, "")
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({results: res.data.businesses, error: ""});
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
+  }
 
   updateSearchLocation(searchLocation) {
     // update the state value searchLocation given the input from the search bar
@@ -125,14 +125,14 @@ export default class HomeScreen extends Component {
         />
         <ScrollView>
 
-          {this.state.results.map(reccomendation => {
+          {this.state.results.map(recommendation => {
             return (
               <RecCard
-                key={reccomendation.id}
-                imgUrl={reccomendation.image_url}
-                description={reccomendation.name}
-                rating={reccomendation.rating}
-                price={reccomendation.price}
+                key={recommendation.id}
+                imgUrl={recommendation.image_url}
+                description={recommendation.name}
+                rating={recommendation.rating}
+                price={recommendation.price}
                 isSaved="false"
                 wasVisited="false"
               />
@@ -161,32 +161,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flexDirection: "column"
-  },
-  welcome: {
-    fontSize: 36,
-    fontWeight: '800',
-    textAlign: 'center',
-    margin: 10,
-    color: '#FF1589'
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  continue: {
-    marginTop: 5,
-    marginBottom: 5,
-    backgroundColor: '#FF1589',
-    borderRadius: 5
-  },
-  continueText: {
-    color: '#0DF242',
-    fontWeight: '600',
-    paddingLeft: 10,
-    paddingTop: 5,
-    paddingRight: 10,
-    paddingBottom: 5
   },
   filterBar: {
     width: '100%',
