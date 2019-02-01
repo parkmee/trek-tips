@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import API from "../utils/API";
 
 export default class PreferencesScreen extends Component {
@@ -23,9 +24,9 @@ export default class PreferencesScreen extends Component {
         >
           <Text style={{
             color: navigationOptions.headerTintColor,
-            marginLeft: 10
+            marginLeft: 15
           }}>
-            Home
+            <FontAwesome5 name={'home'} style={{fontSize: 20}}/>
           </Text>
         </TouchableOpacity>
       ),
@@ -36,9 +37,9 @@ export default class PreferencesScreen extends Component {
         >
           <Text style={{
             color: navigationOptions.headerTintColor,
-            marginRight: 10
+            marginRight: 15
           }}>
-            Save
+            <FontAwesome5 name={'save'} style={{fontSize: 20}}/>
           </Text>
         </TouchableOpacity>
       )

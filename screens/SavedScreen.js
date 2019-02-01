@@ -1,25 +1,19 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {ScrollView} from 'react-native-gesture-handler';
 import RecCard from "../components/RecCard";
 import API from "../utils/API";
 
 export default class SavedScreen extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      searchLocation: "Atlanta, GA",
-      searchCategories: "dessert",
-      results: [],
-      error: "",
-      filter: 'ALL'
-    };
-
-    this.showAll = this.showAll.bind(this);
-    this.showSaved = this.showSaved.bind(this);
-    this.showVisited = this.showVisited.bind(this);
-  }
+  state = {
+    searchLocation: "Atlanta, GA",
+    searchCategories: "dessert",
+    results: [],
+    error: "",
+    filter: 'ALL'
+  };
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -38,27 +32,27 @@ export default class SavedScreen extends Component {
             color: navigationOptions.headerTintColor,
             marginLeft: 10
           }}>
-            Home
+            <FontAwesome5 name={'home'} style={{fontSize: 20}}/>
           </Text>
         </TouchableOpacity>
       )
     }
   };
 
-  showAll() {
+  showAll = () => {
     console.log('View All');
-    this.setState({filter: 'ALL'}, () => console.log(this.state.filter))
-  }
+    this.setState({filter: 'ALL'})
+  };
 
-  showSaved() {
+  showSaved = () => {
     console.log('View Saved');
-    this.setState({filter: 'SAVED'}, () => console.log(this.state.filter))
-  }
+    this.setState({filter: 'SAVED'})
+  };
 
-  showVisited() {
+  showVisited = () => {
     console.log('View Visited');
-    this.setState({filter: 'VISITED'}, () => console.log(this.state.filter))
-  }
+    this.setState({filter: 'VISITED'})
+  };
 
   /*  componentWillMount() {
       // trigger the YELP api search (via the server) when the screen loads
@@ -102,7 +96,7 @@ export default class SavedScreen extends Component {
         </View>
         <View style={styles.filterBar}>
           <TouchableOpacity
-            style={style.filter}
+            style={styles.filter}
             onPress={this.showAll}
           >
             <Text style={this.state.filter === 'ALL'

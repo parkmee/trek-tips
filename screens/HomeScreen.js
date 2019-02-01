@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import RecCard from "../components/RecCard"
 import {ScrollView} from 'react-native-gesture-handler';
 import SearchBar from '../components/SearchBar';
@@ -30,9 +31,9 @@ export default class HomeScreen extends Component {
           >
             <Text style={{
               color: navigationOptions.headerTintColor,
-              marginLeft: 10
+              marginLeft: 15,
             }}>
-              Logout
+              <FontAwesome5 name={'sign-out-alt'} style={{fontSize: 20}}/>
             </Text>
           </TouchableOpacity>
         </View>
@@ -49,9 +50,9 @@ export default class HomeScreen extends Component {
           >
             <Text style={{
               color: navigationOptions.headerTintColor,
-              marginRight: 10
+              marginRight: 20
             }}>
-              Preferences
+              <FontAwesome5 name={'sliders-h'} style={{fontSize: 20}}/>
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -64,9 +65,9 @@ export default class HomeScreen extends Component {
           >
             <Text style={{
               color: navigationOptions.headerTintColor,
-              marginRight: 10
+              marginRight: 15
             }}>
-              Saved
+              <FontAwesome5 name={'heart'} style={{fontSize: 20}}/>
             </Text>
           </TouchableOpacity>
         </View>
