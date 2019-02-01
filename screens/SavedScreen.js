@@ -1,21 +1,76 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import RecCard from "../components/RecCard"
+import RecCard from "../components/RecCard";
+import API from "../utils/API";
 
 export default class SavedScreen extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      searchLocation: "Atlanta, GA",
+      searchCategories: "dessert",
+      results: [],
+      error: ""
+    }
+  }
+
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
 
     return {
       title: `${params.userName}'s Saved Tips`,
+      headerLeft: (<TouchableOpacity
+        style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+        onPress={() => navigation.navigate('Home', {
+          user_id: params.user_id,
+          userName: params.userName
+        })}
+      >
+        <Text style={{
+          color: navigationOptions.headerTintColor,
+          marginLeft: 10
+        }}>
+          Home
+        </Text>
+      </TouchableOpacity>
+    )
     }
   };
 
+  showAll() {
+    console.log('View All');
+  }
+
+  showSaved() {
+    console.log('View Saved');
+  }
+
+  showVisited() {
+    console.log('View Visited')
+  }
+
+  componentWillMount() {
+    // trigger the YELP api search (via the server) when the screen loads
+    API.searchYelp(this.state.searchLocation, "")
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({ results: res.data.businesses, error: "" });
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({ error: err.message });
+        console.log(this.state.error);
+      });
+  }
+
   render() {
-    // const {navigation} = this.props;
-    // const userName = navigation.getParam('userName', 'Default Value');
+    const {navigation} = this.props;
+    const userName = navigation.getParam('userName', 'Default Value');
 
     // Body Content
     return (
@@ -23,57 +78,38 @@ export default class SavedScreen extends Component {
         <View style={styles.filterBar}>
           <TouchableOpacity
             style={styles.filter}
-            onPress={() => console.log('View All')}
+            onPress={this.showAll}
           >
             <Text style={styles.filterText}>All</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.filter}
-            onPress={() => console.log('View Saved')}
+            onPress={this.showSaved}
           >
             <Text style={styles.filterText}>Saved</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.filter}
-            onPress={() => console.log('View Visited')}
+            onPress={this.showVisited}
           >
             <Text style={styles.filterText}>Visited</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.content}>
           <ScrollView>
-            <RecCard
-              imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
-              description="Gary's House"
-              rating="4"
-              price="4"
-              isSaved="false"
-              wasVisited="true"
-            />
-            <RecCard
-              imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
-              description="Steve's House"
-              rating="4"
-              price="2"
-              isSaved="true"
-              wasVisited="true"
-            />
-            <RecCard
-              imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
-              description="Mike's House"
-              rating="1"
-              price="1"
-              isSaved="false"
-              wasVisited="true"
-            />
-            <RecCard
-              imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
-              description="Mary's House"
-              rating="2"
-              price="3"
-              isSaved="false"
-              wasVisited="true"
-            />
+          {this.state.results.map(reccomendation => {
+            return (
+              <RecCard
+                key={reccomendation.id}
+                imgUrl={reccomendation.image_url}
+                description={reccomendation.name}
+                rating={reccomendation.rating}
+                price={reccomendation.price}
+                isSaved="false"
+                wasVisited="false"
+              />
+            )
+          })}
           </ScrollView>
         </View>
       </View>

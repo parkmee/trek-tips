@@ -29,6 +29,8 @@ const AppNavigator = createStackNavigator({
       headerTitleStyle: { // Customize the 'fontFamily', 'fontWeight' and other 'Text' properties
         fontWeight: 'bold',
       },
+      headerBackTitle: 'Home' // aded this to make it say home on the back button, 
+                              // if not here its inconsistent in how it labels the back button
     },
   });
 

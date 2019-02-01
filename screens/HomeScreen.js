@@ -19,16 +19,18 @@ export default class HomeScreen extends Component {
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: 'Trek Tips',
+      headerLeft: null
     }
   };
 
   componentWillMount() {
-    API.searchYelp(this.state.searchLocation)
+    // trigger the YELP api search (via the server) when the screen loads
+    API.searchYelp(this.state.searchLocation, "")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({ results: res.data.message, error: "" });
+        this.setState({ results: res.data.businesses, error: "" });
         console.log(this.state.results);
       })
       .catch(err => {
@@ -43,12 +45,14 @@ export default class HomeScreen extends Component {
   }
 
   getRecommendations(event){
-    API.searchYelp(this.state.searchLocation, this.state.searchCategories)
+    // trigger the YELP api search (via the server) when the user submits
+    // the search from the search bar
+    API.searchYelp(this.state.searchLocation, "")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({ results: res.data.message, error: "" });
+        this.setState({ results: res.data.businesses, error: "" });
       })
       .catch(err => this.setState({ error: err.message }));
   }
@@ -110,38 +114,21 @@ export default class HomeScreen extends Component {
           searchAction={this.getRecommendations.bind(this)}
         />
         <ScrollView>
-          <RecCard
-            imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
-            description="Gary's House"
-            rating="4"
-            price="4"
-            isSaved="false"
-            wasVisited="true"
-          />
-          <RecCard
-            imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
-            description="Steve's House"
-            rating="4"
-            price="2"
-            isSaved="true"
-            wasVisited="true"
-          />
-          <RecCard
-            imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
-            description="Mike's House"
-            rating="1"
-            price="1"
-            isSaved="false"
-            wasVisited="true"
-          />
-          <RecCard
-            imgUrl="https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-cone-1274894_640.jpg"
-            description="Mary's House"
-            rating="2"
-            price="3"
-            isSaved="false"
-            wasVisited="true"
-          />
+
+          {this.state.results.map(reccomendation => {
+            return (
+              <RecCard
+                key={reccomendation.id}
+                imgUrl={reccomendation.image_url}
+                description={reccomendation.name}
+                rating={reccomendation.rating}
+                price={reccomendation.price}
+                isSaved="false"
+                wasVisited="false"
+              />
+            )
+          })}
+          
         </ScrollView>
       </View>
     )
