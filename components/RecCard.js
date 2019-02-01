@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Card, Text, Title, Button } from 'react-native-paper';
+import FontAwesome, { Icons, IconTypes, parseIconFromClassName} from 'react-native-fontawesome';
 
 class RecCard extends Component {
   constructor(props) {
@@ -56,11 +57,8 @@ class RecCard extends Component {
   }
 
   render() {
-    const savedButtonColor = this.state.isSaved === "true" ? "green" : "grey";
-    const visitedButtonColor = this.state.wasVisited === "true" ? "green" : "grey";
-
     return (
-      <Card>
+      <Card style={styles.recCard}>
         <Card.Content>
           <Title>{this.props.description}</Title>
           <Card.Cover
@@ -68,19 +66,21 @@ class RecCard extends Component {
             style={styles.imgStyle}/>
         </Card.Content>
         <Card.Actions>
-          <Text>
+          <Text style={styles.legend}>
             {this.props.rating} - {RecCard.priceString(this.props.price)}
           </Text>
-          <Button
-            color={savedButtonColor}
-            onPress={this.toggleSaved.bind(this)}>
-            Saved
-          </Button>
-          <Button
-            color={visitedButtonColor}
-            onPress={this.toggleVisited.bind(this)}>
-            Visited
-          </Button>
+          <Text
+            style={this.state.isSaved === "true" ? styles.isSavedTrue : styles.isSavedFalse}
+            onPress={this.toggleSaved.bind(this)}
+          >
+            <FontAwesome type={IconTypes.FAS}>{Icons.heart}</FontAwesome>
+          </Text>
+          <Text
+            style={this.state.wasVisited === "true" ? styles.wasVisitedTrue : styles.wasVisitedFalse}
+            onPress={this.toggleVisited.bind(this)}
+          >
+            <FontAwesome type={IconTypes.FAS}>{Icons.bookmark}</FontAwesome>
+          </Text>
         </Card.Actions>
       </Card>
     )
@@ -89,23 +89,33 @@ class RecCard extends Component {
 
 const styles = StyleSheet.create({
   imgStyle: {
-    width: 300,
-    height: 150
+    paddingHorizontal: 3,
   },
-  btnPanel: {
-    alignContent: "stretch"
+  legend: {
+    flex: 1,
   },
-  btnSavedTrue: {
-    color: "green"
+  isSavedTrue: {
+    color: "green",
+    marginLeft: 10,
+    fontSize: 24
   },
-  btnSavedFalse: {
-    color: "grey"
+  isSavedFalse: {
+    color: "grey",
+    marginLeft: 10,
+    fontSize: 24
   },
-  btnVisitedTrue: {
-    color: "green"
+  wasVisitedTrue: {
+    color: "green",
+    marginLeft: 10,
+    fontSize: 24
   },
-  btnVisitedFalse: {
-    color: "grey"
+  wasVisitedFalse: {
+    color: "grey",
+    marginLeft: 10,
+    fontSize: 24
+  },
+  recCard: {
+    marginBottom: 5
   },
 });
 

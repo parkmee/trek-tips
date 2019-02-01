@@ -31,7 +31,6 @@ export default class HomeScreen extends Component {
           throw new Error(res.data.message);
         }
         this.setState({ results: res.data.businesses, error: "" });
-        console.log(this.state.results);
       })
       .catch(err => {
         this.setState({ error: err.message });
