@@ -1,14 +1,54 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import API from "../utils/API";
 
 export default class PreferencesScreen extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
     return {
       title: 'Preferences',
+      headerLeft: (<TouchableOpacity
+        style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+        onPress={() => navigation.navigate('Home', {
+          user_id: params.user_id,
+          userName: params.userName
+        })}
+      >
+        <Text style={{
+          color: navigationOptions.headerTintColor,
+          marginLeft: 10
+        }}>
+          Home
+        </Text>
+      </TouchableOpacity>
+    )
     }
   };
+
+  componentWillMount() {
+    // trigger the YELP api search (via the server) when the screen loads
+    const {navigation} = this.props;
+    const user_id = navigation.getParam('user_id', 'NO ID');
+
+    API.findUserById(user_id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({ results: res.data.message, error: "" });
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({ error: err.message });
+        console.log(this.state.error);
+      });
+  }
 
   render() {
 
