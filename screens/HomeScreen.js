@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import RecCard from "../components/RecCard"
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import SearchBar from '../components/SearchBar';
 import API from "../utils/API";
 
 export default class HomeScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       searchLocation: "Atlanta, GA",
       searchCategories: "dessert",
@@ -15,36 +15,84 @@ export default class HomeScreen extends Component {
       error: ""
     }
   }
+
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     return {
       title: 'Trek Tips',
-      headerLeft: null
+      headerLeft: (
+        <View stlye={styles.nav}>
+          <TouchableOpacity
+            style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+            onPress={() => navigation.navigate('Login')}
+          >
+            <Text style={{
+              color: navigationOptions.headerTintColor,
+              marginLeft: 10
+            }}>
+              Logout
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ),
+      headerRight: (
+        <View style={styles.nav}>
+          <TouchableOpacity
+            style={styles.filter}
+            onPress={() => navigation.navigate('Preferences', {
+                user_id: navigation.getParam('user_id', 'NO ID'),
+                userName: navigation.getParam('userName', 'Default Param Value')
+              }
+            )}
+          >
+            <Text style={{
+              color: navigationOptions.headerTintColor,
+              marginRight: 10
+            }}>
+              Preferences
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.filter}
+            onPress={() => navigation.navigate('Saved', {
+                userName: navigation.getParam('userName', 'Default Param Value')
+              }
+            )}
+          >
+            <Text style={{
+              color: navigationOptions.headerTintColor,
+              marginRight: 10
+            }}>
+              Saved
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )
     }
   };
 
-  componentWillMount() {
-    // trigger the YELP api search (via the server) when the screen loads
-    API.searchYelp(this.state.searchLocation, "")
-      .then(res => {
-        if (res.data.status === "error") {
-          throw new Error(res.data.message);
-        }
-        this.setState({ results: res.data.businesses, error: "" });
-        console.log(this.state.results);
-      })
-      .catch(err => {
-        this.setState({ error: err.message });
-        console.log(this.state.error);
-      });
-  }
+  /*  componentWillMount() {
+      // trigger the YELP api search (via the server) when the screen loads
+      API.searchYelp(this.state.searchLocation, "")
+        .then(res => {
+          if (res.data.status === "error") {
+            throw new Error(res.data.message);
+          }
+          this.setState({ results: res.data.businesses, error: "" });
+          console.log(this.state.results);
+        })
+        .catch(err => {
+          this.setState({ error: err.message });
+          console.log(this.state.error);
+        });
+    }*/
 
   updateSearchLocation(searchLocation) {
     // update the state value searchLocation given the input from the search bar
     this.setState({searchLocation: searchLocation});
   }
 
-  getRecommendations(event){
+  getRecommendations(event) {
     // trigger the YELP api search (via the server) when the user submits
     // the search from the search bar
     API.searchYelp(this.state.searchLocation, "")
@@ -52,13 +100,13 @@ export default class HomeScreen extends Component {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({ results: res.data.businesses, error: "" });
+        this.setState({results: res.data.businesses, error: ""});
       })
-      .catch(err => this.setState({ error: err.message }));
+      .catch(err => this.setState({error: err.message}));
   }
 
   render() {
-
+    console.log(this.props);
     const {navigation} = this.props;
     const user_id = navigation.getParam('user_id', 'NO ID');
     const userName = navigation.getParam('userName', 'Default Param Value');
@@ -66,51 +114,9 @@ export default class HomeScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
-      <View style={styles.filterBar}>
-      <TouchableOpacity
-        style={styles.filter}
-        onPress={() => navigation.navigate('Preferences', {
-            user_id: navigation.getParam('user_id', 'NO ID'),
-            userName: navigation.getParam('userName', 'Default Param Value')
-          }
-        )}
-      >
-        <Text style={{
-          color: "black",
-          marginLeft: 10
-        }}>
-          Preferences
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-          style={styles.filter}
-          onPress={() => navigation.navigate('Saved', {
-              userName: navigation.getParam('userName', 'Default Param Value')
-            }
-          )}
-        >
-          <Text style={{
-            color: "black",
-            marginRight: 10
-          }}>
-            Saved
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            style={styles.filter}
-            onPress={() => navigation.navigate('Login')}
-          >
-            <Text style={{
-              color: "black",
-              marginRight: 10
-            }}>
-              Logout
-            </Text>
-          </TouchableOpacity>
-      </View>
-        <SearchBar 
-          searchLocation={this.state.searchLocation} 
-          updateSearchLocation={this.updateSearchLocation.bind(this)} 
+        <SearchBar
+          searchLocation={this.state.searchLocation}
+          updateSearchLocation={this.updateSearchLocation.bind(this)}
           searchAction={this.getRecommendations.bind(this)}
         />
         <ScrollView>
@@ -128,7 +134,7 @@ export default class HomeScreen extends Component {
               />
             )
           })}
-          
+
         </ScrollView>
       </View>
     )

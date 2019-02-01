@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import API from "../utils/API";
 
 export default class PreferencesScreen extends Component {
@@ -13,42 +13,56 @@ export default class PreferencesScreen extends Component {
     const {params} = navigation.state;
     return {
       title: 'Preferences',
-      headerLeft: (<TouchableOpacity
-        style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-        onPress={() => navigation.navigate('Home', {
-          user_id: params.user_id,
-          userName: params.userName
-        })}
-      >
-        <Text style={{
-          color: navigationOptions.headerTintColor,
-          marginLeft: 10
-        }}>
-          Home
-        </Text>
-      </TouchableOpacity>
-    )
+      headerLeft: (
+        <TouchableOpacity
+          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+          onPress={() => navigation.navigate('Home', {
+            user_id: params.user_id,
+            userName: params.userName
+          })}
+        >
+          <Text style={{
+            color: navigationOptions.headerTintColor,
+            marginLeft: 10
+          }}>
+            Home
+          </Text>
+        </TouchableOpacity>
+      ),
+      headerRight: (
+        <TouchableOpacity
+          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+          onPress={() => console.log('Saved!')}
+        >
+          <Text style={{
+            color: navigationOptions.headerTintColor,
+            marginRight: 10
+          }}>
+            Save
+          </Text>
+        </TouchableOpacity>
+      )
     }
   };
 
-  componentWillMount() {
-    // trigger the YELP api search (via the server) when the screen loads
-    const {navigation} = this.props;
-    const user_id = navigation.getParam('user_id', 'NO ID');
+  /*  componentWillMount() {
+      // trigger the YELP api search (via the server) when the screen loads
+      const {navigation} = this.props;
+      const user_id = navigation.getParam('user_id', 'NO ID');
 
-    API.findUserById(user_id)
-      .then(res => {
-        if (res.data.status === "error") {
-          throw new Error(res.data.message);
-        }
-        this.setState({ results: res.data.message, error: "" });
-        console.log(this.state.results);
-      })
-      .catch(err => {
-        this.setState({ error: err.message });
-        console.log(this.state.error);
-      });
-  }
+      API.findUserById(user_id)
+        .then(res => {
+          if (res.data.status === "error") {
+            throw new Error(res.data.message);
+          }
+          this.setState({ results: res.data.message, error: "" });
+          console.log(this.state.results);
+        })
+        .catch(err => {
+          this.setState({ error: err.message });
+          console.log(this.state.error);
+        });
+    }*/
 
   render() {
 
@@ -59,20 +73,8 @@ export default class PreferencesScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
-      <View style={styles.filterBar}>
-      <TouchableOpacity
-          style={styles.filter}
-          onPress={() => console.log('Saved!')}
-        >
-          <Text style={{
-            color: "black"
-          }}>
-            Save Preferences
-          </Text>
-        </TouchableOpacity>
-      </View>
         <Text style={styles.welcome}>{userName}</Text>
-        <Text style={styles.instructions}>^ Probably unnecessary, but left it as a stand in...</Text>
+        <Text style={styles.instructions}>Username: {JSON.stringify(userName)}</Text>
         <Text style={styles.instructions}>User ID: {JSON.stringify(user_id)}</Text>
         <View style={styles.content}>
           <Text style={styles.instructions}>Stuff goes here....</Text>

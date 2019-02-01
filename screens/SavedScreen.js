@@ -52,7 +52,7 @@ export default class SavedScreen extends Component {
     console.log('View Visited')
   }
 
-  componentWillMount() {
+/*  componentWillMount() {
     // trigger the YELP api search (via the server) when the screen loads
     API.searchYelp(this.state.searchLocation, "")
       .then(res => {
@@ -66,7 +66,7 @@ export default class SavedScreen extends Component {
         this.setState({ error: err.message });
         console.log(this.state.error);
       });
-  }
+  }*/
 
   render() {
     const {navigation} = this.props;
@@ -75,6 +75,23 @@ export default class SavedScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
+        <View style={styles.content}>
+          <ScrollView>
+          {this.state.results.map(reccomendation => {
+            return (
+              <RecCard
+                key={reccomendation.id}
+                imgUrl={reccomendation.image_url}
+                description={reccomendation.name}
+                rating={reccomendation.rating}
+                price={reccomendation.price}
+                isSaved="false"
+                wasVisited="false"
+              />
+            )
+          })}
+          </ScrollView>
+        </View>
         <View style={styles.filterBar}>
           <TouchableOpacity
             style={styles.filter}
@@ -94,23 +111,6 @@ export default class SavedScreen extends Component {
           >
             <Text style={styles.filterText}>Visited</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.content}>
-          <ScrollView>
-          {this.state.results.map(reccomendation => {
-            return (
-              <RecCard
-                key={reccomendation.id}
-                imgUrl={reccomendation.image_url}
-                description={reccomendation.name}
-                rating={reccomendation.rating}
-                price={reccomendation.price}
-                isSaved="false"
-                wasVisited="false"
-              />
-            )
-          })}
-          </ScrollView>
         </View>
       </View>
     )
