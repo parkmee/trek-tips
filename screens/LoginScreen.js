@@ -10,7 +10,7 @@ import API from '../utils/API';
 /* const auth0 = new Auth0({
   domain: DOMAIN,
   clientId: CLIENT_ID
-}); */
+});*/
 
 export default class LoginScreen extends Component {
   state = {
@@ -35,12 +35,12 @@ export default class LoginScreen extends Component {
       .then(credentials => {
         console.log(credentials);
 
-        API.getUser(credentials.accessToken)
+        API.handleLogin(credentials.accessToken)
           .then(res => {
             console.log(res.data);
             this.setState({
-              userName: res.data.name,
-              user_id: res.data.sub
+              userName: res.data.username,
+              user_id: res.data._id
             }, () => {
               console.log(this.state.userName);
               console.log(this.state.user_id)

@@ -7,9 +7,9 @@ const DEV_SERVER_URL = Platform.OS === 'android'
   : 'localhost';
 
 export default {
-  /* getUser: function (accessToken) {
+   handleLogin: function (accessToken) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
-  }, */
+  },
   searchYelp: function(location, categories) {
     return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {location, categories})
   },
