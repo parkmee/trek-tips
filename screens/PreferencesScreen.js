@@ -4,6 +4,37 @@ import {ScrollView} from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import API from "../utils/API";
 
+const placeholderParents = [
+  {
+    id: '1',
+    title: 'Restaurants',
+  }, {
+    id: '2',
+    title: 'Nightlife',
+  }, {
+    id: '3',
+    title: 'Food',
+  }, {
+    id: '4',
+    title: 'Food',
+  }, {
+    id: '5',
+    title: 'Religious',
+  }, {
+    id: '6',
+    title: 'Events',
+  }, {
+    id: '7',
+    title: 'Outdoors',
+  }, {
+    id: '8',
+    title: 'Arts & Culture',
+  }, {
+    id: '9',
+    title: 'Sports',
+  },
+];
+
 export default class PreferencesScreen extends Component {
 
   // Header Options
@@ -65,18 +96,22 @@ export default class PreferencesScreen extends Component {
   render() {
 
     const {navigation} = this.props;
-    const user_id = navigation.getParam('user_id', 'NO ID');
-    const userName = navigation.getParam('userName', 'Default Param Value');
+    const {params} = navigation.state;
+    const user_id = params.user_id;
+    const userName = params.userName;
 
     // Body Content
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>{userName}</Text>
-        <Text style={styles.instructions}>Username: {JSON.stringify(userName)}</Text>
-        <Text style={styles.instructions}>User ID: {JSON.stringify(user_id)}</Text>
-        <View style={styles.content}>
-          <Text style={styles.instructions}>Stuff goes here....</Text>
-        </View>
+        <Button
+          title="Categories"
+          color="B500A9"
+          onPress={() => this.props.navigation.navigate('Categories', {
+            user_id: user_id,
+            userName: userName,
+            parentAlias: this.title
+          })}
+        />
       </View>
     )
   }

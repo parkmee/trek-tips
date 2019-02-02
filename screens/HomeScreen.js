@@ -24,7 +24,7 @@ export default class HomeScreen extends Component {
     return {
       title: 'Trek Tips',
       headerLeft: (
-        <View stlye={styles.nav}>
+        <View style={styles.nav}>
           <TouchableOpacity
             style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
             onPress={() => navigation.navigate('Login')}
@@ -124,7 +124,6 @@ export default class HomeScreen extends Component {
           searchAction={this.getRecommendations.bind(this)}
         />
         <ScrollView>
-
           {this.state.results.map(recommendation => {
             return (
               <RecCard
@@ -138,7 +137,6 @@ export default class HomeScreen extends Component {
               />
             )
           })}
-
         </ScrollView>
       </View>
     )
