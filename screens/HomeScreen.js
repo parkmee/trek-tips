@@ -24,7 +24,7 @@ export default class HomeScreen extends Component {
     return {
       title: 'Trek Tips',
       headerLeft: (
-        <View stlye={styles.nav}>
+        <View style={styles.nav}>
           <TouchableOpacity
             style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
             onPress={() => navigation.navigate('Login')}
@@ -44,7 +44,8 @@ export default class HomeScreen extends Component {
             style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
             onPress={() => navigation.navigate('Preferences', {
                 user_id: params.user_id,
-                userName: params.userName
+                user_name: params.user_name,
+                user_preferences: params.user_preferences
               }
             )}
           >
@@ -59,7 +60,8 @@ export default class HomeScreen extends Component {
             style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
             onPress={() => navigation.navigate('Saved', {
                 user_id: params.user_id,
-                userName: params.userName
+                user_name: params.user_name,
+                user_preferences: params.user_preferences
               }
             )}
           >
@@ -110,10 +112,8 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    const {navigation} = this.props;
-    const {params} = navigation.state;
-    const user_id = params.user_id;
-    const userName = params.userName;
+    const {params} = this.props.navigation.state;
+    console.log(params);
 
     // Body Content
     return (
@@ -124,7 +124,6 @@ export default class HomeScreen extends Component {
           searchAction={this.getRecommendations.bind(this)}
         />
         <ScrollView>
-
           {this.state.results.map(recommendation => {
             return (
               <RecCard
@@ -138,7 +137,6 @@ export default class HomeScreen extends Component {
               />
             )
           })}
-
         </ScrollView>
       </View>
     )

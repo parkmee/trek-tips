@@ -20,12 +20,12 @@ export default class SavedScreen extends Component {
     const {params} = navigation.state;
 
     return {
-      title: `${params.userName}'s Saved Tips`,
+      title: `${params.user_name}'s Saved Tips`,
       headerLeft: (<TouchableOpacity
           style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
           onPress={() => navigation.navigate('Home', {
             user_id: params.user_id,
-            userName: params.userName
+            user_name: params.user_name
           })}
         >
           <Text style={{
@@ -71,8 +71,8 @@ export default class SavedScreen extends Component {
   }
 
   render() {
-    const {navigation} = this.props;
-    const userName = navigation.getParam('userName', 'Default Value');
+    const {params} = this.props.navigation.state;
+    console.log(params);
 
     // Body Content
     return (
