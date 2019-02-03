@@ -31,6 +31,14 @@ export default class CategoriesScreen extends Component {
     }
   };
 
+  updateParamPreferences = () => {
+    this.props.navigation.navigate('Preferences', {
+      user_id: this.state.user_id,
+      user_name: this.state.user_name,
+      user_preferences: this.state.user_preferences
+    })
+  };
+
   getChildCategories = () => {
     this.props.navigation.setParams({_updateParamPreferences: this.updateParamPreferences});
 
@@ -44,14 +52,6 @@ export default class CategoriesScreen extends Component {
     }, () => console.log(this.state))
   };
 
-  updateParamPreferences = () => {
-    console.log('update');
-    this.props.navigation.navigate('Preferences', {
-      user_id: this.state.user_id,
-      user_name: this.state.user_name,
-      user_preferences: this.state.user_preferences
-    })
-  };
 
   render() {
 

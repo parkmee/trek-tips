@@ -114,8 +114,6 @@ export default class HomeScreen extends Component {
   render() {
     const {params} = this.props.navigation.state;
     console.log(params);
-    const user_id = params.user_id;
-    const user_name = params.user_name;
 
     // Body Content
     return (
