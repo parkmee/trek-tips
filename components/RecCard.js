@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Card, Text, Title, Button } from 'react-native-paper';
 import FontAwesome, { Icons, IconTypes, parseIconFromClassName} from 'react-native-fontawesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 class RecCard extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      wasVisited: this.props.wasVisited,
-      isSaved: this.props.isSaved
-    }
   }
 
   static priceString(price) {
@@ -35,28 +32,66 @@ class RecCard extends Component {
   }
 
   toggleVisited() {
-    alert("visited button clicked");
-    if (this.state.wasVisited === "true") {
-      this.setState({wasVisited: "false"});
+    if (this.props.wasVisited === "true") {
+      this.props.userPlaceWasVisitedFalse(this.props.id);
     } else {
-      this.setState({wasVisited: "true"});
+      this.props.userPlaceWasVisitedTrue(this.props.id);
     }
 
-    // TODO: axios call to update the property in mongoose
+    
   }
 
   toggleSaved () {
-    alert("saved button clicked");
-    if (this.state.isSaved === "true") {
-      this.setState({isSaved: "false"});
+    if (this.props.isSaved === "true") {
+      console.log("isSaved == true");
+      this.props.userPlaceSavedFalse(this.props.id);
     } else {
-      this.setState({isSaved: "true"});
+      this.props.userPlaceSavedTrue(this.props.id);
     }
+  }
 
-    // TODO: axios call to update the property in mongoose
+  savedIconTrue () {
+    return (
+      <Text
+        style={styles.isSavedTrue}
+        onPress={this.toggleSaved.bind(this)}
+      >
+        <FontAwesome type={IconTypes.FAS}>{Icons.heart}</FontAwesome>
+      </Text>
+    )
+  }
+
+  savedIconFalse () {
+    return (
+      <FontAwesome5 name={'heart'} 
+        style={styles.isSavedFalse}
+        onPress={this.toggleSaved.bind(this)}
+      />
+    )
+  }
+
+  wasVisitedIconTrue () {
+    return (
+      <Text
+        style={styles.isSavedTrue}
+        onPress={this.toggleVisited.bind(this)}
+      >
+        <FontAwesome type={IconTypes.FAS}>{Icons.bookmark}</FontAwesome>
+      </Text>
+    )
+  }
+
+  wasVisitedIconFalse () {
+    return (
+      <FontAwesome5 name={'bookmark'} 
+        style={styles.isSavedFalse}
+        onPress={this.toggleVisited.bind(this)}
+      />
+    )
   }
 
   render() {
+    console.log(this.props.description + " : isSaved?: " + this.props.isSaved);
     return (
       <Card style={styles.recCard}>
         <Card.Content>
@@ -69,18 +104,8 @@ class RecCard extends Component {
           <Text style={styles.legend}>
             {this.props.rating} - {RecCard.priceString(this.props.price)}
           </Text>
-          <Text
-            style={this.state.isSaved === "true" ? styles.isSavedTrue : styles.isSavedFalse}
-            onPress={this.toggleSaved.bind(this)}
-          >
-            <FontAwesome type={IconTypes.FAS}>{Icons.heart}</FontAwesome>
-          </Text>
-          <Text
-            style={this.state.wasVisited === "true" ? styles.wasVisitedTrue : styles.wasVisitedFalse}
-            onPress={this.toggleVisited.bind(this)}
-          >
-            <FontAwesome type={IconTypes.FAS}>{Icons.bookmark}</FontAwesome>
-          </Text>
+          {this.props.isSaved === "true" ? this.savedIconTrue() : this.savedIconFalse()}
+          {this.props.wasVisited === "true" ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
         </Card.Actions>
       </Card>
     )
@@ -95,7 +120,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   isSavedTrue: {
-    color: "green",
+    color: "red",
     marginLeft: 10,
     fontSize: 24
   },
