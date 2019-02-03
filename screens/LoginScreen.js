@@ -16,16 +16,18 @@ export default class LoginScreen extends Component {
   state = {
     modalVisible: false,
     newUser: true,
-    userName: null,
+    user_name: null,
     user_id: null,
+    user_preferences: []
   };
 
   handleLogin = () => {
 
     this.setState({
-      userName: 'DB_NAME',
-      user_id: 'DB_ID'
-    }, () => console.log('userName', this.state.userName))
+      user_name: 'DB_NAME',
+      user_id: 'DB_ID',
+      user_preferences: ['preference1', 'preference2']
+    }, () => console.log('user_name', this.state.user_name))
 
     /*auth0.webAuth
       .authorize({
@@ -39,10 +41,10 @@ export default class LoginScreen extends Component {
           .then(res => {
             console.log(res.data);
             this.setState({
-              userName: res.data.username,
+              user_name: res.data.user_name,
               user_id: res.data._id
             }, () => {
-              console.log(this.state.userName);
+              console.log(this.state.user_name);
               console.log(this.state.user_id)
             })
           })
@@ -56,7 +58,7 @@ export default class LoginScreen extends Component {
   };
 
   render() {
-    let loggedIn = this.state.userName !== null;
+    let loggedIn = this.state.user_name !== null;
     // console.log(loggedIn);
 
     // Body Content
@@ -65,7 +67,7 @@ export default class LoginScreen extends Component {
         <NavigationEvents
           onWillFocus={() => {
             this.setState({
-              userName: null,
+              user_name: null,
               user_id: null
             })
           }}
@@ -82,7 +84,8 @@ export default class LoginScreen extends Component {
                 ? this.changeModalVisibility(true)
                 : this.props.navigation.navigate('Home', {
                   user_id: this.state.user_id,
-                  userName: this.state.userName
+                  user_name: this.state.user_name,
+                  user_preferences: this.state.user_preferences
                 })
             }}/>
           : <Button
@@ -110,7 +113,8 @@ export default class LoginScreen extends Component {
                     this.changeModalVisibility(false);
                     this.props.navigation.navigate('Preferences', {
                       user_id: this.state.user_id,
-                      userName: this.state.userName
+                      user_name: this.state.user_name,
+                      user_preferences: this.state.user_preferences
                     })
                   }}
                 />
@@ -123,7 +127,8 @@ export default class LoginScreen extends Component {
                     this.changeModalVisibility(false);
                     this.props.navigation.navigate('Home', {
                       user_id: this.state.user_id,
-                      userName: this.state.userName
+                      user_name: this.state.user_name,
+                      user_preferences: this.state.user_preferences
                     })
                   }}
                 />

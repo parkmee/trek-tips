@@ -4,6 +4,7 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import SavedScreen from './screens/SavedScreen';
 import PreferencesScreen from './screens/PreferencesScreen';
+import CategoriesScreen from './screens/CategoriesScreen';
 
 const AppNavigator = createStackNavigator({
     Login: {
@@ -14,6 +15,9 @@ const AppNavigator = createStackNavigator({
     },
     Preferences: {
       screen: PreferencesScreen
+    },
+    Categories: {
+      screen: CategoriesScreen
     },
     Saved: {
       screen: SavedScreen
