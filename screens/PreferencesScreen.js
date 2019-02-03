@@ -62,6 +62,11 @@ const randomArrayItem = (array) => {
 // console.log(colorArray.length);
 
 export default class PreferencesScreen extends Component {
+  state = {
+    user_id: null,
+    user_name: null,
+    user_preferences: []
+  };
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -74,7 +79,8 @@ export default class PreferencesScreen extends Component {
           style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
           onPress={() => navigation.navigate('Home', {
             user_id: params.user_id,
-            userName: params.userName
+            user_name: params.user_name,
+            user_preferences: params.user_preferences
           })}
         >
           <Text style={{
@@ -84,24 +90,40 @@ export default class PreferencesScreen extends Component {
             <FontAwesome5 name={'home'} style={{fontSize: 20}}/>
           </Text>
         </TouchableOpacity>
+      ),
+      headerRight: (
+        <TouchableOpacity
+          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
+          onPress={navigation.getParam('_savePreferences')}
+        >
+          <Text style={{
+            color: navigationOptions.headerTintColor,
+            marginRight: 15
+          }}>
+            <FontAwesome5 name={'save'} style={{fontSize: 20}}/>
+          </Text>
+        </TouchableOpacity>
       )
     }
   };
 
-  getUserPreferences = () => {
+  savePreferences = () => {
+    const {params} = this.props.navigation.state;
+    console.log(`Save User Preferences to Database... where id = ${params.user_id}, or ${this.state.user_id}`)
+  };
+
+  getParentCategories = () => {
     // This is to allow the Save Button in the Navigation bar to interact with the screen
     // method to save preferences
+    this.props.navigation.setParams({_savePreferences: this.savePreferences});
 
     const {params} = this.props.navigation.state;
-    const user_id = params.user_id;
-    const userName = params.userName;
 
-    console.log('query database for user preferences');
     console.log('query database for parent aliases');
     this.setState({
-      user_id: user_id,
-      userName: userName,
-      preferences: []
+      user_id: params.user_id,
+      user_name: params.user_name,
+      user_preferences: params.user_preferences
     }, () => console.log(this.state))
     // trigger the YELP api search (via the server) when the screen loads
     /*const {navigation} = this.props;
@@ -127,7 +149,7 @@ export default class PreferencesScreen extends Component {
     return (
       <View style={styles.container}>
         <NavigationEvents
-          onWillFocus={() => this.getUserPreferences()}
+          onWillFocus={() => this.getParentCategories()}
         />
         {placeholderParents.map(category => (
 
@@ -137,8 +159,8 @@ export default class PreferencesScreen extends Component {
             color={colorArray[category.id]}
             handlePress={() => this.props.navigation.navigate('Categories', {
               user_id: this.state.user_id,
-              userName: this.state.userName,
-              preferences: this.state.preferences,
+              user_name: this.state.user_name,
+              user_preferences: this.state.user_preferences,
               pageTitle: category.title,
               childPrefId: category.id
             })}

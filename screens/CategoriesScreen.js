@@ -4,38 +4,53 @@ import {NavigationEvents} from 'react-navigation';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 export default class CategoriesScreen extends Component {
+  state = {
+    user_id: null,
+    user_name: null,
+    user_preferences: []
+  };
+
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
-    console.log(params);
 
     return {
       title: params.pageTitle,
-      headerRight: (
+      headerLeft: (
         <TouchableOpacity
           style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-          onPress={navigation.getParam('_savePreferences')}
+          onPress={navigation.getParam('_updateParamPreferences')}
         >
           <Text style={{
             color: navigationOptions.headerTintColor,
-            marginRight: 15
+            marginLeft: 15
           }}>
-            <FontAwesome5 name={'save'} style={{fontSize: 20}}/>
+            <FontAwesome5 name={'arrow-left'} style={{fontSize: 20}}/>
           </Text>
         </TouchableOpacity>
-      )
+      ),
     }
   };
 
   getChildCategories = () => {
-    this.props.navigation.setParams({_savePreferences: this.savePreferences});
-    const {params} = this.props.navigation.state;
+    this.props.navigation.setParams({_updateParamPreferences: this.updateParamPreferences});
 
+    const {params} = this.props.navigation.state;
     console.log(`query database for child categories with id: ${params.childPrefId}`);
+
+    this.setState({
+      user_id: params.user_id,
+      user_name: params.user_name,
+      user_preferences: params.user_preferences
+    }, () => console.log(this.state))
   };
 
-  savePreferences = () => {
-    const {params} = this.props.navigation.state;
-    console.log(`Save User Preferences to Database... where id = ${params.user_id}`)
+  updateParamPreferences = () => {
+    console.log('update');
+    this.props.navigation.navigate('Preferences', {
+      user_id: this.state.user_id,
+      user_name: this.state.user_name,
+      user_preferences: this.state.user_preferences
+    })
   };
 
   render() {
@@ -45,7 +60,7 @@ export default class CategoriesScreen extends Component {
         <NavigationEvents
           onWillFocus={() => this.getChildCategories()}
           onDidFocus={() => console.log('did focus')}
-          onWillBlur={() => console.log('will blur')}
+          onWillBlur={() => this.updateParamPreferences()}
           onDidBlur={() => console.log('did blur')}
         />
 

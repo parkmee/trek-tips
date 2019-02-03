@@ -44,7 +44,8 @@ export default class HomeScreen extends Component {
             style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
             onPress={() => navigation.navigate('Preferences', {
                 user_id: params.user_id,
-                userName: params.userName
+                user_name: params.user_name,
+                user_preferences: params.user_preferences
               }
             )}
           >
@@ -59,7 +60,8 @@ export default class HomeScreen extends Component {
             style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
             onPress={() => navigation.navigate('Saved', {
                 user_id: params.user_id,
-                userName: params.userName
+                user_name: params.user_name,
+                user_preferences: params.user_preferences
               }
             )}
           >
@@ -110,10 +112,10 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    const {navigation} = this.props;
-    const {params} = navigation.state;
+    const {params} = this.props.navigation.state;
+    console.log(params);
     const user_id = params.user_id;
-    const userName = params.userName;
+    const user_name = params.user_name;
 
     // Body Content
     return (
