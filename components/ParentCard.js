@@ -5,9 +5,10 @@ const ParentCard = props => {
   return (
     <View
       style={{
+        flex: 1,
         backgroundColor: props.color,
         width: '100%',
-        height: 50,
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center'
       }}
@@ -29,7 +30,7 @@ const ParentCard = props => {
 const styles = StyleSheet.create({
   view: {
     width: '100%',
-    height: 50,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center'
   },

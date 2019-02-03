@@ -18,7 +18,7 @@ const placeholderParents = [
     title: 'Food',
   }, {
     id: '4',
-    title: 'Food',
+    title: 'Parks',
   }, {
     id: '5',
     title: 'Religious',
@@ -38,19 +38,28 @@ const placeholderParents = [
 ];
 const colorArray = [
   '#B500A9',
-  '#',
-  '#',
-  '#',
-  '#',
-  '#',
-  '#',
-  '#',
-  '#',
-  '#',
-  '#',
-  '#',
-  '#',
+  '#F44336',
+  '#673AB7',
+  '#E91E63',
+  '#2196F3',
+  '#009688',
+  '#00BCD4',
+  '#4CDF50',
+  '#CDDC39',
+  '#FF9800',
+  '#FFC107',
+  '#FF5722',
+  '#01579B',
+  '#00796B',
+  '#5E35B1'
 ];
+
+const randomArrayItem = (array) => {
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex]
+};
+
+console.log(colorArray.length);
 
 export default class PreferencesScreen extends Component {
 
@@ -144,7 +153,7 @@ export default class PreferencesScreen extends Component {
           <ParentCard
             key={category.id}
             title={category.title}
-            color="#B500A9"
+            color={colorArray[category.id]}
             handlePress={() => this.props.navigation.navigate('Categories', {
               user_id: this.state.user_id,
               userName: this.state.userName,
