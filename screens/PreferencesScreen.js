@@ -59,14 +59,14 @@ const randomArrayItem = (array) => {
   return array[randomIndex]
 };
 
-console.log(colorArray.length);
+// console.log(colorArray.length);
 
 export default class PreferencesScreen extends Component {
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
-    console.log(params);
+
     return {
       title: 'Preferences',
       headerLeft: (
@@ -84,19 +84,6 @@ export default class PreferencesScreen extends Component {
             <FontAwesome5 name={'home'} style={{fontSize: 20}}/>
           </Text>
         </TouchableOpacity>
-      ),
-      headerRight: (
-        <TouchableOpacity
-          style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-          onPress={navigation.getParam('_savePreferences')}
-        >
-          <Text style={{
-            color: navigationOptions.headerTintColor,
-            marginRight: 15
-          }}>
-            <FontAwesome5 name={'save'} style={{fontSize: 20}}/>
-          </Text>
-        </TouchableOpacity>
       )
     }
   };
@@ -104,10 +91,8 @@ export default class PreferencesScreen extends Component {
   getUserPreferences = () => {
     // This is to allow the Save Button in the Navigation bar to interact with the screen
     // method to save preferences
-    this.props.navigation.setParams({_savePreferences: this.savePreferences});
 
-    const {navigation} = this.props;
-    const {params} = navigation.state;
+    const {params} = this.props.navigation.state;
     const user_id = params.user_id;
     const userName = params.userName;
 
@@ -134,10 +119,6 @@ export default class PreferencesScreen extends Component {
         this.setState({error: err.message});
         console.log(this.state.error);
       });*/
-  };
-
-  savePreferences = () => {
-    console.log('Save User Preferences to Database...')
   };
 
   render() {
