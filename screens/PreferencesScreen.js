@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 import {NavigationEvents} from 'react-navigation'
+import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import ParentCard from '../components/ParentCard';
 import {ScrollView} from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import API from "../utils/API";
@@ -34,6 +35,21 @@ const placeholderParents = [
     id: '9',
     title: 'Sports',
   },
+];
+const colorArray = [
+  '#B500A9',
+  '#',
+  '#',
+  '#',
+  '#',
+  '#',
+  '#',
+  '#',
+  '#',
+  '#',
+  '#',
+  '#',
+  '#',
 ];
 
 export default class PreferencesScreen extends Component {
@@ -124,11 +140,12 @@ export default class PreferencesScreen extends Component {
           onWillFocus={() => this.getUserPreferences()}
         />
         {placeholderParents.map(category => (
-          <Button
+
+          <ParentCard
             key={category.id}
             title={category.title}
             color="#B500A9"
-            onPress={() => this.props.navigation.navigate('Categories', {
+            handlePress={() => this.props.navigation.navigate('Categories', {
               user_id: this.state.user_id,
               userName: this.state.userName,
               preferences: this.state.preferences,
