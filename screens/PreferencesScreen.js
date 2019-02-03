@@ -37,6 +37,7 @@ const placeholderParents = [
 ];
 
 export default class PreferencesScreen extends Component {
+
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
@@ -105,6 +106,10 @@ export default class PreferencesScreen extends Component {
       });*/
   };
 
+  savePreferences = () => {
+    console.log('Save User Preferences to Database...')
+  };
+
   render() {
 
     /*    const {navigation} = this.props;
@@ -115,34 +120,36 @@ export default class PreferencesScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
-        <NavigationEvents
-          onWillFocus={() => this.getUserPreferences()}
-        />
-        <Button
-          title="Categories"
-          color="#B500A9"
-          onPress={() => this.props.navigation.navigate('Categories', {
-            user_id: this.state.user_id,
-            userName: this.state.userName,
-            preferences: this.state.preferences,
-            pageTitle: 'Category Name'
-          })}
-        />
-        {placeholderParents.map(category => (
-          <Button
-            key={category.id}
-            title={category.title}
-            color="#B500A9"
-            onPress={() => this.props.navigation.navigate('Categories', {
-              user_id: this.state.user_id,
-              userName: this.state.userName,
-              preferences: this.state.preferences,
-              pageTitle: category.title,
-              childPrefId: category.id
-            })}
+        <View style={styles.content}>
+          <NavigationEvents
+            onWillFocus={() => this.getUserPreferences()}
           />
-        ))}
+          {placeholderParents.map(category => (
+            <Button
+              key={category.id}
+              title={category.title}
+              color="#B500A9"
+              onPress={() => this.props.navigation.navigate('Categories', {
+                user_id: this.state.user_id,
+                userName: this.state.userName,
+                preferences: this.state.preferences,
+                pageTitle: category.title,
+                childPrefId: category.id
+              })}
+            />
+          ))}
+        </View>
+        <View style={styles.saveBar}>
+          <TouchableOpacity
+            onPress={this.savePreferences}
+          >
+            <Text style={styles.saveText}>
+              <FontAwesome5 name={'save'} style={{fontSize: 20}}/>  Save Preferences
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
     )
   }
 }
@@ -151,9 +158,23 @@ export default class PreferencesScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5FCFF'
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  saveBar: {
+    width: '100%',
+    height: 30,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#B500A9'
+  },
+  saveText: {
+    color: '#FFFFFF'
   },
   welcome: {
     fontSize: 36,
@@ -167,9 +188,5 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: "center"
-  }
+
 });
