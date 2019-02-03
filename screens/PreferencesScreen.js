@@ -65,7 +65,8 @@ export default class PreferencesScreen extends Component {
   state = {
     user_id: null,
     user_name: null,
-    user_preferences: []
+    user_preferences: [],
+    parentCategories: placeholderParents
   };
 
   // Header Options
@@ -151,7 +152,7 @@ export default class PreferencesScreen extends Component {
         <NavigationEvents
           onWillFocus={() => this.getParentCategories()}
         />
-        {placeholderParents.map(category => (
+        {this.state.parentCategories.map(category => (
 
           <ParentCard
             key={category.id}
