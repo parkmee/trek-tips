@@ -18,7 +18,7 @@ export default class CategoriesScreen extends Component {
       headerLeft: (
         <TouchableOpacity
           style={{backgroundColor: navigationOptions.headerStyle.backgroundColor}}
-          onPress={navigation.getParam('_updateParamPreferences')}
+          onPress={navigation.getParam('_updateParamPreferencesAndExit')}
         >
           <Text style={{
             color: navigationOptions.headerTintColor,
@@ -31,7 +31,7 @@ export default class CategoriesScreen extends Component {
     }
   };
 
-  updateParamPreferences = () => {
+  updateParamPreferencesAndExit = () => {
     this.props.navigation.navigate('Preferences', {
       user_id: this.state.user_id,
       user_name: this.state.user_name,
@@ -40,7 +40,7 @@ export default class CategoriesScreen extends Component {
   };
 
   getChildCategories = () => {
-    this.props.navigation.setParams({_updateParamPreferences: this.updateParamPreferences});
+    this.props.navigation.setParams({_updateParamPreferencesAndExit: this.updateParamPreferencesAndExit});
 
     const {params} = this.props.navigation.state;
     console.log(`query database for child categories with id: ${params.childPrefId}`);
@@ -60,7 +60,7 @@ export default class CategoriesScreen extends Component {
         <NavigationEvents
           onWillFocus={() => this.getChildCategories()}
           onDidFocus={() => console.log('did focus')}
-          onWillBlur={() => this.updateParamPreferences()}
+          onWillBlur={() => console.log('wil blur')}
           onDidBlur={() => console.log('did blur')}
         />
 
