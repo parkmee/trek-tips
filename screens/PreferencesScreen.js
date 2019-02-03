@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import {NavigationEvents} from 'react-navigation'
 import {ScrollView} from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import API from "../utils/API";
@@ -36,7 +37,6 @@ const placeholderParents = [
 ];
 
 export default class PreferencesScreen extends Component {
-
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
@@ -74,12 +74,24 @@ export default class PreferencesScreen extends Component {
     }
   };
 
-  componentWillMount() {
-    // trigger the YELP api search (via the server) when the screen loads
+  getUserPreferences = () => {
     const {navigation} = this.props;
-    const user_id = navigation.getParam('user_id', 'NO ID');
+    const {params} = navigation.state;
+    const user_id = params.user_id;
+    const userName = params.userName;
 
-    API.findUserById(user_id)
+    console.log('query database for user preferences');
+    console.log('query database for parent aliases');
+    this.setState({
+      user_id: user_id,
+      userName: userName,
+      preferences: []
+    }, () => console.log(this.state))
+    // trigger the YELP api search (via the server) when the screen loads
+    /*const {navigation} = this.props;
+    const user_id = navigation.getParam('user_id', 'NO ID');*/
+
+    /*API.findUserById(user_id)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
@@ -90,28 +102,46 @@ export default class PreferencesScreen extends Component {
       .catch(err => {
         this.setState({error: err.message});
         console.log(this.state.error);
-      });
-  }
+      });*/
+  };
 
   render() {
 
-    const {navigation} = this.props;
-    const {params} = navigation.state;
-    const user_id = params.user_id;
-    const userName = params.userName;
+    /*    const {navigation} = this.props;
+        const {params} = navigation.state;
+        const user_id = params.user_id;
+        const userName = params.userName;*/
 
     // Body Content
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onWillFocus={() => this.getUserPreferences()}
+        />
         <Button
           title="Categories"
-          color="B500A9"
+          color="#B500A9"
           onPress={() => this.props.navigation.navigate('Categories', {
-            user_id: user_id,
-            userName: userName,
-            parentAlias: this.title
+            user_id: this.state.user_id,
+            userName: this.state.userName,
+            preferences: this.state.preferences,
+            pageTitle: 'Category Name'
           })}
         />
+        {placeholderParents.map(category => (
+          <Button
+            key={category.id}
+            title={category.title}
+            color="#B500A9"
+            onPress={() => this.props.navigation.navigate('Categories', {
+              user_id: this.state.user_id,
+              userName: this.state.userName,
+              preferences: this.state.preferences,
+              pageTitle: category.title,
+              childPrefId: category.id
+            })}
+          />
+        ))}
       </View>
     )
   }
@@ -121,7 +151,7 @@ export default class PreferencesScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },

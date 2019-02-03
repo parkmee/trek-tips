@@ -3,19 +3,32 @@ import {View, Text, StyleSheet} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
 
 export default class CategoriesScreen extends Component {
-  static navigationOptions = ({})
+  static navigationOptions = ({navigation}) => {
+    const {params} = navigation.state;
+    console.log(params);
+
+    return {
+      title: params.pageTitle
+    }
+  };
+
+  getChildCategories = () => {
+    const {navigation} = this.props;
+    const {params} = navigation.state;
+
+    console.log(`query database for child categories with id: ${params.childPrefId}`);
+  };
 
   render() {
 
-    const {navigation} = this.props;
-    const {params} = navigation.state;
-    const user_id = params.user_id;
-    const userName = params.userName;
-
     return (
-      <div style={styles.container}>
-        <p>Children go here...</p>
-      </div>
+      <View style={styles.container}>
+        <NavigationEvents
+          onWillFocus={() => this.getChildCategories()}
+        />
+
+        <Text>Children go here...</Text>
+      </View>
     )
   }
 }
