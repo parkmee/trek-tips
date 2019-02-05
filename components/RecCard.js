@@ -37,8 +37,6 @@ class RecCard extends Component {
     } else {
       this.props.userPlaceWasVisitedTrue(this.props.id);
     }
-
-    
   }
 
   toggleSaved () {
@@ -46,6 +44,7 @@ class RecCard extends Component {
       console.log("isSaved == true");
       this.props.userPlaceSavedFalse(this.props.id);
     } else {
+      console.log("isSaved != true");
       this.props.userPlaceSavedTrue(this.props.id);
     }
   }
@@ -91,7 +90,6 @@ class RecCard extends Component {
   }
 
   render() {
-    console.log(this.props.description + " : isSaved?: " + this.props.isSaved);
     return (
       <Card style={styles.recCard}>
         <Card.Content>

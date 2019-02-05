@@ -13,13 +13,18 @@ export default class HomeScreen extends Component {
       searchLocation: "Atlanta, GA",
       searchCategories: "dessert",
       results: [],
-      error: ""
+      error: "",
+      userPlaces: []
     }
   }
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
+
+    // I am assuming that the user in the params has a places property which
+    // is an array
+    // this.setState({userPlaces: params.user_places})
 
     return {
       title: 'Trek Tips',
@@ -99,69 +104,87 @@ export default class HomeScreen extends Component {
   }
 
   userPlaceSavedFalse(yelpId) {
-    // we will need yelpId to update the recommendation object
+    // remove the yelpID to the user's Saved Places
+    console.log("userPlaceSavedFalse");
 
-    // const message = "yelpId: " + yelpId + " isSaved: FALSE";
-    // alert(message);
-    // console.log(message);
-    let newState = Object.assign({}, this.state);
-    newState.results.forEach(recommendation => { 
-      if (recommendation.id === yelpId) {
-        recommendation.isSaved = "false"
-      };
+    let newPlaces = [...this.state.userPlaces];   // clone places
+    let places = newPlaces.filter((place) => {
+       if (place.place_id === yelpId) {
+          place.isSaved = false;
+          if (place.isSaved !== true && place.wasVisited !== true) {
+            console.log("at least one is true...")
+            return place;
+          }
+        }
     });
-
-    this.setState(newState);
-    
-    console.log(this.state)
+    this.setState({userPlaces: places},() => {console.log("this.state.userPlaces: ", this.state.userPlaces)});
   }
 
   userPlaceSavedTrue(yelpId) {
+    // add the yelpID to the user's Saved Places
+    console.log("userPlaceSavedTrue");
 
-    console.log("state: ", this.state);
+    // assumes that the user is accessible in the params and has an
+    // attribute called places which has a yelpId
+    let newPlaces = [...this.state.userPlaces];   // clone places
+    let placeFound = false;
+    let places = newPlaces.filter((place) => {
+       if (place.place_id === yelpId) {
+          placeFound = true;
+          place.isSaved = true
+        }
 
-    let resultCopy = [...this.state.results];
-    let newResults = resultCopy.filter((result) => {
-      if (result.id === yelpId) {
-          result.isSaved = "true";
-       }
-
-       return result;
-   });
-
-    console.log("newResults: ", newResults);
-
-    this.setState({results: newResults});
-
-
-    console.log("state: ", this.state);
+        return place;
+    });
+    if (placeFound === false) {
+      places.push(
+        { isSaved: true,
+          wasVisited: false, 
+          place_id: yelpId});
+    }
+    this.setState({userPlaces: places},() => {console.log("this.state.userPlaces: ", this.state.userPlaces)});
   }
 
   userPlaceWasVisitedFalse(yelpId) {
-    // we will need yelpId to update the recommendation object
-
-    let newState = Object.assign({}, this.state);
-    newState.results.forEach(recommendation => { 
-      if (recommendation.id === yelpId) {
-        recommendation.wasVisited = "false"
-      };
+    // remove the yelpID to the user's visited Places
+    console.log("userPlaceWasVisitedFalse...");
+    
+    // assumes that the user is accessible in the params and has an
+    // attribute called places which has a yelpId
+    let newPlaces = [...this.state.userPlaces];    // clone places
+    let places = newPlaces.filter((place) => {
+      if (place.place_id === yelpId) {
+        place.wasVisited = false;
+      }
+      return place;
     });
-    this.setState(newState);
+
+    this.setState({userPlaces: places},() => {console.log("this.state.userPlaces: ", this.state.userPlaces)});
   }
 
   userPlaceWasVisitedTrue(yelpId) {
-    // we will need yelpId to update the recommendation object
+    // add the yelpID to the user's visited Places
+    console.log("userPlaceWasVisitedTrue...");
 
-    // const message = "yelpId: " + yelpId + " wasVisited: TRUE";
-    // alert(message);
-    // console.log(message);
-    let newState = Object.assign({}, this.state);
-    newState.results.forEach(recommendation => { 
-      if (recommendation.id === yelpId) {
-        recommendation.wasVisited = "false"
-      };
+    // assumes that the user is accessible in the params and has an
+    // attribute called places which has a yelpId
+    let newPlaces = [...this.state.userPlaces];
+    let placeFound = false;
+    let places = newPlaces.filter((place) => {
+       if (place.place_id === yelpId) {
+          placeFound = true;
+        }
+
+        return place;
     });
-    this.setState(newState);
+    if (placeFound === false) {
+      places.push(
+        { isSaved: false,
+          wasVisited: true, 
+          place_id: yelpId});
+    }
+    this.setState({userPlaces: places},() => {console.log("this.state.userPlaces: ", this.state.userPlaces)});
+  
   }
 
   getRecommendations(event) {
