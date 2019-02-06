@@ -10,8 +10,8 @@ export default {
    handleLogin: function (accessToken) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
   },
-  searchYelp: function(location, categories) {
-    return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {location, categories})
+  searchYelp: function(id, location, categories) {
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {id, location, categories})
   },
   getAllUsers: function() {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user`)
@@ -27,5 +27,23 @@ export default {
   },
   removeUserPreference: function(id, categoryid) {
     return axios.delete(`http://${DEV_SERVER_URL}:8000/api/user/${id}/category/${categoryid}`)
+  },
+  getUserVisitedPlaces: function(id) {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited`)
+  },
+  getUserSavedPlaces: function(id) {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved`)
+  },
+  addUserVisitedPlace: function(id, locationId) {
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/${locationId}`)
+  },
+  addUserSavedPlace: function(id, locationId) {
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/${locationId}`)
+  },
+  deleteUserSavedPlace: function(id, locationId) {
+    return axios.delete(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/${locationId}`)
+  },
+  deleteUserVisitedPlace: function(id, locationId) {
+    return axios.delete(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/${locationId}`)
   }
 }

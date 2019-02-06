@@ -2,54 +2,81 @@ import React, { Component } from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Card, Text, Title, Button } from 'react-native-paper';
 import FontAwesome, { Icons, IconTypes, parseIconFromClassName} from 'react-native-fontawesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import API from "../utils/API";
 
 class RecCard extends Component {
   constructor(props) {
     super(props);
-  }
 
-  static priceString(price) {
-    let priceString;
-    switch (price) {
-      case "$":
-        priceString = "   $";
-        break;
-      case "$$":
-        priceString = "  $$";
-        break;
-      case "$$$$":
-        priceString = " $$$";
-        break;
-      case "$$$$":
-        priceString = "$$$$";
-        break;
-      default:
-        priceString = " N/A";
-        break;
-    }
-    return priceString;
+    this.state = {
+      isSaved: this.props.isSaved,
+      wasVisited: this.props.wasVisited
+    };
   }
 
   toggleVisited() {
-    if (this.props.wasVisited === "true") {
-      this.props.userPlaceWasVisitedFalse(this.props.id);
+    /* 
+      when visited icon is pushed
+      update the database to reflect the changed value
+      and then update state to change the icon
+    */
+    if (this.state.wasVisited === "true") {
+      console.log("setting wasVisited to false");
+      API.deleteUserVisitedPlace(this.props.userId, this.props.id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({wasVisited: "false"});
+      })
+      .catch(err => this.setState({error: err.message}));
     } else {
-      this.props.userPlaceWasVisitedTrue(this.props.id);
+      console.log("setting isSaved to true");
+      API.addUserVisitedPlace(this.props.userId, this.props.id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({wasVisited: "true"});
+      })
+      .catch(err => this.setState({error: err.message}));
     }
   }
 
   toggleSaved () {
-    if (this.props.isSaved === "true") {
-      console.log("isSaved == true");
-      this.props.userPlaceSavedFalse(this.props.id);
+     /* 
+      when saved icon is pushed
+      update the database to reflect the changed value
+      and then update state to change the icon
+    */
+    if (this.state.isSaved === "true") {
+      console.log("setting isSaved to false");
+      API.deleteUserSavedPlace(this.props.userId, this.props.id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({isSaved: "false"});
+      })
+      .catch(err => this.setState({error: err.message}));
     } else {
-      console.log("isSaved != true");
-      this.props.userPlaceSavedTrue(this.props.id);
+      console.log("setting isSaved to true");
+      API.addUserSavedPlace(this.props.userId, this.props.id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({isSaved: "true"});
+      })
+      .catch(err => this.setState({error: err.message}));
     }
   }
 
   savedIconTrue () {
+    /* 
+      render the icon which indicate place is saved
+    */
     return (
       <Text
         style={styles.isSavedTrue}
@@ -61,6 +88,9 @@ class RecCard extends Component {
   }
 
   savedIconFalse () {
+    /* 
+      render the icon which indicate place is NOT saved
+    */
     return (
       <FontAwesome5 name={'heart'} 
         style={styles.isSavedFalse}
@@ -70,9 +100,12 @@ class RecCard extends Component {
   }
 
   wasVisitedIconTrue () {
+    /* 
+      render the icon which indicate place was visited
+    */
     return (
       <Text
-        style={styles.isSavedTrue}
+        style={styles.wasVisitedTrue}
         onPress={this.toggleVisited.bind(this)}
       >
         <FontAwesome type={IconTypes.FAS}>{Icons.bookmark}</FontAwesome>
@@ -81,9 +114,12 @@ class RecCard extends Component {
   }
 
   wasVisitedIconFalse () {
+    /* 
+      render the icon which indicate place was NOT visited
+    */
     return (
       <FontAwesome5 name={'bookmark'} 
-        style={styles.isSavedFalse}
+        style={styles.wasVisitedFalse}
         onPress={this.toggleVisited.bind(this)}
       />
     )
@@ -94,16 +130,16 @@ class RecCard extends Component {
       <Card style={styles.recCard}>
         <Card.Content>
           <Title>{this.props.description}</Title>
-          <Card.Cover
-            source={{ uri: this.props.imgUrl}}
-            style={styles.imgStyle}/>
         </Card.Content>
+        <Card.Cover
+            source={{ uri: this.props.imgUrl}}
+        />
         <Card.Actions>
           <Text style={styles.legend}>
-            {this.props.rating} - {RecCard.priceString(this.props.price)}
+            {this.props.rating} - {this.props.price ? this.props.price :  "N/A"}
           </Text>
-          {this.props.isSaved === "true" ? this.savedIconTrue() : this.savedIconFalse()}
-          {this.props.wasVisited === "true" ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
+          {this.state.isSaved === true ? this.savedIconTrue() : this.savedIconFalse()}
+          {this.state.wasVisited === true ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
         </Card.Actions>
       </Card>
     )
@@ -112,7 +148,7 @@ class RecCard extends Component {
 
 const styles = StyleSheet.create({
   imgStyle: {
-    paddingHorizontal: 3,
+    paddingHorizontal: 0,
   },
   legend: {
     flex: 1,

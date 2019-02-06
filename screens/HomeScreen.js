@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {NavigationEvents} from 'react-navigation'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import RecCard from "../components/RecCard"
 import {ScrollView} from 'react-native-gesture-handler';
@@ -14,7 +15,9 @@ export default class HomeScreen extends Component {
       searchCategories: "dessert",
       results: [],
       error: "",
-      userPlaces: []
+      userPlaces: [],
+      userSavedPlaces: [],
+      userVisitedPlaces: []
     }
   }
 
@@ -82,131 +85,91 @@ export default class HomeScreen extends Component {
     }
   };
 
-  componentWillMount() {
-    // trigger the YELP api search (via the server) when the screen loads
-    API.searchYelp(this.state.searchLocation, "")
-      .then(res => {
-        if (res.data.status === "error") {
-          throw new Error(res.data.message);
-        }
-        this.setState({results: res.data.businesses, error: ""});
-        console.log(this.state.results);
-      })
-      .catch(err => {
-        this.setState({error: err.message});
-        console.log(this.state.error);
-      });
-  }
-
   updateSearchLocation(searchLocation) {
     // update the state value searchLocation given the input from the search bar
     this.setState({searchLocation: searchLocation});
   }
 
-  userPlaceSavedFalse(yelpId) {
-    // remove the yelpID to the user's Saved Places
-    console.log("userPlaceSavedFalse");
-
-    let newPlaces = [...this.state.userPlaces];   // clone places
-    let places = newPlaces.filter((place) => {
-       if (place.place_id === yelpId) {
-          place.isSaved = false;
-          if (place.isSaved !== true && place.wasVisited !== true) {
-            console.log("at least one is true...")
-            return place;
-          }
-        }
-    });
-    this.setState({userPlaces: places},() => {console.log("this.state.userPlaces: ", this.state.userPlaces)});
-  }
-
-  userPlaceSavedTrue(yelpId) {
-    // add the yelpID to the user's Saved Places
-    console.log("userPlaceSavedTrue");
-
-    // assumes that the user is accessible in the params and has an
-    // attribute called places which has a yelpId
-    let newPlaces = [...this.state.userPlaces];   // clone places
-    let placeFound = false;
-    let places = newPlaces.filter((place) => {
-       if (place.place_id === yelpId) {
-          placeFound = true;
-          place.isSaved = true
-        }
-
+  checkPlaceInArray(placeArray, placeId) {
+    let saved = placeArray.filter((place) => {
+      if (place.place_id === placeId) {
         return place;
+      }        
     });
-    if (placeFound === false) {
-      places.push(
-        { isSaved: true,
-          wasVisited: false, 
-          place_id: yelpId});
+    if (saved.length > 0) {
+      return "true"
+    } else {
+      return "false"
     }
-    this.setState({userPlaces: places},() => {console.log("this.state.userPlaces: ", this.state.userPlaces)});
   }
 
-  userPlaceWasVisitedFalse(yelpId) {
-    // remove the yelpID to the user's visited Places
-    console.log("userPlaceWasVisitedFalse...");
-    
-    // assumes that the user is accessible in the params and has an
-    // attribute called places which has a yelpId
-    let newPlaces = [...this.state.userPlaces];    // clone places
-    let places = newPlaces.filter((place) => {
-      if (place.place_id === yelpId) {
-        place.wasVisited = false;
-      }
-      return place;
-    });
-
-    this.setState({userPlaces: places},() => {console.log("this.state.userPlaces: ", this.state.userPlaces)});
-  }
-
-  userPlaceWasVisitedTrue(yelpId) {
-    // add the yelpID to the user's visited Places
-    console.log("userPlaceWasVisitedTrue...");
-
-    // assumes that the user is accessible in the params and has an
-    // attribute called places which has a yelpId
-    let newPlaces = [...this.state.userPlaces];
-    let placeFound = false;
-    let places = newPlaces.filter((place) => {
-       if (place.place_id === yelpId) {
-          placeFound = true;
-        }
-
-        return place;
-    });
-    if (placeFound === false) {
-      places.push(
-        { isSaved: false,
-          wasVisited: true, 
-          place_id: yelpId});
-    }
-    this.setState({userPlaces: places},() => {console.log("this.state.userPlaces: ", this.state.userPlaces)});
-  
-  }
-
-  getRecommendations(event) {
+  getRecommendations() {
     // trigger the YELP api search (via the server) when the user submits
     // the search from the search bar
-    API.searchYelp(this.state.searchLocation, "")
+    let errors = "";
+    let userId = "5c5a407ced8b3c0a9ed9ee25";
+    let searchResults = [];
+    let userVisitedResults = [];
+    let userSavedResults = [];
+    API.searchYelp(userId, this.state.searchLocation, "aquariums")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({results: res.data.businesses, error: ""});
+        searchResults = res.data.businesses
+        console.log("searchResults: ", searchResults);
+        //this.setState({results: res.data.businesses, error: ""});
+        this.setState({results: searchResults, error: errors});
       })
       .catch(err => this.setState({error: err.message}));
+
+      // API.searchYelp(this.state.searchLocation, "")
+      // .then(res => {
+      //   if (res.data.status === "error") {
+      //     throw new Error(res.data.message);
+      //   }
+      //   searchResults = res.data.businesses;
+      //   console.log("seachResults");
+      //   API.getUserSavedPlaces(this.props.user_id)
+      //   .then(res => {
+      //     if (res.data.status === "error") {
+      //       throw new Error(res.data.message);
+      //     }
+      //     userSavedResults = res.data.businesses;
+      //     console.log("userSavedResults");
+      //     API.getUserVisitedPlaces(this.props.user_id)
+      //     .then(res => {
+      //       if (res.data.status === "error") {
+      //         throw new Error(res.data.message);
+      //       }
+      //       userVisitedResults = res.data.businesses;
+      //       console.log("userVisitedResults");
+      //       this.setState({results: searchResults, 
+      //                       userSavedPlaces: userSavedResults, 
+      //                       userVisitedPlaces: 
+      //                       userVisitedResults, 
+      //                       error: ""});
+      //     })
+      //     .catch(err => this.setState({error: err.message}));
+      //   })
+      //   .catch(err => this.setState({error: err.message}));
+      // })
+      // .catch(err => this.setState({error: err.message}));
+    // TODO HERE: get user saved places and load into state
+
+    // TODO HERE: get user visited places and load into state
   }
 
   render() {
     const {params} = this.props.navigation.state;
-    console.log(params);
+    console.log("params: ", params);
 
     // Body Content
     return (
       <View style={styles.container}>
+      <NavigationEvents
+          onWillFocus={() => this.getRecommendations()}    // remove this if we don't want default loading
+        />
         <SearchBar
           searchLocation={this.state.searchLocation}
           updateSearchLocation={this.updateSearchLocation.bind(this)}
@@ -214,8 +177,10 @@ export default class HomeScreen extends Component {
         />
         <ScrollView>
           {this.state.results.map(recommendation => {
-            recommendation.isSaved="false";
-            recommendation.wasVisited="false";
+            
+            // recommendation.isSaved = this.checkPlaceInArray(this.state.userSavedPlaces, recommendation.id);
+            // recommendation.hasVisited = this.checkPlaceInArray(this.state.userVisitedPlaces, recommendation.id);
+
             return (
               <RecCard
                 key={recommendation.id}
@@ -225,11 +190,8 @@ export default class HomeScreen extends Component {
                 rating={recommendation.rating}
                 price={recommendation.price}
                 isSaved={recommendation.isSaved}
-                wasVisited={recommendation.wasVisited}
-                userPlaceSavedFalse={this.userPlaceSavedFalse.bind(this)}
-                userPlaceSavedTrue={this.userPlaceSavedTrue.bind(this)}
-                userPlaceWasVisitedFalse={this.userPlaceWasVisitedFalse.bind(this)}
-                userPlaceWasVisitedTrue={this.userPlaceWasVisitedTrue.bind(this)}
+                wasVisited={recommendation.hasVisited}
+                userId={params.user_id}
               />
             )
           })}
