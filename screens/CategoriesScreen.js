@@ -82,8 +82,16 @@ export default class CategoriesScreen extends Component {
   };
 
   handleChildPress = (selectedChildId) => {
-    this.state.user_preferences.push(selectedChildId);
-    console.log(this.state.user_preferences)
+
+    // If not in the user preferences...
+    if (this.state.user_preferences.indexOf(selectedChildId) === -1) {
+      // add it...
+      this.state.user_preferences.push(selectedChildId);
+    } else {
+      // if it is there, remove it...
+      let removeIndex = this.state.user_preferences.indexOf(selectedChildId);
+      this.state.user_preferences.splice(removeIndex, 1);
+    }
   };
 
   render() {
