@@ -71,7 +71,7 @@ export default {
   getParentCategories: function() {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences`)
   },
-  getParentCategories: function(parentAlias) {
+  getChildCategories: function(parentAlias) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences/${parentAlias}`)
   }
 }
