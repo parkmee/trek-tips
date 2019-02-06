@@ -10,48 +10,57 @@ const placeholderParents = [
   {
     id: '1',
     title: 'Restaurants',
+    alias: 'restaurants',
   }, {
     id: '2',
     title: 'Nightlife',
+    alias: 'nightlife',
   }, {
     id: '3',
     title: 'Food',
+    alias: 'food',
   }, {
     id: '4',
     title: 'Parks',
+    alias: 'parks',
   }, {
     id: '5',
     title: 'Religious',
+    alias: 'religiousorgs',
   }, {
     id: '6',
-    title: 'Events',
+    title: 'Active Life',
+    alias: 'active'
   }, {
     id: '7',
-    title: 'Outdoors',
+    title: 'Shopping',
+    alias: 'shopping',
   }, {
     id: '8',
-    title: 'Arts & Culture',
+    title: 'Arts & Entertainment',
+    alias: 'arts',
   }, {
     id: '9',
-    title: 'Sports',
+    title: 'Hotels & Travel',
+    alias: 'hotelstravel'
   },
 ];
 const colorArray = [
+  '#5E35B1',
   '#B500A9',
   '#F44336',
+  '#FFC107',
   '#673AB7',
   '#E91E63',
   '#2196F3',
+  '#FF9800',
   '#009688',
   '#00BCD4',
   '#4CDF50',
   '#CDDC39',
-  '#FF9800',
-  '#FFC107',
   '#FF5722',
   '#01579B',
-  '#00796B',
-  '#5E35B1'
+  '#00796B'
 ];
 
 const randomArrayItem = (array) => {
@@ -163,7 +172,7 @@ export default class PreferencesScreen extends Component {
               user_name: this.state.user_name,
               user_preferences: this.state.user_preferences,
               pageTitle: category.title,
-              childPrefId: category.id
+              childPrefAlias: category.alias
             })}
           />
         ))}

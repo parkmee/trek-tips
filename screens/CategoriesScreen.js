@@ -3,11 +3,30 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+const colorArray = [
+  '#5E35B1',
+  '#B500A9',
+  '#F44336',
+  '#FFC107',
+  '#673AB7',
+  '#E91E63',
+  '#2196F3',
+  '#FF9800',
+  '#009688',
+  '#00BCD4',
+  '#4CDF50',
+  '#CDDC39',
+  '#FF5722',
+  '#01579B',
+  '#00796B'
+];
+
 export default class CategoriesScreen extends Component {
   state = {
     user_id: null,
     user_name: null,
-    user_preferences: []
+    user_preferences: [],
+    results: []
   };
 
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -60,7 +79,7 @@ export default class CategoriesScreen extends Component {
         <NavigationEvents
           onWillFocus={() => this.getChildCategories()}
           onDidFocus={() => console.log('did focus')}
-          onWillBlur={() => console.log('wil blur')}
+          onWillBlur={() => console.log('will blur')}
           onDidBlur={() => console.log('did blur')}
         />
 
