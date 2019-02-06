@@ -67,5 +67,11 @@ export default {
   // removal of place from user's record is embedded in methods to remove visited and saved flags above
   deletePlace: function(id) {
     return axios.put(`http://${DEV_SERVER_URL}:8000/api/place/${id}`)
+  },
+  getParentCategories: function() {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences`)
+  },
+  getParentCategories: function(parentAlias) {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences/${parentAlias}`)
   }
 }
