@@ -21,7 +21,7 @@ export default {
   createUser: function() {
     return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/new`)
   },
-  // find user by id - replace with tips controller to get user by Auth0 id
+  // find user by id and populate with preferences
   findUserById: function(id) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}`)
   },
@@ -33,43 +33,42 @@ export default {
   removeUserPreference: function(id, categoryid) {
     return axios.delete(`http://${DEV_SERVER_URL}:8000/api/user/${id}/category/${categoryid}`)
   },
-  // get saved places
-  // Needs to be tested after below is fixed
+  // get saved places and populate with place data
   getUserSavedPlaces: function(id) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved`)
   },
   // save a place to a user's record (and add it to the places collection if new)
-  // location is stored assuming we want to store Yelp location search string
-  // THIS NEEDS TO BE FIXED - see notes in userController file
-  addUserSavedPlace: function(id, location) {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved/${location}`)
+  addUserSavedPlace: function(id, placeObject) {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved/`, { placeObject })
   },
-  // remove saved place (and delete place from user's record if it hasVisited === false)
-  // Needs to be tested after above is fixed
+  // remove saved place
   removeUserSavedPlace: function(id, placeid) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved/${placeid}`)
   },
   // get visited places
-  // Needs to be tested after below is fixed
   getUserVisitedPlaces: function(id) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited`)
   },
   // mark place visited in user's record (and add it to the places collection if new)
-  // location is stored assuming we want to track the location search string
-  addUserVisitedPlace: function(id, location) {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited/${location}`)
+  addUserVisitedPlace: function(id, placeObject) {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited/`, { placeObject })
   },
+  // remove visited place
   removeUserVisitedPlace: function(id, placeid) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited/${placeid}`)
   },
   // delete place from place collection -- for cleaning collection during testing
-  // removal of place from user's record is embedded in methods to remove visited and saved flags above
   deletePlace: function(id) {
     return axios.put(`http://${DEV_SERVER_URL}:8000/api/place/${id}`)
   },
+  getAllUserPlaces: function(id) {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places`)
+  },
+  // get parent categories (yelp categories with no parent aliases defined)
   getParentCategories: function() {
     return axios.get(`https://trek-tips.herokuapp.com/api/preferences`)
   },
+  // get child categories classified under parent alias, e.g., arts, active, nightlife
   getChildCategories: function(parentAlias) {
     return axios.get(`https://trek-tips.herokuapp.com/api/preferences/${parentAlias}`)
   }
