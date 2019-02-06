@@ -5,10 +5,9 @@ const ParentCard = props => {
   return (
     <View
       style={{
-        flex: 1,
         backgroundColor: props.color,
-        width: '100%',
-        height: 60,
+        width: '50%',
+        aspectRatio: 1,
         justifyContent: 'center',
         alignItems: 'center'
       }}
@@ -17,7 +16,7 @@ const ParentCard = props => {
         style={styles.view}
         onPress={props.handlePress}
       >
-        <View>
+        <View style={styles.view}>
           <Text style={styles.text}>
             {props.title}
           </Text>
@@ -29,15 +28,13 @@ const ParentCard = props => {
 
 const styles = StyleSheet.create({
   view: {
-    width: '100%',
-    height: 60,
     justifyContent: 'center',
     alignItems: 'center'
   },
   text: {
     color: '#F5FCFF',
     fontWeight: '500',
-    fontSize: 24
+    fontSize: 18
   }
 });
 

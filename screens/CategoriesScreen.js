@@ -92,14 +92,16 @@ export default class CategoriesScreen extends Component {
           onWillBlur={() => console.log('will blur')}
           onDidBlur={() => console.log('did blur')}
         />
-        <ScrollView style={styles.scrollView}>
-          {this.state.results.map((child, i) => (
-            <ChildCard
-              key={i}
-              title={child.title}
-              color={randomArrayItem(colorArray)}
-            />
-          ))}
+        <ScrollView>
+          <View style={styles.grid}>
+            {this.state.results.map((child, i) => (
+              <ChildCard
+                key={i}
+                title={child.title}
+                color={randomArrayItem(colorArray)}
+              />
+            ))}
+          </View>
         </ScrollView>
       </View>
     )
@@ -109,11 +111,14 @@ export default class CategoriesScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
     backgroundColor: '#F5FCFF'
   },
-  scrollView: {
-    width: '100%'
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   }
 });
