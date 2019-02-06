@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {NavigationEvents} from 'react-navigation'
 import {ScrollView} from 'react-native-gesture-handler';
 import RecCard from "../components/RecCard";
 import API from "../utils/API";
@@ -42,21 +43,9 @@ export default class SavedScreen extends Component {
   showAll = () => {
     console.log('View All');
     this.setState({filter: 'ALL'})
-  };
-
-  showSaved = () => {
-    console.log('View Saved');
-    this.setState({filter: 'SAVED'})
-  };
-
-  showVisited = () => {
-    console.log('View Visited');
-    this.setState({filter: 'VISITED'})
-  };
-
-  componentWillMount() {
+    let userId = "5c5a407ced8b3c0a9ed9ee25";
     // trigger the YELP api search (via the server) when the screen loads
-    API.searchYelp(this.state.searchLocation, "")
+    API.searchYelp(userId, this.state.searchLocation, "")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
@@ -68,7 +57,45 @@ export default class SavedScreen extends Component {
         this.setState({error: err.message});
         console.log(this.state.error);
       });
-  }
+  };
+
+  showSaved = () => {
+    console.log('View Saved');
+    this.setState({filter: 'SAVED'})
+    let userId = "5c5a407ced8b3c0a9ed9ee25";
+    // trigger the YELP api search (via the server) when the screen loads
+    API.searchYelp(userId, this.state.searchLocation, "")
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({results: res.data.businesses, error: ""});
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
+  };
+
+  showVisited = () => {
+    console.log('View Visited');
+    this.setState({filter: 'VISITED'})
+    let userId = "5c5a407ced8b3c0a9ed9ee25";
+    // trigger the YELP api search (via the server) when the screen loads
+    API.searchYelp(userId, this.state.searchLocation, "")
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({results: res.data.businesses, error: ""});
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
+  };
 
   render() {
     const {params} = this.props.navigation.state;
@@ -77,18 +104,24 @@ export default class SavedScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
+      <NavigationEvents
+          onWillFocus={() => this.showAll()}    // remove this if we don't want default loading
+        />
         <View style={styles.content}>
           <ScrollView>
             {this.state.results.map(recommendation => {
               return (
                 <RecCard
                   key={recommendation.id}
+                  id={recommendation.id}
                   imgUrl={recommendation.image_url}
                   description={recommendation.name}
                   rating={recommendation.rating}
                   price={recommendation.price}
-                  isSaved="false"
-                  wasVisited="false"
+                  isSaved={recommendation.isSaved}
+                  hasVisited={recommendation.hasVisited}
+                  recommendationData={recommendation}
+                  userId={params.user_id}
                 />
               )
             })}
