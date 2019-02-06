@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 import {NavigationEvents} from 'react-navigation';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import API from '../utils/API';
+import ChildCard from '../components/ChildCard';
 
 const colorArray = [
   '#5E35B1',
@@ -20,6 +22,11 @@ const colorArray = [
   '#01579B',
   '#00796B'
 ];
+
+const randomArrayItem = (array) => {
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex]
+};
 
 export default class CategoriesScreen extends Component {
   state = {
@@ -62,13 +69,16 @@ export default class CategoriesScreen extends Component {
     this.props.navigation.setParams({_updateParamPreferencesAndExit: this.updateParamPreferencesAndExit});
 
     const {params} = this.props.navigation.state;
-    console.log(`query database for child categories with id: ${params.childPrefId}`);
-
+    console.log(`query database for child categories with id: ${params.childPrefAlias}`);
     this.setState({
       user_id: params.user_id,
       user_name: params.user_name,
       user_preferences: params.user_preferences
-    }, () => console.log(this.state))
+    }, () => console.log(this.state));
+
+    API.getChildCategories(params.childPrefAlias)
+      .then(res => this.setState({results: res.data}, () => console.log(this.state.results)))
+      .catch(err => console.log(err))
   };
 
 
@@ -82,8 +92,15 @@ export default class CategoriesScreen extends Component {
           onWillBlur={() => console.log('will blur')}
           onDidBlur={() => console.log('did blur')}
         />
-
-        <Text>Children go here...</Text>
+        <ScrollView style={styles.scrollView}>
+          {this.state.results.map((child, i) => (
+            <ChildCard
+              key={i}
+              title={child.title}
+              color={randomArrayItem(colorArray)}
+            />
+          ))}
+        </ScrollView>
       </View>
     )
   }
@@ -95,5 +112,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
+  },
+  scrollView: {
+    width: '100%'
   }
 });
