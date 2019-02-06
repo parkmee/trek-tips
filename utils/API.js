@@ -10,9 +10,8 @@ export default {
   handleLogin: function (accessToken) {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
   },
-  // get yelp recommendations based on location and preferences (categories)
-  searchYelp: function(location, categories) {
-    return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {location, categories})
+  searchYelp: function(id, location, categories) {
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {id, location, categories})
   },
   // get all users
   getAllUsers: function() {

@@ -1,86 +1,145 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Card, Text, Title, Button } from 'react-native-paper';
+import FontAwesome, { Icons, IconTypes, parseIconFromClassName} from 'react-native-fontawesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import API from "../utils/API";
 
 class RecCard extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      wasVisited: this.props.wasVisited,
-      isSaved: this.props.isSaved
-    }
-  }
 
-  static priceString(price) {
-    let priceString;
-    switch (price) {
-      case "$":
-        priceString = "   $";
-        break;
-      case "$$":
-        priceString = "  $$";
-        break;
-      case "$$$$":
-        priceString = " $$$";
-        break;
-      case "$$$$":
-        priceString = "$$$$";
-        break;
-      default:
-        priceString = " N/A";
-        break;
-    }
-    return priceString;
+    this.state = {
+      isSaved: this.props.isSaved,
+      wasVisited: this.props.wasVisited
+    };
   }
 
   toggleVisited() {
-    alert("visited button clicked");
+    /* 
+      when visited icon is pushed
+      update the database to reflect the changed value
+      and then update state to change the icon
+    */
     if (this.state.wasVisited === "true") {
-      this.setState({wasVisited: "false"});
+      console.log("setting wasVisited to false");
+      API.deleteUserVisitedPlace(this.props.userId, this.props.id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({wasVisited: "false"});
+      })
+      .catch(err => this.setState({error: err.message}));
     } else {
-      this.setState({wasVisited: "true"});
+      console.log("setting isSaved to true");
+      API.addUserVisitedPlace(this.props.userId, this.props.id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({wasVisited: "true"});
+      })
+      .catch(err => this.setState({error: err.message}));
     }
-
-    // TODO: axios call to update the property in mongoose
   }
 
   toggleSaved () {
-    alert("saved button clicked");
+     /* 
+      when saved icon is pushed
+      update the database to reflect the changed value
+      and then update state to change the icon
+    */
     if (this.state.isSaved === "true") {
-      this.setState({isSaved: "false"});
+      console.log("setting isSaved to false");
+      API.deleteUserSavedPlace(this.props.userId, this.props.id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({isSaved: "false"});
+      })
+      .catch(err => this.setState({error: err.message}));
     } else {
-      this.setState({isSaved: "true"});
+      console.log("setting isSaved to true");
+      API.addUserSavedPlace(this.props.userId, this.props.id)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({isSaved: "true"});
+      })
+      .catch(err => this.setState({error: err.message}));
     }
+  }
 
-    // TODO: axios call to update the property in mongoose
+  savedIconTrue () {
+    /* 
+      render the icon which indicate place is saved
+    */
+    return (
+      <Text
+        style={styles.isSavedTrue}
+        onPress={this.toggleSaved.bind(this)}
+      >
+        <FontAwesome type={IconTypes.FAS}>{Icons.heart}</FontAwesome>
+      </Text>
+    )
+  }
+
+  savedIconFalse () {
+    /* 
+      render the icon which indicate place is NOT saved
+    */
+    return (
+      <FontAwesome5 name={'heart'} 
+        style={styles.isSavedFalse}
+        onPress={this.toggleSaved.bind(this)}
+      />
+    )
+  }
+
+  wasVisitedIconTrue () {
+    /* 
+      render the icon which indicate place was visited
+    */
+    return (
+      <Text
+        style={styles.wasVisitedTrue}
+        onPress={this.toggleVisited.bind(this)}
+      >
+        <FontAwesome type={IconTypes.FAS}>{Icons.bookmark}</FontAwesome>
+      </Text>
+    )
+  }
+
+  wasVisitedIconFalse () {
+    /* 
+      render the icon which indicate place was NOT visited
+    */
+    return (
+      <FontAwesome5 name={'bookmark'} 
+        style={styles.wasVisitedFalse}
+        onPress={this.toggleVisited.bind(this)}
+      />
+    )
   }
 
   render() {
-    const savedButtonColor = this.state.isSaved === "true" ? "green" : "grey";
-    const visitedButtonColor = this.state.wasVisited === "true" ? "green" : "grey";
-
     return (
-      <Card>
+      <Card style={styles.recCard}>
         <Card.Content>
           <Title>{this.props.description}</Title>
-          <Card.Cover
-            source={{ uri: this.props.imgUrl}}
-            style={styles.imgStyle}/>
         </Card.Content>
+        <Card.Cover
+            source={{ uri: this.props.imgUrl}}
+        />
         <Card.Actions>
-          <Text>
-            {this.props.rating} - {RecCard.priceString(this.props.price)}
+          <Text style={styles.legend}>
+            {this.props.rating} - {this.props.price ? this.props.price :  "N/A"}
           </Text>
-          <Button
-            color={savedButtonColor}
-            onPress={this.toggleSaved.bind(this)}>
-            Saved
-          </Button>
-          <Button
-            color={visitedButtonColor}
-            onPress={this.toggleVisited.bind(this)}>
-            Visited
-          </Button>
+          {this.state.isSaved === true ? this.savedIconTrue() : this.savedIconFalse()}
+          {this.state.wasVisited === true ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
         </Card.Actions>
       </Card>
     )
@@ -89,23 +148,33 @@ class RecCard extends Component {
 
 const styles = StyleSheet.create({
   imgStyle: {
-    width: 300,
-    height: 150
+    paddingHorizontal: 0,
   },
-  btnPanel: {
-    alignContent: "stretch"
+  legend: {
+    flex: 1,
   },
-  btnSavedTrue: {
-    color: "green"
+  isSavedTrue: {
+    color: "red",
+    marginLeft: 10,
+    fontSize: 24
   },
-  btnSavedFalse: {
-    color: "grey"
+  isSavedFalse: {
+    color: "grey",
+    marginLeft: 10,
+    fontSize: 24
   },
-  btnVisitedTrue: {
-    color: "green"
+  wasVisitedTrue: {
+    color: "green",
+    marginLeft: 10,
+    fontSize: 24
   },
-  btnVisitedFalse: {
-    color: "grey"
+  wasVisitedFalse: {
+    color: "grey",
+    marginLeft: 10,
+    fontSize: 24
+  },
+  recCard: {
+    marginBottom: 5
   },
 });
 

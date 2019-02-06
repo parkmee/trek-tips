@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {NavigationEvents} from 'react-navigation'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import RecCard from "../components/RecCard"
 import {ScrollView} from 'react-native-gesture-handler';
@@ -13,13 +14,20 @@ export default class HomeScreen extends Component {
       searchLocation: "Atlanta, GA",
       searchCategories: "dessert",
       results: [],
-      error: ""
+      error: "",
+      userPlaces: [],
+      userSavedPlaces: [],
+      userVisitedPlaces: []
     }
   }
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
     const {params} = navigation.state;
+
+    // I am assuming that the user in the params has a places property which
+    // is an array
+    // this.setState({userPlaces: params.user_places})
 
     return {
       title: 'Trek Tips',
@@ -77,50 +85,91 @@ export default class HomeScreen extends Component {
     }
   };
 
-  componentWillMount() {
-    // trigger the YELP api search (via the server) when the screen loads
-    API.searchYelp(this.state.searchLocation, "")
-      .then(res => {
-        if (res.data.status === "error") {
-          throw new Error(res.data.message);
-        }
-        this.setState({
-          results: res.data.businesses,
-          error: ""
-        }, () => console.log(this.state.results));
-      })
-      .catch(err => {
-        this.setState({
-          error: err.message
-        }, () => console.log(this.state.error));
-      });
-  }
-
   updateSearchLocation(searchLocation) {
     // update the state value searchLocation given the input from the search bar
     this.setState({searchLocation: searchLocation});
   }
 
-  getRecommendations(event) {
+  checkPlaceInArray(placeArray, placeId) {
+    let saved = placeArray.filter((place) => {
+      if (place.place_id === placeId) {
+        return place;
+      }        
+    });
+    if (saved.length > 0) {
+      return "true"
+    } else {
+      return "false"
+    }
+  }
+
+  getRecommendations() {
     // trigger the YELP api search (via the server) when the user submits
     // the search from the search bar
-    API.searchYelp(this.state.searchLocation, "")
+    let errors = "";
+    let userId = "5c5a407ced8b3c0a9ed9ee25";
+    let searchResults = [];
+    let userVisitedResults = [];
+    let userSavedResults = [];
+    API.searchYelp(userId, this.state.searchLocation, "aquariums")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({results: res.data.businesses, error: ""});
+        searchResults = res.data.businesses
+        console.log("searchResults: ", searchResults);
+        //this.setState({results: res.data.businesses, error: ""});
+        this.setState({results: searchResults, error: errors});
       })
       .catch(err => this.setState({error: err.message}));
+
+      // API.searchYelp(this.state.searchLocation, "")
+      // .then(res => {
+      //   if (res.data.status === "error") {
+      //     throw new Error(res.data.message);
+      //   }
+      //   searchResults = res.data.businesses;
+      //   console.log("seachResults");
+      //   API.getUserSavedPlaces(this.props.user_id)
+      //   .then(res => {
+      //     if (res.data.status === "error") {
+      //       throw new Error(res.data.message);
+      //     }
+      //     userSavedResults = res.data.businesses;
+      //     console.log("userSavedResults");
+      //     API.getUserVisitedPlaces(this.props.user_id)
+      //     .then(res => {
+      //       if (res.data.status === "error") {
+      //         throw new Error(res.data.message);
+      //       }
+      //       userVisitedResults = res.data.businesses;
+      //       console.log("userVisitedResults");
+      //       this.setState({results: searchResults, 
+      //                       userSavedPlaces: userSavedResults, 
+      //                       userVisitedPlaces: 
+      //                       userVisitedResults, 
+      //                       error: ""});
+      //     })
+      //     .catch(err => this.setState({error: err.message}));
+      //   })
+      //   .catch(err => this.setState({error: err.message}));
+      // })
+      // .catch(err => this.setState({error: err.message}));
+    // TODO HERE: get user saved places and load into state
+
+    // TODO HERE: get user visited places and load into state
   }
 
   render() {
     const {params} = this.props.navigation.state;
-    console.log(params);
+    console.log("params: ", params);
 
     // Body Content
     return (
       <View style={styles.container}>
+      <NavigationEvents
+          onWillFocus={() => this.getRecommendations()}    // remove this if we don't want default loading
+        />
         <SearchBar
           searchLocation={this.state.searchLocation}
           updateSearchLocation={this.updateSearchLocation.bind(this)}
@@ -128,15 +177,21 @@ export default class HomeScreen extends Component {
         />
         <ScrollView>
           {this.state.results.map(recommendation => {
+            
+            // recommendation.isSaved = this.checkPlaceInArray(this.state.userSavedPlaces, recommendation.id);
+            // recommendation.hasVisited = this.checkPlaceInArray(this.state.userVisitedPlaces, recommendation.id);
+
             return (
               <RecCard
                 key={recommendation.id}
+                id={recommendation.id}
                 imgUrl={recommendation.image_url}
                 description={recommendation.name}
                 rating={recommendation.rating}
                 price={recommendation.price}
-                isSaved="false"
-                wasVisited="false"
+                isSaved={recommendation.isSaved}
+                wasVisited={recommendation.hasVisited}
+                userId={params.user_id}
               />
             )
           })}
