@@ -81,6 +81,10 @@ export default class CategoriesScreen extends Component {
       .catch(err => console.log(err))
   };
 
+  handleChildPress = (selectedChildId) => {
+    this.state.user_preferences.push(selectedChildId);
+    console.log(this.state.user_preferences)
+  };
 
   render() {
 
@@ -97,8 +101,9 @@ export default class CategoriesScreen extends Component {
             {this.state.results.map((child, i) => (
               <ChildCard
                 key={i}
-                title={child.title}
                 color={randomArrayItem(colorArray)}
+                title={child.title}
+                handlePress={() => this.handleChildPress(child._id)}
               />
             ))}
           </View>

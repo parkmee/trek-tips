@@ -119,7 +119,8 @@ export default class PreferencesScreen extends Component {
 
   savePreferences = () => {
     const {params} = this.props.navigation.state;
-    console.log(`Save User Preferences to Database... where id = ${params.user_id}, or ${this.state.user_id}`)
+    console.log(`Save ${params.user_preferences} to Database... where id = ${params.user_id}`)
+    // console.log(`Save ${this.state.user_preferences} to Database... where id = ${this.state.user_id}`)
   };
 
   getParentCategories = () => {
@@ -135,22 +136,7 @@ export default class PreferencesScreen extends Component {
       user_name: params.user_name,
       user_preferences: params.user_preferences
     }, () => console.log(this.state))
-    // trigger the YELP api search (via the server) when the screen loads
-    /*const {navigation} = this.props;
-    const user_id = navigation.getParam('user_id', 'NO ID');*/
 
-    /*API.findUserById(user_id)
-      .then(res => {
-        if (res.data.status === "error") {
-          throw new Error(res.data.message);
-        }
-        this.setState({results: res.data.message, error: ""});
-        console.log(this.state.results);
-      })
-      .catch(err => {
-        this.setState({error: err.message});
-        console.log(this.state.error);
-      });*/
   };
 
   render() {

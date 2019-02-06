@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 
-const ParentCard = props => {
+const ChildCard = props => {
   return (
     <View
       style={{
@@ -28,6 +28,7 @@ const ParentCard = props => {
 
 const styles = StyleSheet.create({
   view: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -38,4 +39,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ParentCard;
+export default ChildCard;
