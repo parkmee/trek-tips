@@ -72,6 +72,6 @@ export default {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences`)
   },
   getChildCategories: function(parentAlias) {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences/${parentAlias}`)
+    return axios.get(`https://trek-tips.herokuapp.com/api/preferences/${parentAlias}`)
   }
 }
