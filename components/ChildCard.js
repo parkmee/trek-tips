@@ -2,6 +2,7 @@ import React from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 
 const ChildCard = props => {
+  console.log(props.active);
   return (
     <View
       style={{
@@ -17,7 +18,9 @@ const ChildCard = props => {
         onPress={props.handlePress}
       >
         <View style={styles.view}>
-          <Text style={styles.text}>
+          <Text
+            style={props.active ? styles.textActive : styles.textInactive}
+          >
             {props.title}
           </Text>
         </View>
@@ -32,8 +35,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  text: {
+  textActive: {
     color: '#F5FCFF',
+    fontWeight: '500',
+    fontSize: 18
+  },
+  textInactive: {
+    color: '#424242',
     fontWeight: '500',
     fontSize: 18
   }

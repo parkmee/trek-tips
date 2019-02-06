@@ -82,15 +82,18 @@ export default class CategoriesScreen extends Component {
   };
 
   handleChildPress = (selectedChildId) => {
+    const updatedPreferences = this.state.user_preferences;
 
     // If not in the user preferences...
-    if (this.state.user_preferences.indexOf(selectedChildId) === -1) {
+    if (updatedPreferences.indexOf(selectedChildId) === -1) {
       // add it...
-      this.state.user_preferences.push(selectedChildId);
+      updatedPreferences.push(selectedChildId);
+      this.setState({user_preferences: updatedPreferences})
     } else {
       // if it is there, remove it...
-      let removeIndex = this.state.user_preferences.indexOf(selectedChildId);
-      this.state.user_preferences.splice(removeIndex, 1);
+      let removeIndex = updatedPreferences.indexOf(selectedChildId);
+      updatedPreferences.splice(removeIndex, 1);
+      this.setState({user_preferences: updatedPreferences})
     }
   };
 
@@ -109,6 +112,7 @@ export default class CategoriesScreen extends Component {
             {this.state.results.map((child, i) => (
               <ChildCard
                 key={i}
+                active={this.state.user_preferences.includes(child._id)}
                 color={randomArrayItem(colorArray)}
                 title={child.title}
                 handlePress={() => this.handleChildPress(child._id)}
