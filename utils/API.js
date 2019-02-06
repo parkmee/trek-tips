@@ -61,6 +61,9 @@ export default {
   deletePlace: function(id) {
     return axios.put(`http://${DEV_SERVER_URL}:8000/api/place/${id}`)
   },
+  getAllUserPlaces: function(id) {
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places`)
+  },
   // get parent categories (yelp categories with no parent aliases defined)
   getParentCategories: function() {
     return axios.get(`https://trek-tips.herokuapp.com/api/preferences`)
