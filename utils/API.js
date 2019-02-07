@@ -39,11 +39,11 @@ export default {
   },
   // save a place to a user's record (and add it to the places collection if new)
   addUserSavedPlace: function(id, placeObject) {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved/`, { placeObject })
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved/`, { placeObject })
   },
   // remove saved place
   removeUserSavedPlace: function(id, placeid) {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved/${placeid}`)
+    return axios.delete(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved/${placeid}`)
   },
   // get visited places
   getUserVisitedPlaces: function(id) {
@@ -51,11 +51,11 @@ export default {
   },
   // mark place visited in user's record (and add it to the places collection if new)
   addUserVisitedPlace: function(id, placeObject) {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited/`, { placeObject })
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited/`, { placeObject })
   },
   // remove visited place
   removeUserVisitedPlace: function(id, placeid) {
-    return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited/${placeid}`)
+    return axios.delete(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited/${placeid}`)
   },
   // delete place from place collection -- for cleaning collection during testing
   deletePlace: function(id) {

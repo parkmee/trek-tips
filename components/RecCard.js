@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, WebView } from 'react-native';
 import { Card, Text, Title, Button } from 'react-native-paper';
 import FontAwesome, { Icons, IconTypes, parseIconFromClassName} from 'react-native-fontawesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import API from "../utils/API";
+import {NavigationEvents} from 'react-navigation';
 
 class RecCard extends Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class RecCard extends Component {
 
     this.state = {
       isSaved: this.props.isSaved,
-      wasVisited: this.props.wasVisited
+      hasVisited: this.props.hasVisited
     };
   }
 
@@ -21,24 +22,24 @@ class RecCard extends Component {
       update the database to reflect the changed value
       and then update state to change the icon
     */
-    if (this.state.wasVisited === "true") {
-      console.log("setting wasVisited to false");
-      API.deleteUserVisitedPlace(this.props.userId, this.props.id)
+    if (this.state.hasVisited === "true") {
+      console.log("setting hasVisited to false");
+      API.removeUserVisitedPlace(this.props.userId, this.props.id)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({wasVisited: "false"});
+        this.setState({hasVisited: "false"});
       })
       .catch(err => this.setState({error: err.message}));
     } else {
       console.log("setting isSaved to true");
-      API.addUserVisitedPlace(this.props.userId, this.props.id)
+      API.addUserVisitedPlace(this.props.userId, this.props.placeData)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({wasVisited: "true"});
+        this.setState({hasVisited: "true"});
       })
       .catch(err => this.setState({error: err.message}));
     }
@@ -52,7 +53,7 @@ class RecCard extends Component {
     */
     if (this.state.isSaved === "true") {
       console.log("setting isSaved to false");
-      API.deleteUserSavedPlace(this.props.userId, this.props.id)
+      API.removeUserSavedPlace(this.props.userId, this.props.id)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
@@ -62,7 +63,7 @@ class RecCard extends Component {
       .catch(err => this.setState({error: err.message}));
     } else {
       console.log("setting isSaved to true");
-      API.addUserSavedPlace(this.props.userId, this.props.id)
+      API.addUserSavedPlace(this.props.userId, this.props.placeData)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
@@ -126,6 +127,8 @@ class RecCard extends Component {
   }
 
   render() {
+    //console.log("this.state.isSaved: ", this.state.isSaved);
+    //console.log("this.state.hasVisited: ", this.state.hasVisited);
     return (
       <Card style={styles.recCard}>
         <Card.Content>
@@ -133,13 +136,27 @@ class RecCard extends Component {
         </Card.Content>
         <Card.Cover
             source={{ uri: this.props.imgUrl}}
-        />
+          />
         <Card.Actions>
           <Text style={styles.legend}>
             {this.props.rating} - {this.props.price ? this.props.price :  "N/A"}
           </Text>
-          {this.state.isSaved === true ? this.savedIconTrue() : this.savedIconFalse()}
-          {this.state.wasVisited === true ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
+          {/* <FontAwesome5 name={'map'} 
+            style={styles.mapIt}
+            
+            static navigationOptions = ({navigation, navigationOptions}) => {
+              const {params} = navigation.state;
+            }
+
+            onPress={() => navigation.navigate('Map', {
+              user_id: params.user_id,
+              user_name: params.user_name,
+              user_preferences: params.user_preferences,
+              recommendationData: this.props.recommendationData
+            })}
+          /> */}
+          {this.props.isSaved === true ? this.savedIconTrue() : this.savedIconFalse()}
+          {this.props.hasVisited === true ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
         </Card.Actions>
       </Card>
     )
@@ -147,9 +164,6 @@ class RecCard extends Component {
 }
 
 const styles = StyleSheet.create({
-  imgStyle: {
-    paddingHorizontal: 0,
-  },
   legend: {
     flex: 1,
   },
@@ -169,6 +183,11 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   wasVisitedFalse: {
+    color: "grey",
+    marginLeft: 10,
+    fontSize: 24
+  },
+  mapIt: {
     color: "grey",
     marginLeft: 10,
     fontSize: 24

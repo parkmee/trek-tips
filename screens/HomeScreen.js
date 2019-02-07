@@ -15,9 +15,7 @@ export default class HomeScreen extends Component {
       searchCategories: "dessert",
       results: [],
       error: "",
-      userPlaces: [],
-      userSavedPlaces: [],
-      userVisitedPlaces: []
+      userPlaces: []
     }
   }
 
@@ -107,10 +105,13 @@ export default class HomeScreen extends Component {
     // trigger the YELP api search (via the server) when the user submits
     // the search from the search bar
     let errors = "";
+
+    // following for testing only
     let userId = "5c5a407ced8b3c0a9ed9ee25";
     let searchResults = [];
-    let userVisitedResults = [];
-    let userSavedResults = [];
+    const {params} = this.props.navigation.state;
+
+    //API.searchYelp(params.user_id, this.state.searchLocation, "aquariums")
     API.searchYelp(userId, this.state.searchLocation, "aquariums")
       .then(res => {
         if (res.data.status === "error") {
@@ -122,47 +123,11 @@ export default class HomeScreen extends Component {
         this.setState({results: searchResults, error: errors});
       })
       .catch(err => this.setState({error: err.message}));
-
-      // API.searchYelp(this.state.searchLocation, "")
-      // .then(res => {
-      //   if (res.data.status === "error") {
-      //     throw new Error(res.data.message);
-      //   }
-      //   searchResults = res.data.businesses;
-      //   console.log("seachResults");
-      //   API.getUserSavedPlaces(this.props.user_id)
-      //   .then(res => {
-      //     if (res.data.status === "error") {
-      //       throw new Error(res.data.message);
-      //     }
-      //     userSavedResults = res.data.businesses;
-      //     console.log("userSavedResults");
-      //     API.getUserVisitedPlaces(this.props.user_id)
-      //     .then(res => {
-      //       if (res.data.status === "error") {
-      //         throw new Error(res.data.message);
-      //       }
-      //       userVisitedResults = res.data.businesses;
-      //       console.log("userVisitedResults");
-      //       this.setState({results: searchResults, 
-      //                       userSavedPlaces: userSavedResults, 
-      //                       userVisitedPlaces: 
-      //                       userVisitedResults, 
-      //                       error: ""});
-      //     })
-      //     .catch(err => this.setState({error: err.message}));
-      //   })
-      //   .catch(err => this.setState({error: err.message}));
-      // })
-      // .catch(err => this.setState({error: err.message}));
-    // TODO HERE: get user saved places and load into state
-
-    // TODO HERE: get user visited places and load into state
   }
 
   render() {
     const {params} = this.props.navigation.state;
-    console.log("params: ", params);
+    //console.log("params: ", params);
 
     // Body Content
     return (
@@ -177,9 +142,7 @@ export default class HomeScreen extends Component {
         />
         <ScrollView>
           {this.state.results.map(recommendation => {
-            
-            // recommendation.isSaved = this.checkPlaceInArray(this.state.userSavedPlaces, recommendation.id);
-            // recommendation.hasVisited = this.checkPlaceInArray(this.state.userVisitedPlaces, recommendation.id);
+            console.log(recommendation);
 
             return (
               <RecCard
@@ -190,7 +153,8 @@ export default class HomeScreen extends Component {
                 rating={recommendation.rating}
                 price={recommendation.price}
                 isSaved={recommendation.isSaved}
-                wasVisited={recommendation.hasVisited}
+                hasVisited={recommendation.hasVisited}
+                placeData={recommendation}
                 userId={params.user_id}
               />
             )

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {NavigationEvents} from 'react-navigation'
 import {ScrollView} from 'react-native-gesture-handler';
 import RecCard from "../components/RecCard";
 import API from "../utils/API";
@@ -40,55 +41,96 @@ export default class SavedScreen extends Component {
   };
 
   showAll = () => {
-    console.log('View All');
-    this.setState({filter: 'ALL'})
-  };
+    // get all user places entries for display on the UI
+    const {params} = this.props.navigation.state;
 
-  showSaved = () => {
-    console.log('View Saved');
-    this.setState({filter: 'SAVED'})
-  };
-
-  showVisited = () => {
-    console.log('View Visited');
-    this.setState({filter: 'VISITED'})
-  };
-
-  componentWillMount() {
-    // trigger the YELP api search (via the server) when the screen loads
-    API.searchYelp(this.state.searchLocation, "")
+    // testing only
+    let userId = "5c5a407ced8b3c0a9ed9ee25";
+    
+    //API.getAllUserPlaces(params.user_id)
+    API.getAllUserPlaces(userId) // testing only
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({results: res.data.businesses, error: ""});
+        this.setState({results: res.data, error: "", filter: 'ALL'});
         console.log(this.state.results);
       })
       .catch(err => {
         this.setState({error: err.message});
         console.log(this.state.error);
       });
-  }
+  };
+
+  showSaved = () => {
+    // get all saved entries for display on the UI
+    const {params} = this.props.navigation.state;
+
+    // testing only
+    let userId = "5c5a407ced8b3c0a9ed9ee25";
+    
+    //API.getUserSavedPlaces(params.user_id)  
+    API.getUserSavedPlaces(userId)  // testing only
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({results: res.data, error: "", filter: 'SAVED'});
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
+  };
+
+  showVisited = () => {
+    // get all saved entries for display on the UI
+    const {params} = this.props.navigation.state;
+
+    // testing only
+    let userId = "5c5a407ced8b3c0a9ed9ee25";
+
+    //API.getUserVisitedPlaces(params.user_id)
+    API.getUserVisitedPlaces(userId)  // testing only
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.setState({results: res.data, error: "", filter: 'VISITED'});
+        console.log(this.state.results);
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
+  };
 
   render() {
     const {params} = this.props.navigation.state;
-    console.log(params);
+    //console.log(params);
 
     // Body Content
     return (
       <View style={styles.container}>
-        <View style={styles.content}>
+      <NavigationEvents
+          onWillFocus={() => this.showAll()}    // remove this if we don't want default loading
+        />
+        <View style={styles.content}>      
           <ScrollView>
             {this.state.results.map(recommendation => {
               return (
                 <RecCard
-                  key={recommendation.id}
-                  imgUrl={recommendation.image_url}
-                  description={recommendation.name}
-                  rating={recommendation.rating}
-                  price={recommendation.price}
-                  isSaved="false"
-                  wasVisited="false"
+                  key={recommendation.place.id}
+                  id={recommendation.place.id}
+                  imgUrl={recommendation.place.image_url}
+                  description={recommendation.place.name}
+                  rating={recommendation.place.rating}
+                  price={recommendation.place.price}
+                  isSaved={recommendation.isSaved}
+                  hasVisited={recommendation.hasVisited}
+                  recommendationData={recommendation.place}
+                  userId={params.user_id}
                 />
               )
             })}
@@ -144,7 +186,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: "center"
   },
   filterBar: {

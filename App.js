@@ -5,6 +5,7 @@ import HomeScreen from './screens/HomeScreen';
 import SavedScreen from './screens/SavedScreen';
 import PreferencesScreen from './screens/PreferencesScreen';
 import CategoriesScreen from './screens/CategoriesScreen';
+import MapScreen from './screens/MapScreen';
 
 const AppNavigator = createStackNavigator({
     Login: {
@@ -21,6 +22,9 @@ const AppNavigator = createStackNavigator({
     },
     Saved: {
       screen: SavedScreen
+    },
+    Map: {
+      screen: MapScreen
     }
   },
   {
