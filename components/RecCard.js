@@ -24,7 +24,7 @@ class RecCard extends Component {
     */
     if (this.state.hasVisited === "true") {
       console.log("setting hasVisited to false");
-      API.deleteUserVisitedPlace(this.props.userId, this.props.id)
+      API.removeUserVisitedPlace(this.props.userId, this.props.id)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
@@ -34,7 +34,7 @@ class RecCard extends Component {
       .catch(err => this.setState({error: err.message}));
     } else {
       console.log("setting isSaved to true");
-      API.addUserVisitedPlace(this.props.userId, this.props.id)
+      API.addUserVisitedPlace(this.props.userId, this.props.placeData)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
@@ -53,7 +53,7 @@ class RecCard extends Component {
     */
     if (this.state.isSaved === "true") {
       console.log("setting isSaved to false");
-      API.deleteUserSavedPlace(this.props.userId, this.props.id)
+      API.removeUserSavedPlace(this.props.userId, this.props.id)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
@@ -63,7 +63,7 @@ class RecCard extends Component {
       .catch(err => this.setState({error: err.message}));
     } else {
       console.log("setting isSaved to true");
-      API.addUserSavedPlace(this.props.userId, this.props.id)
+      API.addUserSavedPlace(this.props.userId, this.props.placeData)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);

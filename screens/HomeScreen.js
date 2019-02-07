@@ -105,10 +105,13 @@ export default class HomeScreen extends Component {
     // trigger the YELP api search (via the server) when the user submits
     // the search from the search bar
     let errors = "";
-    let userId = "5c5a407ced8b3c0a9ed9ee25";
-    let searchResults = [];
 
-    API.searchYelp(userId, this.state.searchLocation, "aquariums")
+    // following for testing only
+    //let userId = "5c5a407ced8b3c0a9ed9ee25";
+    let searchResults = [];
+    const {params} = this.props.navigation.state;
+
+    API.searchYelp(params.user_id, this.state.searchLocation, "aquariums")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
@@ -123,7 +126,7 @@ export default class HomeScreen extends Component {
 
   render() {
     const {params} = this.props.navigation.state;
-    console.log("params: ", params);
+    //console.log("params: ", params);
 
     // Body Content
     return (
@@ -150,7 +153,7 @@ export default class HomeScreen extends Component {
                 price={recommendation.price}
                 isSaved={recommendation.isSaved}
                 hasVisited={recommendation.hasVisited}
-                recommendationData={recommendation}
+                placeData={recommendation}
                 userId={params.user_id}
               />
             )
