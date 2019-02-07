@@ -155,8 +155,8 @@ class RecCard extends Component {
               recommendationData: this.props.recommendationData
             })}
           /> */}
-          {this.state.isSaved === true ? this.savedIconTrue() : this.savedIconFalse()}
-          {this.state.hasVisited === true ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
+          {this.props.isSaved === true ? this.savedIconTrue() : this.savedIconFalse()}
+          {this.props.hasVisited === true ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
         </Card.Actions>
       </Card>
     )

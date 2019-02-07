@@ -107,11 +107,12 @@ export default class HomeScreen extends Component {
     let errors = "";
 
     // following for testing only
-    //let userId = "5c5a407ced8b3c0a9ed9ee25";
+    let userId = "5c5a407ced8b3c0a9ed9ee25";
     let searchResults = [];
     const {params} = this.props.navigation.state;
 
-    API.searchYelp(params.user_id, this.state.searchLocation, "aquariums")
+    //API.searchYelp(params.user_id, this.state.searchLocation, "aquariums")
+    API.searchYelp(userId, this.state.searchLocation, "aquariums")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);

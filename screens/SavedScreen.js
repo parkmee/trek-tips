@@ -41,16 +41,19 @@ export default class SavedScreen extends Component {
   };
 
   showAll = () => {
-    console.log('View All');
-    this.setState({filter: 'ALL'})
+    // get all user places entries for display on the UI
+    const {params} = this.props.navigation.state;
+
+    // testing only
     let userId = "5c5a407ced8b3c0a9ed9ee25";
-    // trigger the YELP api search (via the server) when the screen loads
-    API.searchYelp(userId, this.state.searchLocation, "")
+    
+    //API.getAllUserPlaces(params.user_id)
+    API.getAllUserPlaces(userId) // testing only
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({results: res.data.businesses, error: ""});
+        this.setState({results: res.data, error: "", filter: 'ALL'});
         console.log(this.state.results);
       })
       .catch(err => {
@@ -60,16 +63,19 @@ export default class SavedScreen extends Component {
   };
 
   showSaved = () => {
-    console.log('View Saved');
-    this.setState({filter: 'SAVED'})
+    // get all saved entries for display on the UI
+    const {params} = this.props.navigation.state;
+
+    // testing only
     let userId = "5c5a407ced8b3c0a9ed9ee25";
-    // trigger the YELP api search (via the server) when the screen loads
-    API.searchYelp(userId, this.state.searchLocation, "")
+    
+    //API.getUserSavedPlaces(params.user_id)  
+    API.getUserSavedPlaces(userId)  // testing only
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({results: res.data.businesses, error: ""});
+        this.setState({results: res.data, error: "", filter: 'SAVED'});
         console.log(this.state.results);
       })
       .catch(err => {
@@ -79,16 +85,19 @@ export default class SavedScreen extends Component {
   };
 
   showVisited = () => {
-    console.log('View Visited');
-    this.setState({filter: 'VISITED'})
+    // get all saved entries for display on the UI
+    const {params} = this.props.navigation.state;
+
+    // testing only
     let userId = "5c5a407ced8b3c0a9ed9ee25";
-    // trigger the YELP api search (via the server) when the screen loads
-    API.searchYelp(userId, this.state.searchLocation, "")
+
+    //API.getUserVisitedPlaces(params.user_id)
+    API.getUserVisitedPlaces(userId)  // testing only
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({results: res.data.businesses, error: ""});
+        this.setState({results: res.data, error: "", filter: 'VISITED'});
         console.log(this.state.results);
       })
       .catch(err => {
@@ -99,7 +108,7 @@ export default class SavedScreen extends Component {
 
   render() {
     const {params} = this.props.navigation.state;
-    console.log(params);
+    //console.log(params);
 
     // Body Content
     return (
@@ -107,20 +116,20 @@ export default class SavedScreen extends Component {
       <NavigationEvents
           onWillFocus={() => this.showAll()}    // remove this if we don't want default loading
         />
-        <View style={styles.content}>
+        <View style={styles.content}>      
           <ScrollView>
             {this.state.results.map(recommendation => {
               return (
                 <RecCard
-                  key={recommendation.id}
-                  id={recommendation.id}
-                  imgUrl={recommendation.image_url}
-                  description={recommendation.name}
-                  rating={recommendation.rating}
-                  price={recommendation.price}
+                  key={recommendation.place.id}
+                  id={recommendation.place.id}
+                  imgUrl={recommendation.place.image_url}
+                  description={recommendation.place.name}
+                  rating={recommendation.place.rating}
+                  price={recommendation.place.price}
                   isSaved={recommendation.isSaved}
                   hasVisited={recommendation.hasVisited}
-                  recommendationData={recommendation}
+                  recommendationData={recommendation.place}
                   userId={params.user_id}
                 />
               )
@@ -177,7 +186,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: "center"
   },
   filterBar: {
