@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
 import {NavigationEvents} from 'react-navigation'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import RecCard from "../components/RecCard"
-import {ScrollView} from 'react-native-gesture-handler';
 import SearchBar from '../components/SearchBar';
 import API from "../utils/API";
 
@@ -125,6 +124,7 @@ export default class HomeScreen extends Component {
 
   render() {
     const {params} = this.props.navigation.state;
+    console.log(params);
     //console.log("params: ", params);
 
     // Body Content
@@ -138,7 +138,7 @@ export default class HomeScreen extends Component {
           updateSearchLocation={this.updateSearchLocation}
           searchAction={this.getRecommendations}
         />
-        <ScrollView>
+        <ScrollView style={styles.scrollView}>
           {this.state.results.map(recommendation => {
             console.log(recommendation);
 
@@ -154,6 +154,16 @@ export default class HomeScreen extends Component {
                 hasVisited={recommendation.hasVisited}
                 placeData={recommendation}
                 userId={params.user_id}
+                toDetails={() => this.props.navigation.navigate('Details', {
+                  coordinates: recommendation.coordinates,
+                  phone: recommendation.display_phone,
+                  address: recommendation.location,
+                  name: recommendation.name,
+                  image: recommendation.image_url,
+                  url: recommendation.url,
+                  rating: recommendation.rating,
+                  other: recommendation.phone
+                })}
               />
             )
           })}
@@ -169,16 +179,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   search: {
-    flex: 1
+    flex: 1,
+    width: '100%'
   },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#B1A296'
+    backgroundColor: '#333333'
   },
   scrollView: {
-    flexDirection: "column"
+    flexDirection: "column",
+    width: '100%'
   },
   filterBar: {
     width: '100%',

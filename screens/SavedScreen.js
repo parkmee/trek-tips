@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {NavigationEvents} from 'react-navigation'
-import {ScrollView} from 'react-native-gesture-handler';
 import RecCard from "../components/RecCard";
 import API from "../utils/API";
 
@@ -46,7 +45,7 @@ export default class SavedScreen extends Component {
 
     // testing only
     let userId = "5c5a407ced8b3c0a9ed9ee25";
-    
+
     //API.getAllUserPlaces(params.user_id)
     API.getAllUserPlaces(userId) // testing only
       .then(res => {
@@ -68,8 +67,8 @@ export default class SavedScreen extends Component {
 
     // testing only
     let userId = "5c5a407ced8b3c0a9ed9ee25";
-    
-    //API.getUserSavedPlaces(params.user_id)  
+
+    //API.getUserSavedPlaces(params.user_id)
     API.getUserSavedPlaces(userId)  // testing only
       .then(res => {
         if (res.data.status === "error") {
@@ -116,7 +115,7 @@ export default class SavedScreen extends Component {
       <NavigationEvents
           onWillFocus={() => this.showAll()}    // remove this if we don't want default loading
         />
-        <View style={styles.content}>      
+        <View style={styles.content}>
           <ScrollView>
             {this.state.results.map(recommendation => {
               return (
@@ -182,7 +181,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#B1A296'
+    backgroundColor: '#333333'
   },
   content: {
     flex: 1,
