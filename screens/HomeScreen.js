@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
 import {NavigationEvents} from 'react-navigation'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import RecCard from "../components/RecCard"
-import {ScrollView} from 'react-native-gesture-handler';
+//import {ScrollView} from 'react-native-gesture-handler';
 import SearchBar from '../components/SearchBar';
 import API from "../utils/API";
 
@@ -112,7 +112,7 @@ export default class HomeScreen extends Component {
     const {params} = this.props.navigation.state;
 
     //API.searchYelp(params.user_id, this.state.searchLocation, "aquariums")
-    API.searchYelp(userId, this.state.searchLocation, "aquariums")
+    API.searchYelp(userId, this.state.searchLocation, "")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
@@ -140,7 +140,7 @@ export default class HomeScreen extends Component {
           updateSearchLocation={this.updateSearchLocation.bind(this)}
           searchAction={this.getRecommendations.bind(this)}
         />
-        <ScrollView>
+        <ScrollView style={styles.scrollView}>
           {this.state.results.map(recommendation => {
             console.log(recommendation);
 
@@ -167,6 +167,9 @@ export default class HomeScreen extends Component {
 
 // StyleSheet
 const styles = StyleSheet.create({
+  scrollView: {
+    width: "100%"
+  },
   nav: {
     flexDirection: 'row'
   },

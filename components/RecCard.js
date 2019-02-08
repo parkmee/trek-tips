@@ -126,37 +126,43 @@ class RecCard extends Component {
     )
   }
 
+  static navigationOptions = ({navigation, navigationOptions}) => {
+      const {params} = navigation.state;
+  }
+
+      
+
+
+
   render() {
-    //console.log("this.state.isSaved: ", this.state.isSaved);
-    //console.log("this.state.hasVisited: ", this.state.hasVisited);
     return (
       <Card style={styles.recCard}>
         <Card.Content>
-          <Title>{this.props.description}</Title>
+          <Title style={styles.cardTitle}>{this.props.description}</Title>
         </Card.Content>
         <Card.Cover
+            style={styles.cardImage}
             source={{ uri: this.props.imgUrl}}
           />
         <Card.Actions>
           <Text style={styles.legend}>
             {this.props.rating} - {this.props.price ? this.props.price :  "N/A"}
           </Text>
-          {/* <FontAwesome5 name={'map'} 
+          <FontAwesome5 name={'map'} 
             style={styles.mapIt}
-            
-            static navigationOptions = ({navigation, navigationOptions}) => {
-              const {params} = navigation.state;
-            }
 
-            onPress={() => navigation.navigate('Map', {
-              user_id: params.user_id,
-              user_name: params.user_name,
-              user_preferences: params.user_preferences,
-              recommendationData: this.props.recommendationData
-            })}
-          /> */}
-          {this.props.isSaved === true ? this.savedIconTrue() : this.savedIconFalse()}
-          {this.props.hasVisited === true ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
+            onPress={() => {
+              navigationOptions = ({navigation, navigationOptions}) => {
+                const {params} = navigation.state;
+                navigation.navigate('Map', {
+                  recommendationData: this.props.recommendationData
+                })
+            }
+              
+            }}
+          />
+          {this.state.isSaved === true ? this.savedIconTrue() : this.savedIconFalse()}
+          {this.state.hasVisited === true ? this.wasVisitedIconTrue() : this.wasVisitedIconFalse()}
         </Card.Actions>
       </Card>
     )
@@ -166,6 +172,12 @@ class RecCard extends Component {
 const styles = StyleSheet.create({
   legend: {
     flex: 1,
+  },
+  cardImage: {
+    width: "100%"
+  },
+  cardTitle: {
+    width: "100%"
   },
   isSavedTrue: {
     color: "red",
@@ -193,6 +205,7 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
   recCard: {
+    width: "100%",
     marginBottom: 5
   },
 });

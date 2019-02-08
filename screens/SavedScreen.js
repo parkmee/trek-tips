@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {NavigationEvents} from 'react-navigation'
 import {ScrollView} from 'react-native-gesture-handler';
@@ -117,10 +117,11 @@ export default class SavedScreen extends Component {
           onWillFocus={() => this.showAll()}    // remove this if we don't want default loading
         />
         <View style={styles.content}>      
-          <ScrollView>
+          <ScrollView style={styles.recCard}>
             {this.state.results.map(recommendation => {
               return (
                 <RecCard
+
                   key={recommendation.place.id}
                   id={recommendation.place.id}
                   imgUrl={recommendation.place.image_url}
@@ -178,16 +179,21 @@ export default class SavedScreen extends Component {
 
 // StyleSheet
 const styles = StyleSheet.create({
+  recCard: {
+    width: "100%"
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#B1A296'
+    backgroundColor: '#B1A296',
+    width: "100%"
   },
   content: {
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: "center"
+    alignItems: "center",
+    width: "100%"
   },
   filterBar: {
     width: '100%',
