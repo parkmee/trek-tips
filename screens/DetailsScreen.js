@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, Image, View, Text, TouchableOpacity, Linking} from 'react-native';
 
+import openMap from 'react-native-open-maps';
+
 export default class DetailsScreen extends Component {
 
   // Header Options
@@ -34,6 +36,10 @@ export default class DetailsScreen extends Component {
     Linking.openURL(url)
   };
 
+  handleAddress = (lat, long) => {
+    openMap({latitude: lat, longitude: long})
+  };
+
   render() {
     const {params} = this.props.navigation.state;
     console.log(params);
@@ -51,19 +57,26 @@ export default class DetailsScreen extends Component {
         <Image source={{uri: params.image}}
                style={styles.image}
         />
-        <Text style={styles.instructions}>
-          {params.address.display_address.join(' ')}
-        </Text>
+        <TouchableOpacity
+          onPress={() => this.handleAddress(params.coordinates.latitude, params.coordinates.longitude)}
+        >
+          <Text style={styles.touch}>
+            {params.address.display_address.join(' ')}
+          </Text>
+        </TouchableOpacity>
         <Text style={styles.instructions}>
           Latitude: {params.coordinates.latitude}
         </Text>
         <Text style={styles.instructions}>
           Longitude: {params.coordinates.longitude}
         </Text>
+        <Text style={styles.instructions}>
+          {params.rating}
+        </Text>
         <TouchableOpacity
           onPress={() => this.handleCall(params.other)}
         >
-          <Text style={styles.phoneNumber}>
+          <Text style={styles.touch}>
             {params.phone}
           </Text>
         </TouchableOpacity>
@@ -99,7 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600'
   },
-  phoneNumber: {
+  touch: {
     textAlign: 'center',
     color: '#B500A9',
     marginBottom: 5,
