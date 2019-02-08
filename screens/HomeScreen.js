@@ -8,16 +8,14 @@ import SearchBar from '../components/SearchBar';
 import API from "../utils/API";
 
 export default class HomeScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchLocation: "Atlanta, GA",
-      searchCategories: "dessert",
-      results: [],
-      error: "",
-      userPlaces: []
-    }
-  }
+
+  state = {
+    searchLocation: "Atlanta, GA",
+    searchCategories: "dessert",
+    results: [],
+    error: "",
+    userPlaces: []
+  };
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -92,7 +90,7 @@ export default class HomeScreen extends Component {
     let saved = placeArray.filter((place) => {
       if (place.place_id === placeId) {
         return place;
-      }        
+      }
     });
     if (saved.length > 0) {
       return "true"
@@ -117,7 +115,7 @@ export default class HomeScreen extends Component {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        searchResults = res.data.businesses
+        searchResults = res.data.businesses;
         console.log("searchResults: ", searchResults);
         //this.setState({results: res.data.businesses, error: ""});
         this.setState({results: searchResults, error: errors});
@@ -132,13 +130,13 @@ export default class HomeScreen extends Component {
     // Body Content
     return (
       <View style={styles.container}>
-      <NavigationEvents
+        <NavigationEvents
           onWillFocus={() => this.getRecommendations()}    // remove this if we don't want default loading
         />
         <SearchBar
           searchLocation={this.state.searchLocation}
-          updateSearchLocation={this.updateSearchLocation.bind(this)}
-          searchAction={this.getRecommendations.bind(this)}
+          updateSearchLocation={this.updateSearchLocation}
+          searchAction={this.getRecommendations}
         />
         <ScrollView>
           {this.state.results.map(recommendation => {

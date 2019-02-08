@@ -11,7 +11,7 @@ export default {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
   },
   searchYelp: function(id, location, categories) {
-    return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {id, location, categories})
+    return axios.post(`https://trek-tips.herokuapp.com/api/recommendations/`, {id, location, categories})
   },
   // get all users
   getAllUsers: function() {
