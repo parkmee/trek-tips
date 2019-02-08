@@ -3,21 +3,18 @@ import { View, StyleSheet} from 'react-native';
 import { TextInput } from 'react-native-paper';
 
 class SearchBar extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     //var updatesearchLocation = this.props.updatesearchLocation;
     return (
       <View style={styles.inputWrapper}>
         <TextInput
-          label='Search City, State or Zip'   
+          label='Search City, State or Zip'
           value={this.props.searchLocation}       // this is from the parent prop searchLocation
-          onChangeText = {this.props.updateSearchLocation}  // update parent state for location                 
-          onSubmitEditing = {this.props.searchAction}       // call yelp API to query  
+          onChangeText = {this.props.updateSearchLocation}  // update parent state for location
+          onSubmitEditing = {this.props.searchAction}       // call yelp API to query
           style={styles.searchInput}
-        />      
+        />
       </View>
     )
   }
