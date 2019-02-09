@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {NavigationEvents} from 'react-navigation'
-import {ScrollView} from 'react-native-gesture-handler';
 import RecCard from "../components/RecCard";
 import API from "../utils/API";
 
@@ -46,7 +45,7 @@ export default class SavedScreen extends Component {
 
     // testing only
     let userId = "5c5a407ced8b3c0a9ed9ee25";
-    
+
     //API.getAllUserPlaces(params.user_id)
     API.getAllUserPlaces(userId) // testing only
       .then(res => {
@@ -68,8 +67,8 @@ export default class SavedScreen extends Component {
 
     // testing only
     let userId = "5c5a407ced8b3c0a9ed9ee25";
-    
-    //API.getUserSavedPlaces(params.user_id)  
+
+    //API.getUserSavedPlaces(params.user_id)
     API.getUserSavedPlaces(userId)  // testing only
       .then(res => {
         if (res.data.status === "error") {
@@ -132,6 +131,16 @@ export default class SavedScreen extends Component {
                   hasVisited={recommendation.hasVisited}
                   recommendationData={recommendation.place}
                   userId={params.user_id}
+                  toDetails={() => this.props.navigation.navigate('Details', {
+                    coordinates: recommendation.place.coordinates,
+                    phone: recommendation.place.display_phone,
+                    address: recommendation.place.location,
+                    name: recommendation.place.name,
+                    image: recommendation.place.image_url,
+                    url: recommendation.place.url,
+                    rating: recommendation.place.rating,
+                    other: recommendation.place.phone
+                  })}
                 />
               )
             })}
@@ -186,8 +195,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#B1A296',
-    width: "100%"
+    backgroundColor: '#333333'
   },
   content: {
     flex: 1,

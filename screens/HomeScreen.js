@@ -3,21 +3,18 @@ import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native
 import {NavigationEvents} from 'react-navigation'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import RecCard from "../components/RecCard"
-//import {ScrollView} from 'react-native-gesture-handler';
 import SearchBar from '../components/SearchBar';
 import API from "../utils/API";
 
 export default class HomeScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchLocation: "Atlanta, GA",
-      searchCategories: "dessert",
-      results: [],
-      error: "",
-      userPlaces: []
-    }
-  }
+
+  state = {
+    searchLocation: "Atlanta, GA",
+    searchCategories: "dessert",
+    results: [],
+    error: "",
+    userPlaces: []
+  };
 
   // Header Options
   static navigationOptions = ({navigation, navigationOptions}) => {
@@ -83,7 +80,7 @@ export default class HomeScreen extends Component {
     }
   };
 
-  updateSearchLocation(searchLocation) {
+  updateSearchLocation = (searchLocation) => {
     // update the state value searchLocation given the input from the search bar
     this.setState({searchLocation: searchLocation});
   }
@@ -92,7 +89,7 @@ export default class HomeScreen extends Component {
     let saved = placeArray.filter((place) => {
       if (place.place_id === placeId) {
         return place;
-      }        
+      }
     });
     if (saved.length > 0) {
       return "true"
@@ -101,7 +98,7 @@ export default class HomeScreen extends Component {
     }
   }
 
-  getRecommendations() {
+  getRecommendations = () => {
     // trigger the YELP api search (via the server) when the user submits
     // the search from the search bar
     let errors = "";
@@ -111,13 +108,13 @@ export default class HomeScreen extends Component {
     let searchResults = [];
     const {params} = this.props.navigation.state;
 
-    //API.searchYelp(params.user_id, this.state.searchLocation, "aquariums")
-    API.searchYelp(userId, this.state.searchLocation, "")
+    API.searchYelp(params.user_id, this.state.searchLocation, "")
+    //API.searchYelp(userId, this.state.searchLocation, "")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        searchResults = res.data.businesses
+        searchResults = res.data;
         console.log("searchResults: ", searchResults);
         //this.setState({results: res.data.businesses, error: ""});
         this.setState({results: searchResults, error: errors});
@@ -127,35 +124,47 @@ export default class HomeScreen extends Component {
 
   render() {
     const {params} = this.props.navigation.state;
+    console.log(params);
     //console.log("params: ", params);
 
     // Body Content
     return (
       <View style={styles.container}>
-      <NavigationEvents
+        <NavigationEvents
           onWillFocus={() => this.getRecommendations()}    // remove this if we don't want default loading
         />
         <SearchBar
           searchLocation={this.state.searchLocation}
-          updateSearchLocation={this.updateSearchLocation.bind(this)}
-          searchAction={this.getRecommendations.bind(this)}
+          updateSearchLocation={this.updateSearchLocation}
+          searchAction={this.getRecommendations}
         />
-        <ScrollView style={styles.scrollView}>
+        <ScrollView style={styles.recCard}>
           {this.state.results.map(recommendation => {
             console.log(recommendation);
 
             return (
               <RecCard
-                key={recommendation.id}
-                id={recommendation.id}
-                imgUrl={recommendation.image_url}
-                description={recommendation.name}
-                rating={recommendation.rating}
-                price={recommendation.price}
+                key={recommendation.place.id}
+                id={recommendation.place.id}
+                imgUrl={recommendation.place.image_url}
+                description={recommendation.place.name}
+                rating={recommendation.place.rating}
+                price={recommendation.place.price}
                 isSaved={recommendation.isSaved}
                 hasVisited={recommendation.hasVisited}
-                placeData={recommendation}
+                placeData={recommendation.place}
                 userId={params.user_id}
+                rerender={this.getRecommendations}
+                toDetails={() => this.props.navigation.navigate('Details', {
+                  coordinates: recommendation.place.coordinates,
+                  phone: recommendation.place.display_phone,
+                  address: recommendation.place.location,
+                  name: recommendation.place.name,
+                  image: recommendation.place.image_url,
+                  url: recommendation.place.url,
+                  rating: recommendation.place.rating,
+                  other: recommendation.place.phone
+                })}
               />
             )
           })}
@@ -167,23 +176,25 @@ export default class HomeScreen extends Component {
 
 // StyleSheet
 const styles = StyleSheet.create({
-  scrollView: {
+  recCard: {
     width: "100%"
   },
   nav: {
     flexDirection: 'row'
   },
   search: {
-    flex: 1
+    flex: 1,
+    width: '100%'
   },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#B1A296'
+    backgroundColor: '#333333'
   },
   scrollView: {
-    flexDirection: "column"
+    flexDirection: "column",
+    width: '100%'
   },
   filterBar: {
     width: '100%',

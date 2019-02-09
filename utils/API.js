@@ -11,6 +11,7 @@ export default {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
   },
   searchYelp: function(id, location, categories) {
+    //return axios.post(`https://trek-tips.herokuapp.com/api/recommendations/`, {id, location, categories})
     return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {id, location, categories})
   },
   // get all users
@@ -66,10 +67,12 @@ export default {
   },
   // get parent categories (yelp categories with no parent aliases defined)
   getParentCategories: function() {
-    return axios.get(`https://trek-tips.herokuapp.com/api/preferences`)
+    //return axios.get(`https://trek-tips.herokuapp.com/api/preferences`)
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences`)
   },
   // get child categories classified under parent alias, e.g., arts, active, nightlife
   getChildCategories: function(parentAlias) {
-    return axios.get(`https://trek-tips.herokuapp.com/api/preferences/${parentAlias}`)
+    //return axios.get(`https://trek-tips.herokuapp.com/api/preferences/${parentAlias}`)
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences/${parentAlias}`)
   }
 }
