@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import {NavigationEvents} from 'react-navigation'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import RecCard from "../components/RecCard"
@@ -80,43 +80,81 @@ export default class HomeScreen extends Component {
     }
   };
 
-  updateSearchLocation(searchLocation) {
+  updateSearchLocation = (searchLocation) => {
     // update the state value searchLocation given the input from the search bar
     this.setState({searchLocation: searchLocation});
   }
 
-  checkPlaceInArray(placeArray, placeId) {
-    let saved = placeArray.filter((place) => {
-      if (place.place_id === placeId) {
-        return place;
+  addUserSavedPlace = (userId, placeData) => {
+    API.addUserSavedPlace(userId, placeData)
+    .then(res => {
+      if (res.data.status === "error") {
+        throw new Error(res.data.message);
       }
+      this.getRecommendations();
+    })
+    .catch(err => {
+      this.setState({error: err.message});
+      console.log(this.state.error);
     });
-    if (saved.length > 0) {
-      return "true"
-    } else {
-      return "false"
-    }
   }
 
-  getRecommendations() {
-    // trigger the YELP api search (via the server) when the user submits
-    // the search from the search bar
-    let errors = "";
+  removeUserSavedPlace = (userId, placeId) => {
+    API.removeUserSavedPlace(userId, placeId)
+    .then(res => {
+      if (res.data.status === "error") {
+        throw new Error(res.data.message);
+      }
+      this.getRecommendations();
+    })
+    .catch(err => {
+      this.setState({error: err.message});
+      console.log(this.state.error);
+    });
+  }
 
-    // following for testing only
-    let userId = "5c5a407ced8b3c0a9ed9ee25";
-    let searchResults = [];
-    const {params} = this.props.navigation.state;
+  addUserVisitedPlace = (userId, placeData) => {
+    API.addUserVisitedPlace(userId, placeData)
+    .then(res => {
+      if (res.data.status === "error") {
+        throw new Error(res.data.message);
+      }
+      this.getRecommendations();
+    })
+    .catch(err => {
+      this.setState({error: err.message});
+      console.log(this.state.error);
+    });
+  }
 
-    //API.searchYelp(params.user_id, this.state.searchLocation, "aquariums")
-    API.searchYelp(userId, this.state.searchLocation, "aquariums")
+  removeUserVisitedPlace = (userId, placeId) => {
+    API.removeUserVisitedPlace(userId, placeId)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        searchResults = res.data.businesses;
-        console.log("searchResults: ", searchResults);
-        //this.setState({results: res.data.businesses, error: ""});
+        this.getRecommendations();
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
+  }
+
+  getRecommendations = () => {
+    // trigger the YELP api search (via the server) when the user submits
+    // the search from the search bar
+    let errors = "";
+
+    let searchResults = [];
+    const {params} = this.props.navigation.state;
+
+    API.searchYelp(params.user_id, this.state.searchLocation, "")
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        searchResults = res.data;
         this.setState({results: searchResults, error: errors});
       })
       .catch(err => this.setState({error: err.message}));
@@ -124,8 +162,6 @@ export default class HomeScreen extends Component {
 
   render() {
     const {params} = this.props.navigation.state;
-    console.log(params);
-    //console.log("params: ", params);
 
     // Body Content
     return (
@@ -138,31 +174,33 @@ export default class HomeScreen extends Component {
           updateSearchLocation={this.updateSearchLocation}
           searchAction={this.getRecommendations}
         />
-        <ScrollView style={styles.scrollView}>
+        <ScrollView style={styles.recCard}>
           {this.state.results.map(recommendation => {
-            console.log(recommendation);
-
             return (
               <RecCard
-                key={recommendation.id}
-                id={recommendation.id}
-                imgUrl={recommendation.image_url}
-                description={recommendation.name}
-                rating={recommendation.rating}
-                price={recommendation.price}
-                isSaved={recommendation.isSaved}
-                hasVisited={recommendation.hasVisited}
-                placeData={recommendation}
-                userId={params.user_id}
+                key = {recommendation.place.id}
+                id = {recommendation.place.id}
+                imgUrl = {recommendation.place.image_url}
+                description = {recommendation.place.name}
+                rating = {recommendation.place.rating}
+                price = {recommendation.place.price}
+                isSaved = {recommendation.isSaved}
+                hasVisited = {recommendation.hasVisited}
+                placeData = {recommendation.place}
+                userId = {params.user_id}
+                addUserSavedPlace = {() => this.addUserSavedPlace(params.user_id, recommendation.place)}
+                removeUserSavedPlace = {() => this.removeUserSavedPlace(params.user_id, recommendation.place.id)}
+                addUserVisitedPlace = {() => this.addUserVisitedPlace(params.user_id, recommendation.place)}
+                removeUserVisitedPlace = {() => this.removeUserVisitedPlace(params.user_id, recommendation.place.id)}
                 toDetails={() => this.props.navigation.navigate('Details', {
-                  coordinates: recommendation.coordinates,
-                  phone: recommendation.display_phone,
-                  address: recommendation.location,
-                  name: recommendation.name,
-                  image: recommendation.image_url,
-                  url: recommendation.url,
-                  rating: recommendation.rating,
-                  other: recommendation.phone
+                  coordinates: recommendation.place.coordinates,
+                  phone: recommendation.place.display_phone,
+                  address: recommendation.place.location,
+                  name: recommendation.place.name,
+                  image: recommendation.place.image_url,
+                  url: recommendation.place.url,
+                  rating: recommendation.place.rating,
+                  other: recommendation.place.phone
                 })}
               />
             )
@@ -175,6 +213,9 @@ export default class HomeScreen extends Component {
 
 // StyleSheet
 const styles = StyleSheet.create({
+  recCard: {
+    width: "100%"
+  },
   nav: {
     flexDirection: 'row'
   },

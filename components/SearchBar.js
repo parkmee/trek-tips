@@ -11,7 +11,7 @@ class SearchBar extends Component {
         <TextInput
           label='Search City, State or Zip'
           value={this.props.searchLocation}       // this is from the parent prop searchLocation
-          onChangeText = {this.props.updateSearchLocation}  // update parent state for location
+          onChangeText = {this.props.updateSearchLocation.bind(this)}  // update parent state for location
           onSubmitEditing = {this.props.searchAction}       // call yelp API to query
           style={styles.searchInput}
         />

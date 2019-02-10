@@ -31,13 +31,28 @@ export default class DetailsScreen extends Component {
     }
   };
 
+  handleOpenWebsite = (url) => {
+    Linking.openURL(url)
+  };
+
   handleCall = (number) => {
     const url = `tel:${number}`;
     Linking.openURL(url)
   };
 
-  handleAddress = (lat, long) => {
-    openMap({latitude: lat, longitude: long})
+  // commentted out to try openAddressInGoogleMaps
+  // handleAddress = (lat, long) => {
+  //   openMap({latitude: lat, longitude: long})
+  // };
+
+  // put the following back into the touchable opacity for 
+  // the address to revert and use handleAddress above
+  //onPress={() => this.handleAddress(params.coordinates.latitude, params.coordinates.longitude)}
+
+  openAddressInGoogleMaps = (location) => {
+    let url = "https://www.google.com/maps/place/";
+    url += location;
+    Linking.openURL(url)
   };
 
   render() {
@@ -45,12 +60,6 @@ export default class DetailsScreen extends Component {
     console.log(params);
     console.log(params.address.display_address.join(' '));
 
-    /*let url = "https://www.google.com/maps/place/";
-    url += this.props.location.address1 + ", ";
-    url += this.props.location.city + ", ";
-    url += this.props.location.state + " ";
-    url += this.props.location.zip_code;
-    var replacedUrl = url.split(' ').join('+')*/
     // Body Content
     return (
       <View style={styles.container}>
@@ -58,10 +67,10 @@ export default class DetailsScreen extends Component {
                style={styles.image}
         />
         <TouchableOpacity
-          onPress={() => this.handleAddress(params.coordinates.latitude, params.coordinates.longitude)}
+          onPress={() => this.openAddressInGoogleMaps(params.address.display_address.join('+'))}
         >
           <Text style={styles.touch}>
-            {params.address.display_address.join(' ')}
+             {params.address.display_address.join(' ')}
           </Text>
         </TouchableOpacity>
         <Text style={styles.instructions}>
@@ -78,6 +87,13 @@ export default class DetailsScreen extends Component {
         >
           <Text style={styles.touch}>
             {params.phone}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.handleOpenWebsite(params.url)}
+        >
+          <Text style={styles.touch}>
+            Find {params.name} on Yelp
           </Text>
         </TouchableOpacity>
       </View>

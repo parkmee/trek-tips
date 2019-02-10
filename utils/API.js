@@ -11,7 +11,7 @@ export default {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
   },
   searchYelp: function(id, location, categories) {
-    return axios.post(`https://trek-tips.herokuapp.com/api/recommendations/`, {id, location, categories})
+    return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {id, location, categories})
   },
   // get all users
   getAllUsers: function() {
@@ -38,8 +38,12 @@ export default {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved`)
   },
   // save a place to a user's record (and add it to the places collection if new)
-  addUserSavedPlace: function(id, placeObject) {
-    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved/`, { placeObject })
+  addUserSavedPlace: function(id, data) {
+    return axios({
+      url: `http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved`,
+      method: 'post',
+      data: data
+    });
   },
   // remove saved place
   removeUserSavedPlace: function(id, placeid) {
@@ -50,8 +54,12 @@ export default {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited`)
   },
   // mark place visited in user's record (and add it to the places collection if new)
-  addUserVisitedPlace: function(id, placeObject) {
-    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited/`, { placeObject })
+  addUserVisitedPlace: function(id, data) {
+    return axios({
+      url: `http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited`,
+      method: 'post',
+      data: data
+    });
   },
   // remove visited place
   removeUserVisitedPlace: function(id, placeid) {
@@ -66,10 +74,12 @@ export default {
   },
   // get parent categories (yelp categories with no parent aliases defined)
   getParentCategories: function() {
-    return axios.get(`https://trek-tips.herokuapp.com/api/preferences`)
+    //return axios.get(`https://trek-tips.herokuapp.com/api/preferences`)
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences`)
   },
   // get child categories classified under parent alias, e.g., arts, active, nightlife
   getChildCategories: function(parentAlias) {
-    return axios.get(`https://trek-tips.herokuapp.com/api/preferences/${parentAlias}`)
+    //return axios.get(`https://trek-tips.herokuapp.com/api/preferences/${parentAlias}`)
+    return axios.get(`http://${DEV_SERVER_URL}:8000/api/preferences/${parentAlias}`)
   }
 }
