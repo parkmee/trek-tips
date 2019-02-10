@@ -11,7 +11,6 @@ export default {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/tips/${accessToken}`)
   },
   searchYelp: function(id, location, categories) {
-    //return axios.post(`https://trek-tips.herokuapp.com/api/recommendations/`, {id, location, categories})
     return axios.post(`http://${DEV_SERVER_URL}:8000/api/recommendations/`, {id, location, categories})
   },
   // get all users
@@ -39,8 +38,12 @@ export default {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved`)
   },
   // save a place to a user's record (and add it to the places collection if new)
-  addUserSavedPlace: function(id, placeObject) {
-    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved/`, { placeObject })
+  addUserSavedPlace: function(id, data) {
+    return axios({
+      url: `http://${DEV_SERVER_URL}:8000/api/user/${id}/places/saved`,
+      method: 'post',
+      data: data
+    });
   },
   // remove saved place
   removeUserSavedPlace: function(id, placeid) {
@@ -51,8 +54,12 @@ export default {
     return axios.get(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited`)
   },
   // mark place visited in user's record (and add it to the places collection if new)
-  addUserVisitedPlace: function(id, placeObject) {
-    return axios.post(`http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited/`, { placeObject })
+  addUserVisitedPlace: function(id, data) {
+    return axios({
+      url: `http://${DEV_SERVER_URL}:8000/api/user/${id}/places/visited`,
+      method: 'post',
+      data: data
+    });
   },
   // remove visited place
   removeUserVisitedPlace: function(id, placeid) {

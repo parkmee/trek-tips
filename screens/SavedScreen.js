@@ -43,17 +43,12 @@ export default class SavedScreen extends Component {
     // get all user places entries for display on the UI
     const {params} = this.props.navigation.state;
 
-    // testing only
-    let userId = "5c5a407ced8b3c0a9ed9ee25";
-
-    //API.getAllUserPlaces(params.user_id)
-    API.getAllUserPlaces(userId) // testing only
+    API.getAllUserPlaces(params.user_id)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
         this.setState({results: res.data, error: "", filter: 'ALL'});
-        console.log(this.state.results);
       })
       .catch(err => {
         this.setState({error: err.message});
@@ -65,17 +60,12 @@ export default class SavedScreen extends Component {
     // get all saved entries for display on the UI
     const {params} = this.props.navigation.state;
 
-    // testing only
-    let userId = "5c5a407ced8b3c0a9ed9ee25";
-
-    //API.getUserSavedPlaces(params.user_id)
-    API.getUserSavedPlaces(userId)  // testing only
+    API.getUserSavedPlaces(params.user_id)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
         this.setState({results: res.data, error: "", filter: 'SAVED'});
-        console.log(this.state.results);
       })
       .catch(err => {
         this.setState({error: err.message});
@@ -87,23 +77,91 @@ export default class SavedScreen extends Component {
     // get all saved entries for display on the UI
     const {params} = this.props.navigation.state;
 
-    // testing only
-    let userId = "5c5a407ced8b3c0a9ed9ee25";
-
-    //API.getUserVisitedPlaces(params.user_id)
-    API.getUserVisitedPlaces(userId)  // testing only
+    API.getUserVisitedPlaces(params.user_id)
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
         this.setState({results: res.data, error: "", filter: 'VISITED'});
-        console.log(this.state.results);
       })
       .catch(err => {
         this.setState({error: err.message});
         console.log(this.state.error);
       });
   };
+
+  addUserSavedPlace = (userId, placeData) => {
+    API.addUserSavedPlace(userId, placeData)
+    .then(res => {
+      if (res.data.status === "error") {
+        throw new Error(res.data.message);
+      }
+      this.rerender();
+    })
+    .catch(err => {
+      this.setState({error: err.message});
+      console.log(this.state.error);
+    });
+  }
+
+  removeUserSavedPlace = (userId, placeId) => {
+    API.removeUserSavedPlace(userId, placeId)
+    .then(res => {
+      if (res.data.status === "error") {
+        throw new Error(res.data.message);
+      }
+      this.rerender();
+    })
+    .catch(err => {
+      this.setState({error: err.message});
+      console.log(this.state.error);
+    });
+  }
+
+  addUserVisitedPlace = (userId, placeData) => {
+    API.addUserVisitedPlace(userId, placeData)
+    .then(res => {
+      if (res.data.status === "error") {
+        throw new Error(res.data.message);
+      }
+      this.rerender();
+    })
+    .catch(err => {
+      this.setState({error: err.message});
+      console.log(this.state.error);
+    });
+  }
+
+  removeUserVisitedPlace = (userId, placeId) => {
+    API.removeUserVisitedPlace(userId, placeId)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.rerender();
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
+  }
+
+  rerender() {
+    switch (this.state.filter) {
+      case "ALL":
+        this.showAll();
+        break;
+      case "SAVED":
+        this.showSaved();
+        break;
+      case "VISITED":
+        this.showVisited();
+        break;
+      default:
+        this.showAll();
+        break;
+    }
+  }
 
   render() {
     const {params} = this.props.navigation.state;
@@ -131,6 +189,10 @@ export default class SavedScreen extends Component {
                   hasVisited={recommendation.hasVisited}
                   recommendationData={recommendation.place}
                   userId={params.user_id}
+                  addUserSavedPlace = {() => this.addUserSavedPlace(params.user_id, recommendation.place)}
+                  removeUserSavedPlace = {() => this.removeUserSavedPlace(params.user_id, recommendation.place.id)}
+                  addUserVisitedPlace = {() => this.addUserVisitedPlace(params.user_id, recommendation.place)}
+                  removeUserVisitedPlace = {() => this.removeUserVisitedPlace(params.user_id, recommendation.place.id)}
                   toDetails={() => this.props.navigation.navigate('Details', {
                     coordinates: recommendation.place.coordinates,
                     phone: recommendation.place.display_phone,

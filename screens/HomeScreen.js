@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import {NavigationEvents} from 'react-navigation'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import RecCard from "../components/RecCard"
@@ -85,17 +85,60 @@ export default class HomeScreen extends Component {
     this.setState({searchLocation: searchLocation});
   }
 
-  checkPlaceInArray(placeArray, placeId) {
-    let saved = placeArray.filter((place) => {
-      if (place.place_id === placeId) {
-        return place;
+  addUserSavedPlace = (userId, placeData) => {
+    API.addUserSavedPlace(userId, placeData)
+    .then(res => {
+      if (res.data.status === "error") {
+        throw new Error(res.data.message);
       }
+      this.getRecommendations();
+    })
+    .catch(err => {
+      this.setState({error: err.message});
+      console.log(this.state.error);
     });
-    if (saved.length > 0) {
-      return "true"
-    } else {
-      return "false"
-    }
+  }
+
+  removeUserSavedPlace = (userId, placeId) => {
+    API.removeUserSavedPlace(userId, placeId)
+    .then(res => {
+      if (res.data.status === "error") {
+        throw new Error(res.data.message);
+      }
+      this.getRecommendations();
+    })
+    .catch(err => {
+      this.setState({error: err.message});
+      console.log(this.state.error);
+    });
+  }
+
+  addUserVisitedPlace = (userId, placeData) => {
+    API.addUserVisitedPlace(userId, placeData)
+    .then(res => {
+      if (res.data.status === "error") {
+        throw new Error(res.data.message);
+      }
+      this.getRecommendations();
+    })
+    .catch(err => {
+      this.setState({error: err.message});
+      console.log(this.state.error);
+    });
+  }
+
+  removeUserVisitedPlace = (userId, placeId) => {
+    API.removeUserVisitedPlace(userId, placeId)
+      .then(res => {
+        if (res.data.status === "error") {
+          throw new Error(res.data.message);
+        }
+        this.getRecommendations();
+      })
+      .catch(err => {
+        this.setState({error: err.message});
+        console.log(this.state.error);
+      });
   }
 
   getRecommendations = () => {
@@ -103,20 +146,15 @@ export default class HomeScreen extends Component {
     // the search from the search bar
     let errors = "";
 
-    // following for testing only
-    let userId = "5c5a407ced8b3c0a9ed9ee25";
     let searchResults = [];
     const {params} = this.props.navigation.state;
 
     API.searchYelp(params.user_id, this.state.searchLocation, "")
-    //API.searchYelp(userId, this.state.searchLocation, "")
       .then(res => {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
         searchResults = res.data;
-        console.log("searchResults: ", searchResults);
-        //this.setState({results: res.data.businesses, error: ""});
         this.setState({results: searchResults, error: errors});
       })
       .catch(err => this.setState({error: err.message}));
@@ -124,8 +162,6 @@ export default class HomeScreen extends Component {
 
   render() {
     const {params} = this.props.navigation.state;
-    console.log(params);
-    //console.log("params: ", params);
 
     // Body Content
     return (
@@ -140,21 +176,22 @@ export default class HomeScreen extends Component {
         />
         <ScrollView style={styles.recCard}>
           {this.state.results.map(recommendation => {
-            console.log(recommendation);
-
             return (
               <RecCard
-                key={recommendation.place.id}
-                id={recommendation.place.id}
-                imgUrl={recommendation.place.image_url}
-                description={recommendation.place.name}
-                rating={recommendation.place.rating}
-                price={recommendation.place.price}
-                isSaved={recommendation.isSaved}
-                hasVisited={recommendation.hasVisited}
-                placeData={recommendation.place}
-                userId={params.user_id}
-                rerender={this.getRecommendations}
+                key = {recommendation.place.id}
+                id = {recommendation.place.id}
+                imgUrl = {recommendation.place.image_url}
+                description = {recommendation.place.name}
+                rating = {recommendation.place.rating}
+                price = {recommendation.place.price}
+                isSaved = {recommendation.isSaved}
+                hasVisited = {recommendation.hasVisited}
+                placeData = {recommendation.place}
+                userId = {params.user_id}
+                addUserSavedPlace = {() => this.addUserSavedPlace(params.user_id, recommendation.place)}
+                removeUserSavedPlace = {() => this.removeUserSavedPlace(params.user_id, recommendation.place.id)}
+                addUserVisitedPlace = {() => this.addUserVisitedPlace(params.user_id, recommendation.place)}
+                removeUserVisitedPlace = {() => this.removeUserVisitedPlace(params.user_id, recommendation.place.id)}
                 toDetails={() => this.props.navigation.navigate('Details', {
                   coordinates: recommendation.place.coordinates,
                   phone: recommendation.place.display_phone,
