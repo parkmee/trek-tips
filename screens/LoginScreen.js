@@ -25,8 +25,8 @@ export default class LoginScreen extends Component {
 
     this.setState({
       user_name: 'DB_NAME',
-      user_id_DEFAULT: 'DB_ID',
-      user_id: "5c5a407ced8b3c0a9ed9ee25",    // mike added this for testing
+      user_id: 'DB_ID',
+      user_id_TESTING: "5c5a407ced8b3c0a9ed9ee25",    // mike added this for testing
       user_preferences: ['preference1', 'preference2']
     }, () => console.log('user_name', this.state.user_name))
 
