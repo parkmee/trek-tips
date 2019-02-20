@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 
 const ChildCard = props => {
-  console.log(props.active);
+  // console.log(props.active);
   return (
     <View
       style={{

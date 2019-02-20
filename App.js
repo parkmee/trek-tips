@@ -5,6 +5,7 @@ import HomeScreen from './screens/HomeScreen';
 import SavedScreen from './screens/SavedScreen';
 import PreferencesScreen from './screens/PreferencesScreen';
 import CategoriesScreen from './screens/CategoriesScreen';
+import DetailsScreen from './screens/DetailsScreen';
 
 const AppNavigator = createStackNavigator({
     Login: {
@@ -21,6 +22,9 @@ const AppNavigator = createStackNavigator({
     },
     Saved: {
       screen: SavedScreen
+    },
+    Details: {
+      screen: DetailsScreen
     }
   },
   {
@@ -33,7 +37,7 @@ const AppNavigator = createStackNavigator({
       headerTitleStyle: { // Customize the 'fontFamily', 'fontWeight' and other 'Text' properties
         fontWeight: 'bold',
       },
-      headerBackTitle: 'Home' // aded this to make it say home on the back button,
+      headerBackTitle: 'Home' // added this to make it say home on the back button,
                               // if not here its inconsistent in how it labels the back button
     },
   });
